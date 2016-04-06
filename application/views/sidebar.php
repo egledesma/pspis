@@ -80,7 +80,7 @@
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('sourcefund/index') ?>" data-slug="layout-grids">
+								<a class="animsition-link" href="<?php echo base_url('sourcefund/index/0') ?>" data-slug="layout-grids">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Source of Funds</span>
 								</a>
