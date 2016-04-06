@@ -21,6 +21,7 @@
             <table class="table table-hover dataTable table-striped width-full" id="communities_table">
                 <thead>
                 <tr>
+                    <th>Action</th>
                     <th>Project Title</th>
                     <th>Assistance Name</th>
                     <th>Nature of work</th>
@@ -37,6 +38,7 @@
                 </thead>
                 <tfoot>
                 <tr>
+                    <th>Action</th>
                     <th>Project Title</th>
                     <th>Assistance Name</th>
                     <th>Nature of work</th>
@@ -54,6 +56,17 @@
                 <tbody>
                 <?php foreach($project as $projectData): ?>
                 <tr>
+                    <td>
+                        <div class="btn-group">
+
+                            <a class="btn btn-info btn-outline" id="confirm"
+                               href="<?php echo base_url('communities/updateCommunities/'.$projectData->project_id.'') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i> </a>
+                            <a class="confirmation btn btn-danger btn-outline" id="confirm"
+                               href="<?php echo base_url('') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Delete"><i class="icon wb-close" aria-hidden="true"></i> </a>
+                        </div>
+                    </td>
                     <td><?php echo $projectData->project_title; ?></td>
                     <td><?php echo $projectData->assistance_name; ?></td>
                     <td><?php echo $projectData->work_nature; ?></td>
@@ -73,18 +86,5 @@
         </div>
     </div>
     </div>
-<!--    <div class="site-action">-->
-<!--        <button type="button" class="btn btn-floating btn-danger">-->
-<!--            <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>-->
-<!--            <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i>-->
-<!--        </button>-->
-<!--        <div class="site-action-buttons">-->
-<!--            <button type="button" class="btn-raised btn btn-success btn-floating animation-slide-bottom animation-delay-100">-->
-<!--                <i class="icon wb-trash" aria-hidden="true"></i>-->
-<!--            </button>-->
-<!--            <button type="button" class="btn-raised btn btn-success btn-floating animation-slide-bottom">-->
-<!--                <i class="icon wb-inbox" aria-hidden="true"></i>-->
-<!--            </button>-->
-<!--        </div>-->
-<!--    </div>-->
+
 </div>

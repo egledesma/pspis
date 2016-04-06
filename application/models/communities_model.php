@@ -13,7 +13,7 @@ class communities_model extends CI_Model
 
     public function get_project()
     {
-        $sql = 'select a.project_title, b.assistance_name,
+        $sql = 'select a.project_id,a.project_title, b.assistance_name,
                 c.work_nature, d.fund_source,e.lgu_counterpart,
                 a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status,a.region_code
                 from tbl_projects a
@@ -91,7 +91,8 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($project_title,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status)
+    public function insertProject($project_title,$assistancelist,$natureofworklist,$fundsourcelist
+        ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status)
     {
 
         $this->db->trans_begin();
@@ -114,5 +115,34 @@ class communities_model extends CI_Model
         }
         $this->db->close();
 
+    }
+    public function updateProject($project_title,$assistancelist,$natureofworklist,$fundsourcelist
+        ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
+
+        $this->db->trans_begin();
+
+        $this->db->query(' ');
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+
+        $this->db->close();
+    }
+    public function get_project_byid($project_id = 0)
+    {
+        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
+        if ($query->num_rows() > 0){
+            return $query->row();
+        } else {
+            return FALSE;
+        }
+        $this->db->close();
     }
 }

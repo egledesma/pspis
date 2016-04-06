@@ -4,7 +4,7 @@
  * User: ljesaclayan
  * Date: 2/11/2016
  * Time: 3:26 PM
- */
+ z*/
 
 
 class communities extends CI_Controller
@@ -69,7 +69,26 @@ class communities extends CI_Controller
             $this->redirectIndex();
         }
     }
+    public function updateCommunities($project_id)
+    {
+        $communities_model = new communities_model();
 
+
+        $this->assistance_session();
+        $getList['assistancelist'] = $communities_model->get_lib_assistance();
+        $getList['fundsourcelist'] = $communities_model->get_fund_source();
+        $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+        $getList['projectdata'] = $communities_model->get_project_byid($project_id);
+
+        if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
+            $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
+        }
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('communities_edit',$getList);
+        $this->load->view('footer');
+    }
     public function populate_natureofwork() {
         if($_POST['assistance_id'] > 0 and isset($_POST) and isset($_POST['assistance_id'])) {
 
