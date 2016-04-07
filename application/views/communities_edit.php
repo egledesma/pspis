@@ -48,12 +48,13 @@
 <!--                </pre>-->
 <!---->
 <!---->
-<!--                <input type="text" value = "--><?php //echo $projectdata->project_id ?><!--">-->
+
                 <?php
                 $attributes = array("class" => "form-horizontal", "id" => "projectformedit", "name" => "projectformedit");
                  echo form_open("communities/updateCommunities", $attributes);?>
                 <table class="table table-bordered table-striped">
                     <br>
+                    <input type="hidden" id = "project_id" name = "project_id" value = "<?php echo $projectdata->project_id ?>">
                     <tr>
                         <td><label for="project_title" class="control-label">Project Title:</label></td>
                     </tr>
@@ -223,12 +224,9 @@
                     </tr>
                 </table>
                 <div class="btn-group">
+                    <input id="btn_add" name="btn_add" type="submit" class="btn btn-primary" value="Update"/>
+                </div>
 
-                    <input id="btn_add" name="btn_add" type="submit" class="btn btn-primary" value="Save"/>
-                </div>
-                <div class="btn-group">
-                    <input id="btn_cancel" name="btn_cancel" type="reset" class="btn btn-danger" value="Reset" />
-                </div>
                 <?php echo form_close(); ?>
 
             </div>

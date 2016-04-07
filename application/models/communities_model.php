@@ -116,12 +116,27 @@ class communities_model extends CI_Model
         $this->db->close();
 
     }
-    public function updateProject($project_title,$assistancelist,$natureofworklist,$fundsourcelist
+    public function updateProject($project_id,$project_title,$assistancelist,$natureofworklist,$fundsourcelist
         ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
 
         $this->db->trans_begin();
 
-        $this->db->query(' ');
+        $this->db->query('UPDATE tbl_projects
+                        SET
+                        project_title = "'.$project_title.'",
+                        assistance_id = "'.$assistancelist.'",
+                        nature_id = "'.$natureofworklist.'",
+                        fundsource_id = "'.$fundsourcelist.'",
+                        lgucounterpart_id = "'.$lgucounterpartlist.'",
+                        lgu_fundsource = "'.$lgu_fundsource.'",
+                        lgu_amount = "'.$lgu_amount.'",
+                        project_cost = "'.$project_cost.'",
+                        project_amount = "'.$project_amount.'",
+                        implementing_agency = "'.$implementing_agency.'",
+                        `status` = "'.$status.'"
+                        WHERE
+                        project_id = "'.$project_id.'"');
+
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -135,6 +150,28 @@ class communities_model extends CI_Model
 
         $this->db->close();
     }
+    public function deleteProject($project_id = 0)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_projects SET
+                              deleted ="1"
+                              WHERE
+                              project_id = "'.$project_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
     public function get_project_byid($project_id = 0)
     {
         $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
@@ -145,4 +182,5 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
+
 }

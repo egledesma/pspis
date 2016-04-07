@@ -73,21 +73,75 @@ class communities extends CI_Controller
     {
         $communities_model = new communities_model();
 
+        $this->validateAddForm();
 
-        $this->assistance_session();
-        $getList['assistancelist'] = $communities_model->get_lib_assistance();
-        $getList['fundsourcelist'] = $communities_model->get_fund_source();
-        $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-        $getList['projectdata'] = $communities_model->get_project_byid($project_id);
+        if ($this->form_validation->run() == FALSE) {
 
-        if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-            $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
+            $this->assistance_session();
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->get_project_byid($project_id);
+
+            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
+                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
+            }
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('communities_edit', $getList);
+            $this->load->view('footer');
         }
-        $this->load->view('header');
-        $this->load->view('navbar');
-        $this->load->view('sidebar');
-        $this->load->view('communities_edit',$getList);
-        $this->load->view('footer');
+        else
+        {
+
+            $project_id = $this->input->post('project_id');
+            $assistancelist = $this->input->post('assistancelist');
+            $project_title = $this->input->post('project_title');
+            $natureofworklist = $this->input->post('natureofworklist');
+            $fundsourcelist = $this->input->post('fundsourcelist');
+            $project_amount = $this->input->post('project_amount');
+            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
+            $lgu_amount = $this->input->post('lgu_amount');
+            $lgu_fundsource = $this->input->post('lgu_fundsource');
+            $project_cost = $this->input->post('project_cost');
+            $implementing_agency = $this->input->post('implementing_agency');
+            $status = $this->input->post('status');
+
+            $updateResult = $communities_model->updateProject($project_id,$project_title,$assistancelist,$natureofworklist,$fundsourcelist
+                ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+            if ($updateResult) {
+
+                    $this->load->view('header');
+                    $this->load->view('navbar');
+                    $this->load->view('sidebar');
+
+                    $this->load->view('communities_list',array(
+                        'project' => $communities_model->get_project()
+                    ));
+                    $this->load->view('footer');
+            }
+
+            $this->redirectIndex();
+        }
+    }
+    public function deleteCommunities($project_id)
+    {
+        $communities_model = new communities_model();
+        if ($project_id > 0){
+            $deleteResult = $communities_model->deleteProject($project_id);
+            if ($deleteResult){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+                $this->load->view('communities_list',array(
+                    'project' => $communities_model->get_project()
+                ));
+
+                $this->load->view('footer');
+            }
+            $this->redirectIndex();
+        }
     }
     public function populate_natureofwork() {
         if($_POST['assistance_id'] > 0 and isset($_POST) and isset($_POST['assistance_id'])) {
