@@ -4,10 +4,11 @@
  * User: user
  * Date: 3/3/2016
  * Time: 10:47 AM
- */ ?>
+ */
+error_reporting(0);?>
 <body class="page-register layout-full">
 <!--[if lt IE 8]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+
 <![endif]-->
 
 
@@ -16,37 +17,43 @@
      data-animsition-out="fade-out">
     <div class="page-content vertical-align-middle">
         <div class="brand">
-            <img class="brand-img" src="../../assets/images/logo.png" alt="...">
+            <img class="brand-img" src="<?php echo base_url('assets/images/logobig.jpg'); ?>" alt="...">
             <h2 class="brand-text">PSPIS</h2>
         </div>
         <p>Register</p>
-        <form method="post" role="form" action="">
-            <div class="form-group">
+        <form method="post" action="">
+              <div class="form-group"><div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <?php echo $form_message;?><?php echo validation_errors() ?> <a class="alert-link" href="javascript:void(0)"></a>.
+            </div>
                 <label class="sr-only" for="fullname">Full Name</label>
-                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name">
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="username">Full Name</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="inputPassword">Password</label>
-                <input type="password" class="form-control" id="inputPassword" name="password"
-                       placeholder="Password">
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Password" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="inputPasswordCheck">Retype Password</label>
-                <input type="password" class="form-control" id="inputPasswordCheck" name="passwordCheck"
-                       placeholder="Confirm Password">
+                <input type="password" class="form-control" id="password2" name="password2"
+                       placeholder="Confirm Password" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="region">Region</label>
-                <select name="regionlist" id="regionlist" class="form-control" onchange="get_prov();">
-                    <option value="0">Choose Region</option>
+                <select name="regionlist" id="regionlist" class="form-control" required>
+                    <option value="">Choose Region</option>
                     <?php foreach($regionlist as $regionselect): ?>
                         <option value="<?php echo $regionselect->region_code; ?>"
                             <?php if(isset($_SESSION['region'])) {

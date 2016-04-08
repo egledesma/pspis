@@ -59,8 +59,8 @@ error_reporting(0);
                             <td><?php echo $sourceData->date_modified; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"  href="<?php echo base_url('sourcefund/edit/' . $sourceData->fundsource_id . '') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
+                                    <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"  href="<?php echo base_url('sourcefund/edit/' . $sourceData->fundsource_id . '') ?>"><i class="icon wb-edit" aria-hidden="true" data-toggle="tooltip"
+                                        data-placement="top" data-original-title="Edit"></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"
                                        href="<?php echo base_url('sourcefund/delete/' . $sourceData->fundsource_id . '') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Delete"><i class="icon wb-close" aria-hidden="true"></i> </a>

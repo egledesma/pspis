@@ -10,30 +10,50 @@ class users extends CI_Controller {
         redirect('/users/login','location');
     }
 
+    public function superKey()
+    {
+        return $this->config->item('encryption_key');
+
+        $this->load->library('encrypt');
+    }
+
+
     public function register()
     {
         $this->load->model('Model_user');
         $this->customvalidateRegForm();
-		$this->init_rpmb_session();
+        $this->init_rpmb_session();
         $rpmb['regionlist'] = $this->Model_form->get_regions();
+        $userkey = $this->superKey();
 
         if (!$this->form_validation->run()){
-			$this->load->view('header');
+            $this->load->view('header');
             $this->load->view('register',$rpmb);
-			$this->load->view('footer');
+            $this->load->view('footer');
+
+
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
-			$fullname = $this->input->post('fullname');
-			$email = $this->input->post('email');
-			$regionlist = $this->input->post('regionlist');
-            $Model_user = new Model_user($username,$password,$fullname,$email,$regionlist);
+            $fullname = $this->input->post('fullname');
+            $email = $this->input->post('email');
+            $regionlist = $this->input->post('regionlist');
+            $superkey = $this->encrypt->sha1($userkey.$password);
+
+
+            $Model_user = new Model_user($username,$superkey,$fullname,$email,$regionlist);
             $regResult = $Model_user->registerUser();
             if ($regResult == 1){
-                $this->load->view('registration_success');
-                $this->redirectIndex();
+                $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password);
+                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$registerSendResult.'<a href="#" class="closed">&times;</a></div>';
+                $this->load->view('header');
+                $this->load->view('register',array($rpmb,'form_message'=>$form_message));
+                $this->load->view('footer');
             } else {
-                $this->load->view('registration_fail');
+                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Fail!<a href="#" class="closed">&times;</a></div>';
+                $this->load->view('header');
+                $this->load->view('register',array($rpmb,'form_message'=>$form_message));
+                $this->load->view('footer');
             }
         }
     }
@@ -89,19 +109,20 @@ class users extends CI_Controller {
             $password = $this->input->post('password');
             $updateResult = $Model_user->changePassword($id, $password);
             if ($updateResult){
-                $form_message = 'Update Success';
+                $resultSend = $this->forgotpassword_sendmail($email,$password);
+                $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
 				$this->load->view('header');
 			$this->load->view('nav');
 			$this->load->view('sidebar');
-			$this->load->view('change_password');
+			$this->load->view('change_password',array('form_message'=>$form_message));
 			$this->load->view('sidepanel');
 			$this->load->view('footer');
             } else {
-                $form_message = 'Sad';
+                $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
 				$this->load->view('header');
 			$this->load->view('nav');
 			$this->load->view('sidebar');
-			$this->load->view('change_password');
+			$this->load->view('change_password',array('form_message'=>$form_message));
 			$this->load->view('sidepanel');
 			$this->load->view('footer');
             }
@@ -134,6 +155,62 @@ class users extends CI_Controller {
         return $this->form_validation->set_rules($config);
     }
 
+    public function forgot_password()
+    {
+        $Model_user = new Model_user();
+        $this->customvalidateForgotForm();
+
+        $userkey = $this->superKey();
+
+        if (!$this->form_validation->run()){
+            $this->load->view('header');
+            $this->load->view('forgot_password');
+            $this->load->view('footer');
+
+
+        } else {
+            $email = $this->input->post('email');
+            $password = random_string('alnum', 16);
+            $superkey = $this->encrypt->sha1($userkey.$password);
+            $ifUserActivated = $Model_user->userActivated($email);
+            if($ifUserActivated > 0){
+                $regResult = $Model_user->forgotPassword($email, $superkey);
+                if ($regResult == 1){
+                    $resultSend = $this->forgotpassword_sendmail($email,$password);
+                    $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
+                    $this->load->view('header');
+                    $this->load->view('forgot_password',array('form_message'=>$form_message));
+                    $this->load->view('footer');
+                } else {
+                    $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Fail!<a href="#" class="closed">&times;</a></div>';
+                    $this->load->view('header');
+                    $this->load->view('forgot_password', array('form_message' => $form_message));
+                    $this->load->view('footer');
+                }
+            } else {
+                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Invalid Account/The account is not yet activated.!<a href="#" class="closed">&times;</a></div>';
+                $this->load->view('header');
+                $this->load->view('forgot_password', array('form_message' => $form_message));
+                $this->load->view('footer');
+            }
+        }
+
+    }
+
+    public function oldpassword_check($oldpassword){
+        $Model_user = new Model_user();
+        $userkey = $this->superKey();
+        $myid = $this->session->userdata('uid');
+        $old_password_hash = sha1($userkey.$oldpassword);
+        $old_password_db_hash = $Model_user->getuserpass($myid);
+        $error = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Old password not match!<a href="#" class="closed">&times;</a></div>';
+        if($old_password_hash != $old_password_db_hash->passwd)
+        {
+            $this->form_validation->set_message('oldpassword_check', ''.$error.'');
+            return FALSE;
+        }
+        return TRUE;
+    }
 
     public function logout()
     {
@@ -149,7 +226,7 @@ class users extends CI_Controller {
             array(
                 'field'   => 'username',
                 'label'   => 'username',
-                'rules'   => 'required'
+                'rules'   => 'required|is_unique[users.username]'
             ),
             array(
                 'field'   => 'password2',
@@ -169,7 +246,7 @@ class users extends CI_Controller {
             array(
                 'field'   => 'email',
                 'label'   => 'email',
-                'rules'   => 'required'
+                'rules'   => 'required|is_unique[users.email]'
             ),
             array(
                 'field'   => 'regionlist',
@@ -209,6 +286,82 @@ class users extends CI_Controller {
 	public function init_rpmb_session() {
         if(isset($_POST['regionlist']) and $_POST['regionlist'] > 0) {
             $_SESSION['region'] = $_POST['regionlist'];
+        }
+    }
+
+    public function registration_sendmail($email,$username,$fullname,$regionlist) {
+        $this->load->library('My_PHPMailer');
+        $mail = new PHPMailer;
+
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'itsm-desk@dswd.gov.ph';                 // SMTP username
+        $mail->Password = 'm21l3rm0d3r@t0r123';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;                                    // TCP port to connect to
+
+        $mail->setFrom('pspis-noreply@dswd.gov.ph', 'pspis-noreply@dswd.gov.ph');
+        $mail->addAddress($email);     // Add a recipient
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Registration Information';
+        $mail->Body    = 'Dear Sir/Madam, <br><br>
+                          Thank you for registering with us. Your registration details with us is as follow: <br><br>
+                          Full Name: '.$fullname.'<br>
+                          Email Address: '.$email.'<br>
+                          Username: '.$username.'<br>
+                          Region: '.$regionlist.'<br><br>
+                          Please feel free to contact us in case of further queries.
+                          <br>
+                          Best Regards,
+                          Support';
+        $mail->AltBody = 'Registration';
+        if(!$mail->send()) {
+            $sendMessage = 'Error Sending Email, but the Registration is complete';
+        } else {
+            $sendMessage = 'Registration succeeded. An email has been sent to your email address.!';
+        }
+
+    }
+
+
+
+    public function forgotpassword_sendmail($email,$password) {
+        $this->load->library('My_PHPMailer');
+        $mail = new PHPMailer;
+
+        //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'itsm-desk@dswd.gov.ph';                 // SMTP username
+        $mail->Password = 'm21l3rm0d3r@t0r123';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;                                    // TCP port to connect to
+
+        $mail->setFrom('pspis-noreply@dswd.gov.ph', 'pspis-noreply@dswd.gov.ph');
+        $mail->addAddress($email);     // Add a recipient
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Password Reset';
+        $mail->Body    = 'Dear Sir/Madam, <br><br>
+                           Please see below for the requested information: <br><br>
+                           Email Address: '.$email.'<br>
+                           Password: '.$password.'<br><br>
+                           Please feel free to contact us in case of further queries.
+                           <br>
+                           Best Regards,
+                           Support';
+        $mail->AltBody = 'Forgot Password';
+
+        if(!$mail->send()) {
+            $sendMessage = 'Error Sending Email, but the Registration is complete';
+        } else {
+            $sendMessage = 'Registration succeeded. An email has been sent to your email address.!';
         }
     }
 }

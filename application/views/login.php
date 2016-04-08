@@ -17,7 +17,6 @@ echo validation_errors();
 ?>
 	<body class="page-login layout-full">
 	<!--[if lt IE 8]>
-	<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 
 
@@ -26,12 +25,12 @@ echo validation_errors();
 		 data-animsition-out="fade-out">>
 		<div class="page-content vertical-align-middle">
 			<div class="brand">
-			<img class="brand-img" src="<?php base_url('assets/images/logo.png'); ?>" alt="...">
+				<img class="brand-img" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="...">
 				<h2 class="brand-text">PSPIS</h2>
 			</div>
 			<p>SIGN-IN</p>
 			<form method="post" action="">
-				<div class="form-group">
+				<div class="form-group"><?php echo $form_message;?><?php echo validation_errors() ?>
 					<label class="sr-only" for="username">Username</label>
 					<input type="text" name="username" class="form-control" id="inputName" placeholder="Username" required>
 				</div>

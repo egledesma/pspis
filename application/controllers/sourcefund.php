@@ -10,7 +10,7 @@
 class sourcefund extends CI_Controller
 {
 
-    public function index($function){
+    public function index($function = 0){
 
         $sourcefund_model = new sourcefund_model();
         if($function == 0){
