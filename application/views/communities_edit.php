@@ -126,9 +126,9 @@
                         <td><label for="brgylist"  class="control-label">Barangay:</label></td>
                     </tr>
 
-                    <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo "0".$projectdata->prov_code ?>" >
-                    <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo "0".$projectdata->city_code ?>" >
-                    <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="<?php echo "0".$projectdata->brgy_code ?>" >
+                    <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $projectdata->prov_code ?>" >
+                    <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo $projectdata->city_code ?>" >
+                    <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="<?php echo $projectdata->brgy_code ?>" >
                     <tr>
                         <td>
                             <div id="regionID">
