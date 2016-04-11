@@ -210,7 +210,7 @@ class communities extends CI_Controller
                 $province_list[$tempprov->prov_code] = $tempprov->prov_name;
             }
 
-            $provlist_prop = 'id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
+            $provlist_prop = 'required="required" required  id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
 
             echo form_dropdown('provlist', $province_list, '', $provlist_prop);
         }
@@ -226,7 +226,7 @@ class communities extends CI_Controller
                 $muni_list[$tempmuni->city_code] = $tempmuni->city_name;
             }
 
-            $munilist_prop = 'id="munilist" name="munilist" onchange="get_brgy();" class="form-control"';
+            $munilist_prop = 'required="required" required  id="munilist" name="munilist" onchange="get_brgy();" class="form-control"';
             echo form_dropdown('munilist', $muni_list,'',$munilist_prop);
         }
     }
@@ -240,7 +240,7 @@ class communities extends CI_Controller
                 $brgy_list[$tempbrgy->brgy_code] = $tempbrgy->brgy_name;
             }
 
-            $brgylist_prop = 'id="brgylist" name="brgylist" class="form-control"';
+            $brgylist_prop = 'required="required" required id="brgylist" name="brgylist" class="form-control"';
             echo form_dropdown('brgylist', $brgy_list,'',$brgylist_prop);
         }
     }

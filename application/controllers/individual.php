@@ -229,8 +229,7 @@ class individual extends CI_Controller
                 $province_list[$tempprov->prov_code] = $tempprov->prov_name;
             }
 
-            $provlist_prop = 'id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
-
+            $provlist_prop = 'required="required" required id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
             echo form_dropdown('provlist', $province_list, '', $provlist_prop);
         }
     }
@@ -245,7 +244,7 @@ class individual extends CI_Controller
                 $muni_list[$tempmuni->city_code] = $tempmuni->city_name;
             }
 
-            $munilist_prop = 'id="munilist" name="munilist" onchange="get_brgy();" class="form-control"';
+            $munilist_prop = 'required="required" id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required';
             echo form_dropdown('munilist', $muni_list,'',$munilist_prop);
         }
     }

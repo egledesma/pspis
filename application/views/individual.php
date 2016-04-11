@@ -132,7 +132,7 @@
                                     <div class="col-md-4">
                                         <label class="control-label" for="regionlist">Project Location:</label>
                                         <div id="regionID">
-                                            <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();" required>
+                                            <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();" required="required">
                                                 <option value="">Choose Region</option>
                                                 <?php foreach($regionlist as $regionselect): ?>
                                                     <option value="<?php echo $regionselect->region_code; ?>"
@@ -151,8 +151,9 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
+                                        <label class="control-label" name="provlist_label" id="provlist_label" for="provlist">Province:</label>
                                         <div id="provinceID">
-                                            <select required id="provlist" name="provlist" class="form-control" onChange="get_muni();" required>
+                                            <select id="provlist" name="provlist" class="form-control" onChange="get_muni();" required="required" required>
                                                 <?php if(isset($_SESSION['province']) or isset($user_region)) {
                                                     ?>
                                                     <option value="">Choose Province</option>
@@ -179,7 +180,7 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <div id="muniID">
-                                            <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required>
+                                            <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required="required">
                                                 <?php if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
                                                     ?>
                                                     <option value="">Choose Municipality</option>
