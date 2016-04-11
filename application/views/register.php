@@ -5,7 +5,13 @@
  * Date: 3/3/2016
  * Time: 10:47 AM
  */
-error_reporting(0);?>
+error_reporting(0);
+$form_validation = '<div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <?php echo validation_errors() ?> <a class="alert-link" href="javascript:void(0)"></a></div>';?>
 <body class="page-register layout-full">
 <!--[if lt IE 8]>
 
@@ -22,32 +28,27 @@ error_reporting(0);?>
         </div>
         <p>Register</p>
         <form method="post" action="">
-              <div class="form-group"><div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <?php echo $form_message;?><?php echo validation_errors() ?> <a class="alert-link" href="javascript:void(0)"></a>.
-            </div>
+              <div class="form-group">
+                  <?php echo $form_message;?>
                 <label class="sr-only" for="fullname">Full Name</label>
-                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
+                <input type="text" class="form-control" id="fullname" value="<?php echo htmlspecialchars($_POST['fullname']); ?>" name="fullname" placeholder="Full Name" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($_POST['email']); ?>" name="email" placeholder="Email" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="username">Full Name</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                <input type="text" class="form-control" id="username" value="<?php echo htmlspecialchars($_POST['username']); ?>" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="inputPassword">Password</label>
-                <input type="password" class="form-control" id="password" name="password"
+                <input type="password" maxlength="30" class="form-control" value="<?php echo htmlspecialchars($_POST['password']); ?>" id="password" name="password"
                        placeholder="Password" required>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="inputPasswordCheck">Retype Password</label>
-                <input type="password" class="form-control" id="password2" name="password2"
+                <input type="password"  maxlength="30"  class="form-control" value="<?php echo htmlspecialchars($_POST['password2']); ?>" id="password2" name="password2"
                        placeholder="Confirm Password" required>
             </div>
             <div class="form-group">

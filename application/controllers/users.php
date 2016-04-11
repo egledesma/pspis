@@ -64,6 +64,7 @@ class users extends CI_Controller {
     {
         $this->load->model('Model_user');
         $this->validateLoginForm();
+        $userkey = $this->superKey();
 
         if (!$this->form_validation->run()){
             $this->load->view('header');
@@ -72,7 +73,8 @@ class users extends CI_Controller {
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
-            $Model_user = new Model_user($username,$password);
+            $newkey = $this->encrypt->sha1($userkey . $password);
+            $Model_user = new Model_user($username,$newkey);
             $ifUserExist = $Model_user->ifUserExist();
             if ($ifUserExist > 0){
                 $this->session->set_userdata('user_data',$Model_user->retrieveUserData()->full_name);

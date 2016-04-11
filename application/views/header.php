@@ -47,6 +47,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url('assets/vendor/datatables-fixedheader/dataTables.fixedHeader.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/vendor/datatables-responsive/dataTables.responsive.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/vendor/alertify-js/alertify.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/vendor/jquery-wizard/jquery-wizard.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/vendor/formvalidation/formValidation.css'); ?>">
 
     <!-- Page -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/../fonts/weather-icons/weather-icons.css'); ?>">

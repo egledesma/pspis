@@ -14,6 +14,7 @@
  */
 if (!$this->session->userdata('user_data')){
 echo validation_errors();
+	error_reporting(0);
 ?>
 	<body class="page-login layout-full">
 	<!--[if lt IE 8]>

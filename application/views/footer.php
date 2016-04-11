@@ -23,6 +23,9 @@
 <script src="<?php echo base_url('assets/vendor/jvectormap/jquery-jvectormap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/matchheight/jquery.matchHeight-min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/jquery-wizard/jquery-wizard.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/formvalidation/formValidation.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/formvalidation/framework/bootstrap.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/toastr/toastr.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/datatables/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/datatables-fixedheader/dataTables.fixedHeader.js'); ?>"></script>
@@ -48,6 +51,7 @@
 <script src="<?php echo base_url('assets/js/components/slidepanel.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/switchery.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/matchheight.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/components/jquery-wizard.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/jvectormap.js'); ?>"></script>
 <script src="<?php echo base_url('assets/assets/js/components/toastr.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/datatables.js'); ?>"></script>
@@ -478,6 +482,69 @@
 		})();
 
 	});
+
+	(function() {
+		var defaults = $.components.getDefaults("wizard");
+		var options = $.extend(true, {}, defaults, {
+			onInit: function() {
+				$('#exampleFormContainer').formValidation({
+					framework: 'bootstrap',
+					fields: {
+						username: {
+							validators: {
+								notEmpty: {
+									message: 'The username is required'
+								}
+							}
+						},
+						password: {
+							validators: {
+								notEmpty: {
+									message: 'The password is required'
+								}
+							}
+						},
+						number: {
+							validators: {
+								notEmpty: {
+									message: 'The credit card number is not valid'
+								}
+							}
+						},
+						cvv: {
+							validators: {
+								notEmpty: {
+									message: 'The CVV number is required'
+								}
+							}
+						}
+					}
+				});
+			},
+			validator: function() {
+				var fv = $('#exampleFormContainer').data(
+						'formValidation');
+
+				var $this = $(this);
+
+				// Validate the container
+				fv.validateContainer($this);
+
+				var isValidStep = fv.isValidContainer($this);
+				if (isValidStep === false || isValidStep === null) {
+					return false;
+				}
+
+				return true;
+			},
+			onFinish: function() {
+				// $('#exampleFormContainer').submit();
+			},
+			buttonsAppendTo: '.panel-body'
+		});
+
+		$("#exampleWizardFormContainer").wizard(options);
+	})();
 </script>
 <script>
 	(function(document, window, $) {

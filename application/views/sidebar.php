@@ -27,7 +27,7 @@
 						</a>
 						<ul class="site-menu-sub">
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('individuals/index') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('individual/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Individuals</span>
 								</a>
