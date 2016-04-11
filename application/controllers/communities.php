@@ -210,7 +210,7 @@ class communities extends CI_Controller
                 $province_list[$tempprov->prov_code] = $tempprov->prov_name;
             }
 
-            $provlist_prop = 'required="required" required  id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
+            $provlist_prop = 'required="required" required id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
 
             echo form_dropdown('provlist', $province_list, '', $provlist_prop);
         }

@@ -109,7 +109,7 @@
                             </div>
                             <div class="pearl col-xs-4">
                                 <div class="pearl-icon"><i class="icon wb-payment" aria-hidden="true"></i></div>
-                                <span class="pearl-title">Billing Info</span>
+                                <span class="pearl-title">Source of Fund</span>
                             </div>
                             <div class="pearl col-xs-4">
                                 <div class="pearl-icon"><i class="icon wb-check" aria-hidden="true"></i></div>
@@ -121,15 +121,65 @@
                         <!-- Wizard Content -->
                         <form class="wizard-content" id="exampleFormContainer">
                             <div class="wizard-pane active" role="tabpanel">
+
                                 <div class="form-group col-md-12">
                                     <div class="col-md-6">
-                                    <label class="control-label" for="projecttitle">Project Title:</label>
-                                    <input type="text" class="form-control" id="projecttitle" name="projecttitle" required="required" autofocus>
+                                        <label class="control-label" for="assistancelist">Type of Assistance:</label>
+                                        <select name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();" required="required" autofocus>
+                                            <option value="">Choose Assistance</option>
+                                            <?php foreach($assistancelist as $assistanceselect): ?>
+                                                <option value="<?php echo $assistanceselect->assistance_id; ?>"
+                                                    <?php if(isset($_SESSION['assistance'])) {
+                                                        if($assistanceselect->assistance_id == $_SESSION['assistance']) {
+                                                            echo " selected";
+                                                        }
+                                                    } ?>
+                                                >
+                                                    <?php echo $assistanceselect->assistance_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </div>
+                                    <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <div id="natureofworkID">
+                                        <label class="control-label" for="natureofworklist">Nature of Work:</label>
+                                        <select required id="natureofworklist" name="natureofworklist" class="form-control" required="required">
+                                            <?php if(isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
+                                                ?>
+                                                <option value="">Choose Nature of work</option>
+                                                <?php
+                                                foreach ($natureofworklist as $natureofworkselect) { ?>
+                                                    <option value="<?php echo $natureofworkselect->nature_id; ?>"
+                                                        <?php
+                                                        if (isset($_SESSION['natureofwork']) and $natureofworkselect->nature_id== $_SESSION['natureofwork']) {
+                                                            echo " selected";
+                                                        } ?>
+                                                    >
+                                                        <?php echo $natureofworkselect->work_nature; ?></option>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <option value="">Select Assistance First</option>
+                                                <?php
+                                            } ?>
+                                        </select>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-6">
+                                        <label class="control-label" for="projecttitle">Project Title:</label>
+                                        <input type="text" class="form-control" id="projecttitle" name="projecttitle" required="required">
+                                    </div>
+                                </div>
+
                                 <div class="form-group col-md-12">
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label class="control-label" for="regionlist">Project Location:</label>
                                         <div id="regionID">
                                             <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();" required="required">
@@ -150,8 +200,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
-                                        <label class="control-label" name="provlist_label" id="provlist_label" for="provlist">Province:</label>
+                                    <div class="col-md-6">
                                         <div id="provinceID">
                                             <select id="provlist" name="provlist" class="form-control" onChange="get_muni();" required="required" required>
                                                 <?php if(isset($_SESSION['province']) or isset($user_region)) {
@@ -178,7 +227,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div id="muniID">
                                             <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required="required">
                                                 <?php if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
@@ -205,7 +254,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div id="brgyID">
                                             <select required id="brgylist" name="brgylist" class="form-control" required>
                                                 <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
@@ -231,7 +280,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-6">
+                                        <label class="control-label" for="projecttitle">No of Beneficiaries:</label>
+                                        <input type="number" class="form-control" id="projecttitle" name="projecttitle">
+                                    </div>
+                                </div>
                             </div>
+
 
                             <div class="wizard-pane" id="exampleBillingOne" role="tabpanel">
                                 <div class="form-group">

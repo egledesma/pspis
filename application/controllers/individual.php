@@ -200,13 +200,13 @@ class individual extends CI_Controller
             $assistance_id = $_POST['assistance_id'];
             $natureofworklist = $this->communities_model->get_work_nature($assistance_id);
 
-            $natureofwork_list[] = "Choose Nature of work";
+            $natureofwork_list[''] = "Choose Nature of work";
             foreach($natureofworklist as $tempnatureofworklist) {
                 $natureofwork_list[$tempnatureofworklist->nature_id] = $tempnatureofworklist->work_nature;
             }
 
-            $natureofworklist_prop = 'id="natureofworklist" name="natureofworklist" class="form-control"';
-            echo form_dropdown('natureofworklist', $natureofwork_list,'',$natureofworklist_prop);
+            $natureofworklist_prop = 'required="required"  id="natureofworklist" name="natureofworklist" class="form-control" required';
+            echo form_dropdown('natureofworklist', $natureofwork_list,'', $natureofworklist_prop);
         }
     }
 
@@ -224,7 +224,7 @@ class individual extends CI_Controller
             $region_code = $_POST['region_code'];
             $provlist = $this->communities_model->get_provinces($region_code);
 
-            $province_list[] = "Choose Province";
+            $province_list[''] = "Choose Province";
             foreach($provlist as $tempprov) {
                 $province_list[$tempprov->prov_code] = $tempprov->prov_name;
             }
@@ -239,7 +239,7 @@ class individual extends CI_Controller
             $prov_code = $_POST['prov_code'];
             $munilist = $this->communities_model->get_muni($prov_code);
 
-            $muni_list[] = "Choose Municipality";
+            $muni_list[''] = "Choose Municipality";
             foreach($munilist as $tempmuni) {
                 $muni_list[$tempmuni->city_code] = $tempmuni->city_name;
             }
@@ -253,12 +253,12 @@ class individual extends CI_Controller
             $city_code = $_POST['city_code'];
             $brgylist = $this->communities_model->get_brgy($city_code);
 
-            $brgy_list[] = "Choose Barangay";
+            $brgy_list[''] = "Choose Barangay";
             foreach($brgylist as $tempbrgy) {
                 $brgy_list[$tempbrgy->brgy_code] = $tempbrgy->brgy_name;
             }
 
-            $brgylist_prop = 'id="brgylist" name="brgylist" class="form-control"';
+            $brgylist_prop = 'required="required" id="brgylist" name="brgylist" class="form-control" required';
             echo form_dropdown('brgylist', $brgy_list,'',$brgylist_prop);
         }
     }
