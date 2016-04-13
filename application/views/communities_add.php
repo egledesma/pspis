@@ -329,7 +329,7 @@
                     <div class="col-sm-4">
                         <label for="fundsourcelist" class="control-label">Fund Source:</label>
                         <select name="fundsourcelist" id="fundsourcelist" class="form-control">
-                            <option value="0">Choose Fund Source</option>
+                            <option value="">Choose Fund Source</option>
                             <?php foreach($fundsourcelist as $fundsourceselect): ?>
                                 <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
                                     <?php echo $fundsourceselect->fund_source; ?>
@@ -345,7 +345,7 @@
                     <div class="col-sm-4">
                         <label for="lgucounterpartlist" class="control-label">LGU counterpart:</label>
                         <select name="lgucounterpartlist" id="lgucounterpartlist" class="form-control">
-                            <option value="0">Choose LGU counterpart</option>
+                            <option value="">Choose LGU counterpart</option>
                             <?php foreach($lgucounterpartlist as $lgucounterpartselect): ?>
                                 <option value="<?php echo $lgucounterpartselect->lgucounterpart_id; ?>">
                                     <?php echo $lgucounterpartselect->lgu_counterpart; ?>
@@ -378,7 +378,7 @@
                     <div class="col-sm-4">
                         <label for="implementing_agency" class="control-label">Implementing Agency:</label>
                         <select name="implementing_agency" id="implementing_agency" class="form-control">
-                            <option value="0">Choose Implementing Agency</option>
+                            <option value="">Choose Implementing Agency</option>
                             <?php foreach($fundsourcelist as $fundsourceselect): ?>
                                 <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
                                     <?php echo $fundsourceselect->fund_source; ?>

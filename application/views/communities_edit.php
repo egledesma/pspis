@@ -6,7 +6,6 @@
         get_prov();
         get_muni();
         get_brgy();
-
         get_natureofwork();
         get_maxmin();
 
@@ -122,50 +121,75 @@
     <div class="page-content">
         <div class="panel">
             <header class="panel-heading">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Edit Project</h3>
+                </div>
             </header>
             <div class="panel-body">
-<!--                <pre>-->
-<!--                --><?php //print_r($provlist); ?>
-<!--                </pre>-->
 
 
 
                 <?php
                 $attributes = array("class" => "form-horizontal", "id" => "projectformedit", "name" => "projectformedit");
                  echo form_open("communities/updateCommunities", $attributes);?>
-                <table class="table table-bordered table-striped">
 
-                    <br>
-                    <tr>
-                        <td><label for="regionlist" class="control-label">Region:</label></td>
-                        <td><label for="provlist"  class="control-label">Province:</label></td>
-                        <td><label for="munilist"  class="control-label">Municipality:</label></td>
-                        <td><label for="brgylist"  class="control-label">Barangay:</label></td>
-                    </tr>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="assistancelist">Type of Assistance:</label>
+                        <select name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();">
+                            <option value="">Choose Assistance</option>
+                            <?php foreach($assistancelist as $assistanceselect): ?>
+                                <option value="<?php echo $assistanceselect->assistance_id; ?>"
+                                    <?php if($projectdata->assistance_id) {
+                                        if($assistanceselect->assistance_id == $projectdata->assistance_id) {
+                                            echo " selected";
+                                        }
+                                    } ?>
+                                >
+                                    <?php echo $assistanceselect->assistance_name; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                    <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $projectdata->prov_code ?>" >
-                    <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo $projectdata->city_code ?>" >
-                    <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="<?php echo $projectdata->brgy_code ?>" >
-                    <tr>
-                        <td>
-                            <div id="regionID">
-                                <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();">
-                                    <option value="0">Choose Region</option>
-                                    <?php foreach($regionlist as $regionselect): ?>
-                                        <option value="<?php echo $regionselect->region_code; ?>"
-                                            <?php if(isset($projectdata->region_code)) {
-                                                if($regionselect->region_code == $projectdata->region_code) {
-                                                    echo " selected";
-                                                }
-                                            } ?>
-                                        >
-                                            <?php echo $regionselect->region_name; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </td>
-                        <td id = "provinceID">
+                </div>
+
+                <div class="form-group row">
+                    <div id="project_title" class="col-sm-6">
+                        <label for="project_title" class="control-label">Project Title:</label>
+                        <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo $projectdata->project_title ?>" required />
+                        <span class="text-danger"><?php echo form_error('project_title'); ?></span>
+                    </div>
+
+                </div>
+
+                <label  class="control-label">Project Location:</label>
+                <div class="form-group row">
+                    <div id="regionID" class="col-sm-3">
+                        <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $projectdata->prov_code ?>" >
+                        <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo $projectdata->city_code ?>" >
+                        <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="<?php echo $projectdata->brgy_code ?>" >
+                        <input type="hidden" id = "project_id" name = "project_id" value = "<?php echo $projectdata->project_id ?>">
+                        <label for="regionlist" class="control-label">Region :</label>
+                            <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();">
+                                <option value="">Choose Region</option>
+                                <?php foreach($regionlist as $regionselect): ?>
+                                    <option value="<?php echo $regionselect->region_code; ?>"
+                                        <?php if(isset($projectdata->region_code)) {
+                                            if($regionselect->region_code == $projectdata->region_code) {
+                                                echo " selected";
+                                            }
+                                        } ?>
+                                    >
+                                        <?php echo $regionselect->region_name; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="provlist" class="control-label">Province :</label>
+                        <div id="provinceID">
                             <select required id="provlist" name="provlist" class="form-control" onChange="get_muni();" required>
                                 <?php if(isset($projectdata->prov_code) or isset($projectdata->region_code)) {
                                     ?>
@@ -187,8 +211,12 @@
                                     <?php
                                 } ?>
                             </select>
-                        </td>
-                        <td id = "muniID">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="munilist" class="control-label">Municipality :</label>
+                        <div id="muniID">
                             <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required>
                                 <?php if(isset($projectdata->city_code) or isset($projectdata->prov_code)) {
                                     ?>
@@ -210,8 +238,12 @@
                                     <?php
                                 } ?>
                             </select>
-                        </td>
-                        <td id = "brgyID">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="provlist" class="control-label">Barangay :</label>
+                        <div id="brgyID">
                             <select required id="brgylist" name="brgylist" class="form-control" required>
                                 <?php if(isset($projectdata->brgy_code) or isset($projectdata->city_code)) {
                                     ?>
@@ -233,47 +265,22 @@
                                     <?php
                                 } ?>
                             </select>
-                        </td>
-                    </tr>
-                    <input type="hidden" id = "project_id" name = "project_id" value = "<?php echo $projectdata->project_id ?>">
-                    <tr>
-                        <td><label for="project_title" class="control-label">Project Title:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo $projectdata->project_title ?>" required />
-                            <span class="text-danger"><?php echo form_error('project_title'); ?></span>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
+                </div>
 
-                    <tr>
-                        <td><label for="assistancelist" class="control-label">Assistance Type:</label></td>
-                    </tr>
-                    <tr>
-<!--                        --><?php //echo $projectdata->assistance_id;?>
-                        <td>
-                            <select name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();">
-                                <option value="0">Choose Assistance</option>
-                                <?php foreach($assistancelist as $assistanceselect): ?>
-                                    <option value="<?php echo $assistanceselect->assistance_id; ?>"
-                                        <?php if($projectdata->assistance_id) {
-                                            if($assistanceselect->assistance_id == $projectdata->assistance_id) {
-                                                echo " selected";
-                                            }
-                                        } ?>
-                                    >
-                                        <?php echo $assistanceselect->assistance_name; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="natureofworklist" class="control-label">Nature of Work:</label></td>
-                        <td><label for="natureofworklist" class="control-label">Minimum - Maximum Amount :</label></td>
-                    </tr>
-                    <tr>
-                        <td id = "natureofworkID">
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label for="number_bene" class="control-label">Number of Beneficiaries:</label>
+                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label class="control-label" for="natureofworklist">Nature of Work:</label>
+                        <div id="natureofworkID">
                             <select required id="natureofworklist" name="natureofworklist" class="form-control" required>
                                 <?php if(isset($projectdata->nature_id) or isset($projectdata->assistance_id)) {
                                     ?>
@@ -295,122 +302,115 @@
                                     <?php
                                 } ?>
                             </select>
-                        </td>
-                        <td id = nature_maxmin>
-                            <input type = "text" name ="maxmin_nature" class = "form-control" disabled>
-                        </td>
+                        </div>
+                    </div>
 
-                    </tr>
-                    <tr>
-                        <td><label for="fundsourcelist" class="control-label">Fund Source:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select name="fundsourcelist" id="fundsourcelist" class="form-control">
-                                <option value="0">Choose Fund Source</option>
-                                <?php foreach($fundsourcelist as $fundsourceselect): ?>
-                                    <option value="<?php echo $fundsourceselect->fundsource_id; ?>"
-                                        <?php
-                                        if (isset($projectdata->fundsource_id) and $fundsourceselect->fundsource_id== $projectdata->fundsource_id) {
-                                            echo " selected";
-                                        } ?>
-                                    >
+                    <div class="col-sm-4">
+                        <label for="natureofworklist" class="control-label">Minimum - Maximum Amount :</label>
+                        <div id = "nature_maxmin">
+                            <div>
+                                <input type = "text" id="maxmin_nature" name ="maxmin_nature" class = "form-control" disabled>
+                            </div>
+                            <div id = "amount_requested">
+                                <label for="amount_requested" class="control-label">Amount Requested:</label>
 
-                                        <?php echo $fundsourceselect->fund_source; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="lgucounterpartlist" class="control-label">LGU counterpart:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
+                                <input type = "number" id="amount_requested" name ="amount_requested" class = "form-control" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="fundsourcelist" class="control-label">Fund Source:</label>
+                        <select name="fundsourcelist" id="fundsourcelist" class="form-control">
+                            <option value="">Choose Fund Source</option>
+                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
+                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>"
+                                    <?php
+                                    if (isset($projectdata->fundsource_id) and $fundsourceselect->fundsource_id== $projectdata->fundsource_id) {
+                                        echo " selected";
+                                    } ?>
+                                >
+
+                                    <?php echo $fundsourceselect->fund_source; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label for="lgucounterpartlist" class="control-label">LGU counterpart:</label>
                             <select name="lgucounterpartlist" id="lgucounterpartlist" class="form-control">
-                                <option value="0">Choose LGU counterpart</option>
+                                <option value="">Choose LGU counterpart</option>
                                 <?php foreach($lgucounterpartlist as $lgucounterpartselect): ?>
                                     <option value="<?php echo $lgucounterpartselect->lgucounterpart_id; ?>"
                                         <?php
-                                            if (isset($projectdata->lgucounterpart_id) and $lgucounterpartselect->lgucounterpart_id == $projectdata->lgucounterpart_id) {
-                                        echo " selected";
+                                        if (isset($projectdata->lgucounterpart_id) and $lgucounterpartselect->lgucounterpart_id == $projectdata->lgucounterpart_id) {
+                                            echo " selected";
                                         } ?>
                                     >
                                         <?php echo $lgucounterpartselect->lgu_counterpart; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="lgu_fundsource" class="control-label">LGU fundsource:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_fundsource ?>" required />
-                            <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="lgu_amount" class="control-label">LGU amount:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="lgu_amount" class="control-label">LGU amount:</label>
                             <input id="lgu_amount" name="lgu_amount" placeholder="LGU amount" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_amount ?>"required />
                             <span class="text-danger"><?php echo form_error('lgu_amount'); ?></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="project_cost" class="control-label">Project Cost:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="project_cost" name="project_cost" placeholder="Project Cost" type="text"  class="form-control"  value="<?php echo $projectdata->project_cost ?>" required />
-                            <span class="text-danger"><?php echo form_error('project_cost'); ?></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="project_amount" class="control-label">Project Amount:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="project_amount" name="project_amount" placeholder="Project amount" type="text"  class="form-control"  value="<?php echo $projectdata->project_amount ?>" required />
-                            <span class="text-danger"><?php echo form_error('project_amount'); ?></span>
-                        </td>
-                    </tr>
+                        </div>
 
-                    <tr>
-                        <td><label for="implementing_agency" class="control-label">Implementing Agency:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select name="implementing_agency" id="implementing_agency" class="form-control">
-                                <?php foreach($fundsourcelist as $fundsourceselect): ?>
-                                    <option value="<?php echo $fundsourceselect->fundsource_id; ?>"
-                                        <?php
-                                        if (isset($projectdata->fundsource_id) and $fundsourceselect->fundsource_id== $projectdata->fundsource_id) {
-                                            echo " selected";
-                                        } ?>
-                                    >
-                                        <?php echo $fundsourceselect->fund_source; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="project_amount" class="control-label">Status:</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="status" name="status" placeholder="Status" type="text"  class="form-control"  value="<?php echo $projectdata->status ?>" required />
-                            <span class="text-danger"><?php echo form_error('status'); ?></span>
-                        </td>
-                    </tr>
-                </table>
-                <div class="btn-group">
-                    <input id="btn_add" name="btn_add" type="submit" class="btn btn-primary" value="Update"/>
+                        <div class="col-sm-4">
+                            <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
+                            <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_fundsource ?>" required />
+                            <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
+                        </div>
+
                 </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label for="project_cost" class="control-label">Project Cost:</label>
+                        <input id="project_cost" name="project_cost" placeholder="Project Cost" type="text"  class="form-control"  value="<?php echo $projectdata->project_cost ?>" required />
+                        <span class="text-danger"><?php echo form_error('project_cost'); ?></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="implementing_agency" class="control-label">Implementing Agency:</label>
+                        <select name="implementing_agency" id="implementing_agency" class="form-control">
+                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
+                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>"
+                                    <?php
+                                    if (isset($projectdata->fundsource_id) and $fundsourceselect->fundsource_id== $projectdata->fundsource_id) {
+                                        echo " selected";
+                                    } ?>
+                                >
+                                    <?php echo $fundsourceselect->fund_source; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="project_amount" class="control-label">Status:</label>
+                        <input id="status" name="status" placeholder="Status" type="text"  class="form-control"  value="<?php echo $projectdata->status ?>" required />
+                        <span class="text-danger"><?php echo form_error('status'); ?></span>
+                    </div>
+
+                </div>
+
+
+
+                <div class="site-action">
+                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-success btn-lg btn-outline" data-toggle="tooltip"
+                             data-placement="top" data-original-title="Update">
+                        <i class="front-icon wb-pencil animation-scale-up" aria-hidden="true"></i>
+                    </button>
+
+                </div>
+
 
                 <?php echo form_close(); ?>
 
