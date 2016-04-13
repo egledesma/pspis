@@ -204,15 +204,36 @@ class communities extends CI_Controller
                 'type'        => 'text',
                 'id'          => 'nature_label',
                 'name'       => 'nature_label',
-                'value'   =>  $natureofworklist->minimum_amount.'-'.$natureofworklist->maximum_amount,
+                'value'   =>  '₱ '.$natureofworklist->minimum_amount.' - ₱ '.$natureofworklist->maximum_amount,
                 'class'        => 'form-control',
                 'disabled' => true
             );
 
             echo form_input($data);
 
+            $label = array(
+                'for'          => 'amount_requested',
+                'class'        => 'control-label'
+            );
+            echo form_label('Amount Requested:', '', $label);
+
+            $data1 = array(
+                'type'        => 'number',
+                'id'          => 'amount_requested',
+                'name'       => 'amount_requested',
+                'max'   => $natureofworklist->maximum_amount,
+                'min'   => $natureofworklist->minimum_amount,
+                'value'   =>  $natureofworklist->minimum_amount,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data1);
+
+
+
         }
     }
+
 
 
     public function assistance_session() {

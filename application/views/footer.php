@@ -490,31 +490,52 @@
 				$('#exampleFormContainer').formValidation({
 					framework: 'bootstrap',
 					fields: {
-						username: {
+						assistancelist: {
 							validators: {
 								notEmpty: {
-									message: 'The username is required'
+									message: 'The type of assistance title field is required'
 								}
 							}
 						},
-						password: {
+						projecttitle: {
 							validators: {
 								notEmpty: {
-									message: 'The password is required'
+									message: 'The project title field is required'
 								}
 							}
 						},
-						number: {
+						natureofworklist: {
 							validators: {
 								notEmpty: {
-									message: 'The credit card number is not valid'
+									message: 'The nature of work field is required'
 								}
 							}
 						},
-						cvv: {
+						regionlist: {
 							validators: {
 								notEmpty: {
-									message: 'The CVV number is required'
+									message: 'The region field is required'
+								}
+							}
+						},
+						provlist: {
+							validators: {
+								notEmpty: {
+									message: 'The province field is required'
+								}
+							}
+						},
+						munilist: {
+							validators: {
+								notEmpty: {
+									message: 'The municipality field is required'
+								}
+							}
+						},
+						brgylist: {
+							validators: {
+								notEmpty: {
+									message: 'The baragay field is required'
 								}
 							}
 						}

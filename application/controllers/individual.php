@@ -200,12 +200,15 @@ class individual extends CI_Controller
             $assistance_id = $_POST['assistance_id'];
             $natureofworklist = $this->communities_model->get_work_nature($assistance_id);
 
-            $natureofwork_list[''] = "Choose Nature of work";
+            $natureofwork_list[] = "Choose Nature of work";
             foreach($natureofworklist as $tempnatureofworklist) {
                 $natureofwork_list[$tempnatureofworklist->nature_id] = $tempnatureofworklist->work_nature;
             }
 
             $natureofworklist_prop = 'required="required"  id="natureofworklist" name="natureofworklist" class="form-control" required';
+            $natureofworklist_label = 'for="natureofworklist" class="control-label"';
+            $natureofworklist_id = 'id="natureofworklist"';
+            echo form_label('Nature of Work:', $natureofworklist_id,  $natureofworklist_label);
             echo form_dropdown('natureofworklist', $natureofwork_list,'', $natureofworklist_prop);
         }
     }
@@ -230,6 +233,9 @@ class individual extends CI_Controller
             }
 
             $provlist_prop = 'required="required" required id="provlist" name="provlist" class="form-control" onChange="get_muni();"';
+            $prov_id = 'id="provlist"';
+            $provlist_label = 'for="provlist" class="control-label" required';
+            echo form_label('Province:', $prov_id,  $provlist_label);
             echo form_dropdown('provlist', $province_list, '', $provlist_prop);
         }
     }
@@ -245,6 +251,9 @@ class individual extends CI_Controller
             }
 
             $munilist_prop = 'required="required" id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required';
+            $muni_id = 'id="munilist"';
+            $munilist_label = 'for="munilist" class="control-label" required';
+            echo form_label('Municipality/City:', $muni_id,  $munilist_label);
             echo form_dropdown('munilist', $muni_list,'',$munilist_prop);
         }
     }
@@ -259,6 +268,9 @@ class individual extends CI_Controller
             }
 
             $brgylist_prop = 'required="required" id="brgylist" name="brgylist" class="form-control" required';
+            $brgy_id = 'id="brgylist"';
+            $brgylist_label = 'for="brgylist" class="control-label" required';
+            echo form_label('Barangay:', $brgy_id,  $brgylist_label);
             echo form_dropdown('brgylist', $brgy_list,'',$brgylist_prop);
         }
     }

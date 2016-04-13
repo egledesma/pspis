@@ -98,7 +98,7 @@
                 <!-- Panel Wizard Form Container -->
                 <div class="panel" id="exampleWizardFormContainer">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Add New Project</h3>
+                        <marquee><h3 class="panel-title">Add New Project</h3></marquee>
                     </div>
                     <div class="panel-body">
                         <!-- Steps -->
@@ -256,7 +256,7 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-6">
                                         <div id="brgyID">
-                                            <select required id="brgylist" name="brgylist" class="form-control" required>
+                                            <select required id="brgylist" name="brgylist" class="form-control" required="required">
                                                 <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
                                                     ?>
                                                     <option value="">Choose Barangay</option>
@@ -341,6 +341,7 @@
                                 </div>
                             </div>
                         </form>
+
                         <!-- Wizard Content -->
                     </div>
                 </div>
