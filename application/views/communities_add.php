@@ -2,6 +2,22 @@
 
 ?>
 <script type="text/javascript">
+
+    function get_maxmin() {
+        var nature_id = $('#natureofworklist').val();
+        if(nature_id > 0) {
+            $.ajax({
+                url: "<?php echo base_url('communities/populate_naturemaxmin'); ?>",
+                async: false,
+                type: "POST",
+                data: "nature_id="+nature_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#nature_maxmin').html(data);
+                                   }
+            });
+        }
+    }
     function get_natureofwork() {
         var assistance_id = $('#assistancelist').val();
 
@@ -116,7 +132,7 @@
                           <td>
                               <div id="regionID">
                                   <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();">
-                                      <option value="0">Choose Region</option>
+                                      <option value="">Choose Region</option>
                                       <?php foreach($regionlist as $regionselect): ?>
                                           <option value="<?php echo $regionselect->region_code; ?>"
                                               <?php if(isset($_SESSION['region'])) {
@@ -217,7 +233,7 @@
                     <tr>
                         <td>
                             <select name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();">
-                                <option value="0">Choose Assistance</option>
+                                <option value="">Choose Assistance</option>
                                 <?php foreach($assistancelist as $assistanceselect): ?>
                                     <option value="<?php echo $assistanceselect->assistance_id; ?>"
                                         <?php if(isset($_SESSION['assistance'])) {
@@ -234,10 +250,11 @@
                     </tr>
                     <tr>
                         <td><label for="natureofworklist" class="control-label">Nature of Work:</label></td>
+                        <td><label for="natureofworklist" class="control-label">Minimum - Maximum Amount :</label></td>
                     </tr>
                     <tr>
                         <td id = "natureofworkID">
-                            <select required id="natureofworklist" name="natureofworklist" class="form-control" required>
+                            <select required id="natureofworklist" name="natureofworklist" class="form-control" onChange="get_maxmin();" required>
                                 <?php if(isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
                                     ?>
                                     <option value="">Choose Nature of work</option>
@@ -259,7 +276,9 @@
                                 } ?>
                             </select>
                         </td>
-
+                        <td id = nature_maxmin>
+                            <input type = "text" name ="maxmin_nature" class = "form-control" disabled>
+                        </td>
                     </tr>
                     <tr>
                         <td><label for="fundsourcelist" class="control-label">Fund Source:</label></td>

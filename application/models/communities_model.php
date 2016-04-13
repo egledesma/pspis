@@ -59,7 +59,10 @@ class communities_model extends CI_Model
         $get_work_nature = "
         SELECT
             nature_id,
-            work_nature
+            work_nature,
+            maximum_amount,
+            minimum_amount
+
         FROM
           lib_work_nature
         WHERE
@@ -71,6 +74,22 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_work_nature,$assistance_id)->result();
 
+    }
+    public function get_naturemaxmin($nature_id) {
+        $get_work_naturemaxmin = "
+        SELECT
+            maximum_amount,
+            minimum_amount
+        FROM
+          lib_work_nature
+        WHERE
+          nature_id = ?
+        and deleted = 0
+        ORDER BY
+          work_nature
+        ";
+
+        return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
     }
     public function get_fund_source()
     {

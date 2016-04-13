@@ -181,15 +181,39 @@ class communities extends CI_Controller
             $assistance_id = $_POST['assistance_id'];
             $natureofworklist = $this->communities_model->get_work_nature($assistance_id);
 
-            $natureofwork_list[] = "Choose Nature of work";
+            $natureofwork_list[''] = "Choose Nature of work";
             foreach($natureofworklist as $tempnatureofworklist) {
                 $natureofwork_list[$tempnatureofworklist->nature_id] = $tempnatureofworklist->work_nature;
             }
 
-            $natureofworklist_prop = 'id="natureofworklist" name="natureofworklist" class="form-control"';
+            $natureofworklist_prop = 'required="required" required id="natureofworklist" name="natureofworklist" class="form-control" onChange="get_maxmin();"';
             echo form_dropdown('natureofworklist', $natureofwork_list,'',$natureofworklist_prop);
+
+
+
         }
     }
+    public function populate_naturemaxmin()
+    {
+        if($_POST['nature_id'] > 0 and isset($_POST) and isset($_POST['nature_id']))
+        {
+        $nature_id = $_POST['nature_id'];
+        $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
+
+            $data = array(
+                'type'        => 'text',
+                'id'          => 'nature_label',
+                'name'       => 'nature_label',
+                'value'   =>  $natureofworklist->minimum_amount.'-'.$natureofworklist->maximum_amount,
+                'class'        => 'form-control',
+                'disabled' => true
+            );
+
+            echo form_input($data);
+
+        }
+    }
+
 
     public function assistance_session() {
         if(isset($_POST['assistancelist']) and $_POST['assistancelist'] > 0) {
