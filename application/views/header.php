@@ -93,6 +93,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         .position-example > .btn-block + .btn-block {
             margin-top: 215px;
         }
+
+        @import url(http://fonts.googleapis.com/css?family=Roboto+Mono);
+        [data-plugin="formatter"] {
+            font-family: 'Roboto Mono', Menlo, Monaco, Consolas, "Courier New", monospace;
+        }
     </style>
     <script>
         Breakpoints();

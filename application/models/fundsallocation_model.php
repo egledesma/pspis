@@ -7,34 +7,22 @@
  */
 
 
-class communities_model extends CI_Model
+class fundsallocation_model extends CI_Model
 {
 
 
-    public function get_project()
+    public function get_funds()
     {
-        $sql = 'select a.project_id,a.project_title, b.assistance_name,
-                c.work_nature, d.fund_source,e.lgu_counterpart,
-                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status,a.region_code
-                from tbl_projects a
-                INNER JOIN lib_assistance_type b
-                on a.assistance_id = b.assistance_id
-                INNER JOIN lib_work_nature c
-                on a.nature_id = c.nature_id
-                INNER JOIN lib_fund_source d
-                on a.fundsource_id = d.fundsource_id
-								INNER JOIN lib_fund_source f
-								on a.implementing_agency = f.fundsource_id
-                INNER JOIN lib_lgu_counterpart e
-                on a.lgucounterpart_id = e.lgucounterpart_id
-
+        $sql = 'select a.*, b.region_name from tbl_funds_allocated a
+                INNER JOIN lib_region b
+                on a.region_code = b.region_code
                 where a.deleted ="0"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
-
     }
+
     public function get_lib_assistance()
     {
         $get_lib_assistance = "
@@ -110,20 +98,16 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,
-                                  $lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status)
+    public function insertFunds($year,$regionlist,$funds_allocated,$funds_utilized,$myid,$status,$funds_identifier)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(assistance_id,
-                          project_title,region_code,prov_code,city_code,brgy_code,no_of_bene,nature_id,fundsource_id,project_amount,lgucounterpart_id,lgu_amount
-                          ,lgu_fundsource,project_cost,implementing_agency,status,deleted)
+        $this->db->query('insert into tbl_funds_allocated(
+                          for_year,region_code,funds_allocated,funds_utilized,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'",
-                          "'.$provlist.'","'.$munilist.'","'.$brgylist.'","'.$number_bene.'",
-                          "'.$natureofworklist.'","'.$fundsourcelist.'",
-                          "'.$project_amount.'","'.$lgucounterpartlist.'","'.$lgu_amount.'",
-                          "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$status.'","0")');
+                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
+                          "'.$funds_utilized.'",now(),"'.$myid.'","'.$status.'",
+                          "'.$funds_identifier.'")');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

@@ -33,6 +33,7 @@
 <script src="<?php echo base_url('assets/vendor/datatables-responsive/dataTables.responsive.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/datatables-tabletools/dataTables.tableTools.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/alertify-js/alertify.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/formatter-js/jquery.formatter.js'); ?>"></script>
 
 <!-- Scripts -->
 <script src="<?php echo base_url('assets/js/core.js'); ?>"></script>
@@ -56,6 +57,7 @@
 <script src="<?php echo base_url('assets/assets/js/components/toastr.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/datatables.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/alertify-js.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/components/formatter-js.js'); ?>"></script>
 
 <script>
 	(function() {
@@ -483,89 +485,7 @@
 
 	});
 
-	(function() {
-		var defaults = $.components.getDefaults("wizard");
-		var options = $.extend(true, {}, defaults, {
-			onInit: function() {
-				$('#exampleFormContainer').formValidation({
-					framework: 'bootstrap',
-					fields: {
-						assistancelist: {
-							validators: {
-								notEmpty: {
-									message: 'The type of assistance title field is required'
-								}
-							}
-						},
-						projecttitle: {
-							validators: {
-								notEmpty: {
-									message: 'The project title field is required'
-								}
-							}
-						},
-						natureofworklist: {
-							validators: {
-								notEmpty: {
-									message: 'The nature of work field is required'
-								}
-							}
-						},
-						regionlist: {
-							validators: {
-								notEmpty: {
-									message: 'The region field is required'
-								}
-							}
-						},
-						provlist: {
-							validators: {
-								notEmpty: {
-									message: 'The province field is required'
-								}
-							}
-						},
-						munilist: {
-							validators: {
-								notEmpty: {
-									message: 'The municipality field is required'
-								}
-							}
-						},
-						brgylist: {
-							validators: {
-								notEmpty: {
-									message: 'The baragay field is required'
-								}
-							}
-						}
-					}
-				});
-			},
-			validator: function() {
-				var fv = $('#exampleFormContainer').data(
-						'formValidation');
 
-				var $this = $(this);
-
-				// Validate the container
-				fv.validateContainer($this);
-
-				var isValidStep = fv.isValidContainer($this);
-				if (isValidStep === false || isValidStep === null) {
-					return false;
-				}
-
-				return true;
-			},
-			onFinish: function() {
-				// $('#exampleFormContainer').submit();
-			},
-			buttonsAppendTo: '.panel-body'
-		});
-
-		$("#exampleWizardFormContainer").wizard(options);
-	})();
 </script>
 <script>
 	(function(document, window, $) {

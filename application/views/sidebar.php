@@ -9,7 +9,7 @@
 
 					<!------------------------ DASHBOARD ------------------------>
 					<li class="site-menu-item has-sub active open">
-						<a href="<?php base_url('/dashboardc/dashboard','location'); ?>" data-slug="dashboard">
+						<a href="<?php echo base_url('dashboardc/dashboard') ?>" data-slug="dashboard">
 							<i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
 							<span class="site-menu-title">Dashboard</span>
 							<div class="site-menu-badge">
@@ -26,6 +26,12 @@
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
+							<li class="site-menu-item">
+								<a class="animsition-link" href="<?php echo base_url('fundsallocation/index') ?>" data-slug="uikit-buttons">
+									<i class="site-menu-icon " aria-hidden="true"></i>
+									<span class="site-menu-title">Funds Allocation</span>
+								</a>
+							</li>
 							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('individual/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>

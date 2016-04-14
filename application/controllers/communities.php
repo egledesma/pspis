@@ -21,6 +21,7 @@ class communities extends CI_Controller
         ));
         $this->load->view('footer');
     }
+
     public function addCommunities(){
         $communities_model = new communities_model();
 
@@ -63,6 +64,7 @@ class communities extends CI_Controller
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
+            $number_bene = $this->input->post('number_bene');
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
             $project_amount = $this->input->post('project_amount');
@@ -72,7 +74,7 @@ class communities extends CI_Controller
             $project_cost = $this->input->post('project_cost');
             $implementing_agency = $this->input->post('implementing_agency');
             $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');
@@ -130,6 +132,7 @@ class communities extends CI_Controller
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
+            $number_bene = $this->input->post('number_bene');
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
             $project_amount = $this->input->post('project_amount');
@@ -140,7 +143,7 @@ class communities extends CI_Controller
             $implementing_agency = $this->input->post('implementing_agency');
             $status = $this->input->post('status');
 
-            $updateResult = $communities_model->updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$assistancelist,$natureofworklist,$fundsourcelist
+            $updateResult = $communities_model->updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
                 ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
             if ($updateResult) {
 
