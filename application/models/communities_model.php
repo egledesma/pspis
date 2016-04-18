@@ -15,7 +15,7 @@ class communities_model extends CI_Model
     {
         $sql = 'select a.project_id,a.project_title, b.assistance_name,
                 c.work_nature, d.fund_source,e.lgu_counterpart,
-                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status,a.region_code
+                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
                 from tbl_projects a
                 INNER JOIN lib_assistance_type b
                 on a.assistance_id = b.assistance_id
@@ -23,10 +23,12 @@ class communities_model extends CI_Model
                 on a.nature_id = c.nature_id
                 INNER JOIN lib_fund_source d
                 on a.fundsource_id = d.fundsource_id
-								INNER JOIN lib_fund_source f
-								on a.implementing_agency = f.fundsource_id
+				INNER JOIN lib_fund_source f
+				on a.implementing_agency = f.fundsource_id
                 INNER JOIN lib_lgu_counterpart e
                 on a.lgucounterpart_id = e.lgucounterpart_id
+                INNER JOIN lib_region g
+                on a.region_code = g.region_code
 
                 where a.deleted ="0"
                ';
