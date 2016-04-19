@@ -22,6 +22,18 @@ class communities extends CI_Controller
         $this->load->view('footer');
     }
 
+    public function view(){
+        $communities_model = new communities_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+
+        $this->load->view('view_project',array(
+            'project' => $communities_model->get_project()
+        ));
+        $this->load->view('footer');
+    }
+
     public function addCommunities(){
         $communities_model = new communities_model();
 
