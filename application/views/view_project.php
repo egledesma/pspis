@@ -16,28 +16,30 @@
             <!-- Example Panel With All -->
             <div class="panel panel-bordered">
                 <div class="panel-heading">
-                    <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; Construction of Day Care Center &nbsp;&nbsp;&nbsp;</mark></h1>
+                    <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; <?php echo $projectdata->project_title ?> &nbsp;&nbsp;&nbsp;</mark></h1>
                     <div class="panel-actions">
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-edit" aria-hidden="true"></i> Edit</a>
+                        <a class= "btn btn-outline btn-primary "  data-toggle="tooltip" data-placement="top" data-original-title="Edit Project" href="<?php echo base_url('communities/updateCommunities/'.$projectdata->project_id.'') ?>"><i class="icon wb-edit" aria-hidden="true"></i> Edit</a>
                     </div>
                 </div>
 
                 <div class="panel-body">
                     <div>
-                    <h5><i class="icon wb-globe" aria-hidden="true"></i>Project Location:</h5><hr>
+
                     <ul class="list-group list-group-dividered list-group-full col-lg-6">
-                        <li class="list-group-item"> Region: </li>
-                        <li class="list-group-item"> Province: </li>
-                        <li class="list-group-item"> City/Municipality</li>
-                        <li class="list-group-item"> Barangay: </li>
+                        <h5><i class="icon wb-globe" aria-hidden="true"></i><b>Project Location:</b></h5>
+                        <li class="list-group-item"> Region:  <b><?php echo $projectdata->region_name ?></b></li>
+                        <li class="list-group-item"> Province:  <b><?php echo $projectdata->prov_name ?></b></li>
+                        <li class="list-group-item"> City/Municipality:  <b><?php echo $projectdata->city_name ?></b></li>
+                        <li class="list-group-item"> Barangay:  <b><?php echo $projectdata->brgy_name ?></b></li>
                     </ul>
                     </div>
                     <div>
                         <ul class="list-group list-group-dividered list-group-full col-lg-6">
-                            <li class="list-group-item"> Type of Assistance: </li>
-                            <li class="list-group-item"> Nature of Work: </li>
-                            <li class="list-group-item"> Number of Beneficiaries: </li>
-                            <li class="list-group-item"> Barangay: </li>
+                        <h5><i class="icon wb-pencil" aria-hidden="true"></i><b>Project Information:</b></h5>
+                            <li class="list-group-item"> Type of Assistance: <b><?php echo $projectdata->assistance_name ?></b></li>
+                            <li class="list-group-item"> Nature of Work: <b><?php echo $projectdata->work_nature ?></b></li>
+                            <li class="list-group-item"> Number of Beneficiaries: <b><?php echo $projectdata->no_of_bene ?></b></li>
+                            <!--<li class="list-group-item"> Barangay: <b><?php //echo $projectdata->region_name ?></b></li> -->
                         </ul>
                     </div>
                 </div>
@@ -49,10 +51,44 @@
             <!-- Example Panel With All -->
             <div class="panel panel-bordered">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Project Timeline</h1>
+                    <h1 class="panel-title">Implementation</h1>
 
                     <div class="panel-actions">
-                        <a class= "btn btn-outline btn-danger"   href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add</a>
+                        <?php if($implementationdata->implementation_id == '') { ?>
+                        <a class="btn btn-outline btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Add" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true" ></i> Add</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group list-group-dividered list-group-full">
+                        <h5><i class="icon wb-time" aria-hidden="true"></i><b>Project Timeline:</b></h5>
+                    </ul>
+                </div>
+                        <?php } else { ?>
+                        <a class="btn btn-outline btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Edit" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true" ></i> Edit</a>
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group list-group-dividered list-group-full">
+                        <h5><i class="icon wb-time" aria-hidden="true"></i><b>Project Timeline:</b></h5>
+                        <li class="list-group-item"> Start Date:  <b><?php echo $implementationdata->start_date ?></b></li>
+                        <li class="list-group-item"> End Date:  <b><?php echo $implementationdata->end_date ?></b></li>
+                        <li class="list-group-item"> Status:  <b><?php echo $implementationdata->project_status ?></b></li>
+                    </ul>
+                </div>
+                <?php } ?>
+            </div>
+            <!-- End Example Panel With All -->
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Example Panel With All -->
+            <div class="panel panel-bordered">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Budget</h1>
+
+                    <div class="panel-actions">
+                        <a class= "btn btn-outline btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Add" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -61,5 +97,4 @@
             </div>
             <!-- End Example Panel With All -->
         </div>
-
 </div>

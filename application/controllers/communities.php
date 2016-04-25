@@ -22,15 +22,19 @@ class communities extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function view(){
+    public function view($project_id){
         $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
+        $getList['assistancelist'] = $communities_model->get_lib_assistance();
+        $getList['fundsourcelist'] = $communities_model->get_fund_source();
+        $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+        $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+        $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+        $getList['regionlist'] = $communities_model->get_regions();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-
-        $this->load->view('view_project',array(
-            'project' => $communities_model->get_project()
-        ));
+        $this->load->view('view_project', $getList);
         $this->load->view('footer');
     }
 

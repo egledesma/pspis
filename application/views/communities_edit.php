@@ -114,7 +114,9 @@
         <h1 class="page-title">Assistance to Communities</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li class="active">Communities</li>
+            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('communities/view/'.$projectdata->project_id.'') ?>">View Project</a></li>
+            <li class="active">Edit</li>
         </ol>
     </div>
 
@@ -136,7 +138,7 @@
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="assistancelist">Type of Assistance:</label>
-                        <select name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();">
+                        <select autofocus name="assistancelist" id="assistancelist" class="form-control" onChange="get_natureofwork();">
                             <option value="">Choose Assistance</option>
                             <?php foreach($assistancelist as $assistanceselect): ?>
                                 <option value="<?php echo $assistanceselect->assistance_id; ?>"
@@ -272,7 +274,7 @@
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="number_bene" class="control-label">Number of Beneficiaries:</label>
-                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="" required autofocus/>
+                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="" required/>
                         <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                     </div>
                 </div>

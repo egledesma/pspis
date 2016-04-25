@@ -37,6 +37,53 @@ class communities_model extends CI_Model
         return $result;
 
     }
+
+
+    public function get_project_byid($project_id = 0)
+    {
+        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
+        if ($query->num_rows() > 0){
+            return $query->row();
+        } else {
+            return FALSE;
+        }
+        $this->db->close();
+    }
+
+    public function view_projectbyid($project_id = 0)
+    {
+        $sql = 'select a.project_id,a.project_title, b.assistance_name,
+                c.work_nature, d.fund_source,e.lgu_counterpart, h.prov_name, i.city_name, j.brgy_name, a.no_of_bene,
+                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
+                from tbl_projects a
+                INNER JOIN lib_assistance_type b
+                on a.assistance_id = b.assistance_id
+                INNER JOIN lib_work_nature c
+                on a.nature_id = c.nature_id
+                INNER JOIN lib_fund_source d
+                on a.fundsource_id = d.fundsource_id
+				INNER JOIN lib_fund_source f
+				on a.implementing_agency = f.fundsource_id
+                INNER JOIN lib_lgu_counterpart e
+                on a.lgucounterpart_id = e.lgucounterpart_id
+                INNER JOIN lib_region g
+                on a.region_code = g.region_code
+                INNER JOIN lib_provinces h
+                on a.prov_code = h.prov_code
+                INNER JOIN lib_municipality i
+                on a.city_code = i.city_code
+                INNER JOIN lib_brgy j
+                on a.brgy_code = j.brgy_code
+
+                where a.deleted ="0"
+                and a.project_id ="'.$project_id.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+
     public function get_lib_assistance()
     {
         $get_lib_assistance = "
@@ -200,16 +247,7 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
-    public function get_project_byid($project_id = 0)
-    {
-        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
-        if ($query->num_rows() > 0){
-            return $query->row();
-        } else {
-            return FALSE;
-        }
-        $this->db->close();
-    }
+
     public function get_regions() {
         $get_regions = "
         SELECT
