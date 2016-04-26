@@ -65,6 +65,11 @@
 <script src="<?php echo base_url('assets/js/components/select2.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/bootstrap-select.js'); ?>"></script>
 
+<!--High Charts-->
+<script src="<?php echo base_url('assets/js/highcharts.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/modules/exporting.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/modules/export-csv.js'); ?>"></script>
+
 <script>
 	(function() {
 		$('#exampleWarningConfirm').on("click", function() {

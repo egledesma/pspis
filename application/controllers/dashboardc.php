@@ -16,7 +16,6 @@ class dashboardc extends CI_Controller
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-
        /** $this->load->view('dashboard',array('getIndiv'=> $dashboard_model->getDashboardIndividual($user_region),
                 'getDisaster'=> $dashboard_model->getDashboardDisaster($user_region),
                 'getEco'=> $dashboard_model->getDashboardEconomic($user_region),

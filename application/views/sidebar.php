@@ -8,7 +8,7 @@
 					<li class="site-menu-category">General</li>
 
 					<!------------------------ DASHBOARD ------------------------>
-					<li class="site-menu-item has-sub active open">
+					<li >
 						<a href="<?php echo base_url('dashboardc/dashboard') ?>" data-slug="dashboard">
 							<i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
 							<span class="site-menu-title">Dashboard</span>
