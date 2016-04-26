@@ -78,7 +78,7 @@
             <!-- End Example Panel With All -->
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-8">
             <!-- Example Panel With All -->
             <div class="panel panel-bordered">
                 <div class="panel-heading">
