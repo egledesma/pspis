@@ -1,5 +1,5 @@
 /**
- * Highcharts JS v4.2.4 (2016-04-14)
+ * Highcharts JS v4.2.3 (2016-02-08)
  * Highcharts Broken Axis module
  * 
  * License: www.highcharts.com/license
@@ -289,19 +289,21 @@
 
 	function drawPointsWrapped(proceed) {
 		proceed.apply(this);
-		this.drawBreaks(this.xAxis, ['x']);
-		this.drawBreaks(this.yAxis, pick(this.pointArrayMap, ['y']));
+		this.drawBreaks();
 	}
 
-	H.Series.prototype.drawBreaks = function (axis, keys) {
+	H.Series.prototype.drawBreaks = function () {
 		var series = this,
 			points = series.points,
+			axis,
 			breaks,
 			threshold,
+			axisName = 'Axis',
 			eventName,
 			y;
 
-		each(keys, function (key) {
+		each(['y', 'x'], function (key) {
+			axis = series[key + axisName];
 			breaks = axis.breakArray || [];
 			threshold = axis.isXAxis ? axis.min : pick(series.options.threshold, axis.min);
 			each(points, function (point) {

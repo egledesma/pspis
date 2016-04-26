@@ -17,8 +17,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <link rel="apple-touch-icon" href="<?php echo base_url('assets/images/apple-touch-icon.png'); ?>">
     <link rel="shortcut icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <link href="<?php echo base_url('assets/bootstrap/css/root.css'); ?>" rel="stylesheet">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
