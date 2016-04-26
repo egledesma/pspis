@@ -7,7 +7,7 @@
  z*/
 
 
-class communities extends CI_Controller
+class implementation extends CI_Controller
 {
 
     public function index(){
@@ -105,38 +105,19 @@ class communities extends CI_Controller
         }
     }
 
-    public function updateCommunities($project_id)
+    public function editImplementation($implementation_id)
     {
-        $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
 
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->init_rpmb_session();
-            $this->assistance_session();
-            $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-            $getList['projectdata'] = $communities_model->get_project_byid($project_id);
-            $getList['regionlist'] = $communities_model->get_regions();
-
-//            if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-//                $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
-//            }
-//            if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-//                $getList['munilist'] = $communities_model->get_muni($_SESSION['province']);
-//            }
-//            if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-//                $getList['brgylist'] = $communities_model->get_brgy($_SESSION['muni']);
-//            }
-//
-//            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-//                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
-//            }
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('communities_edit', $getList);
+            $this->load->view('implementation_edit',array(
+                'implementationdetails' => $implementation_model->get_implementation($implementation_id)
+            ));
             $this->load->view('footer');
         }
         else
@@ -177,7 +158,7 @@ class communities extends CI_Controller
             $this->redirectIndex();
         }
     }
-
+    
     public function deleteCommunities($project_id)
     {
         $communities_model = new communities_model();

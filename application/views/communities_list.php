@@ -31,7 +31,7 @@
                     <th>Fund Source</th>
                     <th>Project Cost</th>
                     <th>Implementing Agency</th>
-                    <th>Status</th>
+                    <!-- <th>Status</th> -->
                 </tr>
                 </thead>
                 <tfoot>
@@ -44,7 +44,7 @@
                     <th>Fund Source</th>
                     <th>Project Cost</th>
                     <th>Implementing Agency</th>
-                    <th>Status</th>
+                   <!-- <th>Status</th> -->
                 </tr>
                 </tfoot>
                 <tbody  data-plugin="scrollable" data-direction="horizontal">
@@ -71,7 +71,7 @@
                     <td><?php echo $projectData->fund_source; ?></td>
                     <td><?php echo '₱ '. number_format($projectData->project_cost,2); ?></td>
                     <td><?php echo $projectData->implementing_agency; ?></td>
-                    <td><?php echo $projectData->status; ?></td>
+                   <!-- <td><?php // echo $projectData->status; ?></td> -->
 
                 </tr>
                 <?php endforeach ?>

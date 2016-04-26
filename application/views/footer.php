@@ -34,6 +34,9 @@
 <script src="<?php echo base_url('assets/vendor/datatables-tabletools/dataTables.tableTools.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/alertify-js/alertify.js'); ?>"></script>
 <script src="<?php echo base_url('assets/vendor/formatter-js/jquery.formatter.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/bootstrap-select/bootstrap-select.js'); ?>"></script>
+<script src="<?php echo base_url('assets/vendor/select2/select2.min.js'); ?>"></script>
 
 <!-- Scripts -->
 <script src="<?php echo base_url('assets/js/core.js'); ?>"></script>
@@ -58,6 +61,9 @@
 <script src="<?php echo base_url('assets/js/components/datatables.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/alertify-js.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/components/formatter-js.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/components/bootstrap-datepicker.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/components/select2.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/components/bootstrap-select.js'); ?>"></script>
 
 <script>
 	(function() {

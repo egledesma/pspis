@@ -48,15 +48,26 @@ class implementation_model extends CI_Model
 
     }
 
-    public function view_implementationbyproject($project_id = 0)
+    public function get_implementation($implementation_id = 0)
     {
-        $query = $this->db->get_where('tbl_projectimplementation',array('project_id'=>$project_id));
+        $query = $this->db->get_where('tbl_project_implementation',array('implementation_id'=>$implementation_id));
         if ($query->num_rows() > 0){
             return $query->row();
         } else {
             return FALSE;
         }
         $this->db->close();
+    }
+
+    public function view_implementationbyproject($project_id = 0)
+    {
+        $sql = 'select * from tbl_project_implementation
+                where project_id ="'.$project_id.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
     }
 
     public function updateAssistance($aid, $assistance_name, $myid)

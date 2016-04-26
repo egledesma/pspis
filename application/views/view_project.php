@@ -1,4 +1,4 @@
-
+<?php error_reporting(0); ?>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -59,12 +59,9 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <ul class="list-group list-group-dividered list-group-full">
-                        <h5><i class="icon wb-time" aria-hidden="true"></i><b>Project Timeline:</b></h5>
-                    </ul>
                 </div>
                         <?php } else { ?>
-                        <a class="btn btn-outline btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Edit" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true" ></i> Edit</a>
+                        <a class="btn btn-outline btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Edit" href="<?php echo base_url('implementation/editImplementation/'.$implementationdata->implementation_id.'') ?>"><i class="icon wb-edit" aria-hidden="true" ></i> Edit</a>
 
                     </div>
                 </div>
@@ -72,7 +69,7 @@
                     <ul class="list-group list-group-dividered list-group-full">
                         <h5><i class="icon wb-time" aria-hidden="true"></i><b>Project Timeline:</b></h5>
                         <li class="list-group-item"> Start Date:  <b><?php echo $implementationdata->start_date ?></b></li>
-                        <li class="list-group-item"> End Date:  <b><?php echo $implementationdata->end_date ?></b></li>
+                        <li class="list-group-item"> End Date:  <b><?php echo $implementationdata->target_date ?></b></li>
                         <li class="list-group-item"> Status:  <b><?php echo $implementationdata->project_status ?></b></li>
                     </ul>
                 </div>
