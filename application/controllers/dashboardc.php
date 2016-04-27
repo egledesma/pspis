@@ -17,7 +17,9 @@ class dashboardc extends CI_Controller
         $this->load->view('navbar');
         $this->load->view('sidebar');
 
-        $this->load->view('dashboard',array('getAllocUtil'=>$dashboard_model->fundsAllocUtil()));
+        $this->load->view('dashboard',array('getAllocUtil'=>$dashboard_model->fundsAllocUtil(),
+            'getGrand'=>$dashboard_model->grandTotal()
+        ));
         $this->load->view('footer');
     }
 

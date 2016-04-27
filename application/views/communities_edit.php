@@ -315,7 +315,6 @@
                             </div>
                             <div id = "amount_requested">
                                 <label for="amount_requested" class="control-label">Amount Requested:</label>
-
                                 <input type = "number" id="amount_requested" name ="amount_requested" class = "form-control" >
                             </div>
                         </div>

@@ -22,4 +22,12 @@ class dashboard_model extends CI_Model
         $query = $this->db->query($sql);
         return  $query->result_array();
     }
+    public function grandTotal(){
+
+        $sql = 'select sum(funds_allocated) as saro,sum(funds_utilized) as utilized ,sum(funds_allocated-funds_utilized) as balance
+from tbl_funds_allocated
+where for_year = 2016 and deleted  = 0;';
+        $query = $this->db->query($sql);
+        return  $query->result_array();
+    }
 }

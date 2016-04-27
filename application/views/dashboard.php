@@ -21,9 +21,21 @@ $util_format =  substr($util,0,-1);
 $remaining_format =  substr($remaining,0,-1);
 
 ?>
+<?php
+$grandUtil = '';
+$grandBalance = '';
+$grandSARO = '';
+foreach($getGrand as $key=>$value){
+    $grandBalance .= "".$value['balance']."";
+    $grandSARO .= "".$value['saro']."";
+    $grandUtil .= "".$value['utilized']."";
+
+}
+
 ?>
+
 <!--<pre>-->
-<!--        --><?php //print_r($alloc_format)?><!--<br>-->
+<!--        --><?php //echo $grandSaro?><!--<br>-->
 <!--        --><?php //print_r($region_format)?><!--<br>-->
 <!--        --><?php //print_r($util_format)?><!--<br>-->
 <!--        --><?php //print_r($remaining_format)?><!--<br>-->
@@ -40,9 +52,58 @@ $remaining_format =  substr($remaining,0,-1);
         </ol>
     </div>
 
-    <style type="text/css">
-        ${demo.css}
-    </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#container2').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Nationwide'
+                },
+                subtitle: {
+                    text: 'Utilization of SARO  ₱ <?php echo $grandSARO; ?>'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: ₱ {point.y:,.2f} ({point.percentage:.1f} %)',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Brands',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Remaining Funds',
+                        y: <?php echo $grandBalance;?>
+                    }, {
+                        name: 'Utilized',
+                        y:  <?php echo $grandUtil;?>,
+                        sliced: true,
+                        selected: true
+                    }]
+                }]
+            });
+        });
+    </script>
+
+    <div id="container2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
     <script type="text/javascript">
 
         $(function () {
@@ -110,8 +171,6 @@ $remaining_format =  substr($remaining,0,-1);
             });
         });
     </script>
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <script type="text/javascript">
         $(function () {
@@ -169,12 +228,12 @@ $remaining_format =  substr($remaining,0,-1);
                     }
                 },
                 series: [ {
-                    name: 'Utilized',
-                    data: [<?php echo $util_format;?>]
-
-                }, {
                     name: 'Remaining Balance',
                     data: [<?php echo $remaining_format;?>]
+
+                }, {
+                    name: 'Utilized',
+                    data: [<?php echo $util_format;?>]
 
                 }]
             });
