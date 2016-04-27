@@ -25,7 +25,8 @@
                         <th>ID</th>
                         <th>Year</th>
                         <th>Region</th>
-                        <th>Funds Allocated</th>
+                        <th>Allocated Funds</th>
+                        <th>Funds Downloaded to LGU</th>
                         <th>Funds Utilized</th>
                         <th>Remaining Budget</th>
                         <th>Status</th>
@@ -37,7 +38,8 @@
                         <th>ID</th>
                         <th>Year</th>
                         <th>Region</th>
-                        <th>Funds Allocated</th>
+                        <th>Allocated Funds</th>
+                        <th>Funds Downloaded to LGU</th>
                         <th>Funds Utilized</th>
                         <th>Remaining Budget</th>
                         <th>Status</th>
@@ -47,10 +49,16 @@
                     <tbody>
                     <?php foreach($fundsdetails as $fundsData):
                        $fundsallocate = $fundsData->funds_allocated;
+                       $fundsdownload = $fundsData->funds_downloaded;
                        $fundsutilize = $fundsData->funds_utilized;
-                       $budget =($fundsallocate - $fundsutilize);
-                       $percent = ($fundsutilize / $fundsallocate);
-                       $status = number_format( $percent * 100, 2 ) . '%';
+                       $budget =($fundsallocate - $fundsdownload);
+                        if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
+
+                            $status = number_format( $percent * 100, 2 ) . '%';
+                        } else {
+                            $status = "0.00%";
+                        }
+
 
                         ?>  <!--pagination buttons -->
 
@@ -59,6 +67,7 @@
                             <td><?php echo $fundsData->for_year; ?></td>
                             <td><?php echo $fundsData->region_name; ?></td>
                             <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
+                            <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
                             <td><?php echo '₱ '. number_format($fundsutilize,2); ?></td>
                             <td><?php echo '₱ '. number_format($budget,2); ?></td>
                             <td><?php echo $status; ?></td>

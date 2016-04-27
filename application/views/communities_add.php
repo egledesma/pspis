@@ -122,7 +122,8 @@
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li class="active">Communities</li>
+            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li class="active">Add</li>
         </ol>
     </div>
 
@@ -388,7 +389,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="project_amount" class="control-label">Status:</label>
+                        <label for="status" class="control-label">Status:</label>
                         <input id="status" name="status" placeholder="Status" type="text"  class="form-control"  value="<?php echo set_value('status'); ?>" required autofocus/>
                         <span class="text-danger"><?php echo form_error('status'); ?></span>
                     </div>

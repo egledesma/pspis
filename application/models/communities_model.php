@@ -124,6 +124,8 @@ class communities_model extends CI_Model
         return $this->db->query($get_work_nature,$assistance_id)->result();
 
     }
+
+
     public function get_naturemaxmin($nature_id) {
         $get_work_naturemaxmin = "
         SELECT
@@ -159,7 +161,7 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,
+    public function insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
                                   $lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status)
     {
 
@@ -173,6 +175,7 @@ class communities_model extends CI_Model
                           "'.$natureofworklist.'","'.$fundsourcelist.'",
                           "'.$project_amount.'","'.$lgucounterpartlist.'","'.$lgu_amount.'",
                           "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$status.'","0")');
+
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

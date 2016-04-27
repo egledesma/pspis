@@ -7,7 +7,7 @@
  z*/
 
 
-class communities extends CI_Controller
+class budget extends CI_Controller
 {
 
     public function index(){
@@ -25,13 +25,11 @@ class communities extends CI_Controller
     public function view($project_id){
         $communities_model = new communities_model();
         $implementation_model = new implementation_model();
-        $budget_model = new budget_model();
         $getList['assistancelist'] = $communities_model->get_lib_assistance();
         $getList['fundsourcelist'] = $communities_model->get_fund_source();
         $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
         $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
         $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
-        $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
         $getList['regionlist'] = $communities_model->get_regions();
         $this->load->view('header');
         $this->load->view('navbar');
@@ -85,14 +83,14 @@ class communities extends CI_Controller
             $number_bene = $this->input->post('number_bene');
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
-            $project_amount = $this->input->post('amount_requested');
+            $project_amount = $this->input->post('project_amount');
             $lgucounterpartlist = $this->input->post('lgucounterpartlist');
             $lgu_amount = $this->input->post('lgu_amount');
             $lgu_fundsource = $this->input->post('lgu_fundsource');
             $project_cost = $this->input->post('project_cost');
             $implementing_agency = $this->input->post('implementing_agency');
             $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');
@@ -107,38 +105,19 @@ class communities extends CI_Controller
         }
     }
 
-    public function updateCommunities($project_id)
+    public function editImplementation($implementation_id)
     {
-        $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
 
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->init_rpmb_session();
-            $this->assistance_session();
-            $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-            $getList['projectdata'] = $communities_model->get_project_byid($project_id);
-            $getList['regionlist'] = $communities_model->get_regions();
-
-//            if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-//                $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
-//            }
-//            if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-//                $getList['munilist'] = $communities_model->get_muni($_SESSION['province']);
-//            }
-//            if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-//                $getList['brgylist'] = $communities_model->get_brgy($_SESSION['muni']);
-//            }
-//
-//            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-//                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
-//            }
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('communities_edit', $getList);
+            $this->load->view('implementation_edit',array(
+                'implementationdetails' => $implementation_model->get_implementation($implementation_id)
+            ));
             $this->load->view('footer');
         }
         else
@@ -179,7 +158,7 @@ class communities extends CI_Controller
             $this->redirectIndex();
         }
     }
-
+    
     public function deleteCommunities($project_id)
     {
         $communities_model = new communities_model();

@@ -8,13 +8,10 @@
 					<li class="site-menu-category">General</li>
 
 					<!------------------------ DASHBOARD ------------------------>
-					<li >
+					<li class="site-menu-item">
 						<a href="<?php echo base_url('dashboardc/dashboard') ?>" data-slug="dashboard">
 							<i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
 							<span class="site-menu-title">Dashboard</span>
-							<div class="site-menu-badge">
-								<span class="badge badge-success">2</span>
-							</div>
 						</a>
 					</li>
 
@@ -35,13 +32,13 @@
 							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('individual/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
-									<span class="site-menu-title">Individuals</span>
+									<span class="site-menu-title">AICS</span>
 								</a>
 							</li>
 							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('communities/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
-									<span class="site-menu-title">Communities</span>
+									<span class="site-menu-title">ACN</span>
 								</a>
 							</li>
 							<!--<li class="site-menu-item">
@@ -86,7 +83,7 @@
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('sourcefund/index/0') ?>" data-slug="layout-grids">
+								<a class="animsition-link" href="<?php echo base_url('sourcefund/index') ?>" data-slug="layout-grids">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Source of Funds</span>
 								</a>

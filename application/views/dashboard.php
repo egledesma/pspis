@@ -125,7 +125,7 @@ foreach($getGrand as $key=>$value){
                     text: 'FUND MONITORING'
                 },
                 subtitle: {
-                    text: 'Allocated , Utilized and Remaining Balance'
+                    text: 'Sub-Allotment Release Order (SARO) , Downloaded, Utilized and Remaining Balance'
                 },
 
                 xAxis: {
@@ -142,7 +142,7 @@ foreach($getGrand as $key=>$value){
 
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>₱ {point.y:,.1f} </b>({point.percentage:.0f}%)</td></tr>',
+                    '<td style="padding:0"><b>₱ {point.y:.2f}</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
@@ -156,7 +156,7 @@ foreach($getGrand as $key=>$value){
                     }
                 },
                 series: [{
-                    name: 'Allocated',
+                    name: 'SARO',
                     data: [<?php echo $alloc_format;?>]
 
                 }, {
@@ -182,7 +182,7 @@ foreach($getGrand as $key=>$value){
                     text: 'FUND MONITORING'
                 },
                 subtitle: {
-                    text: 'Allocated , Utilized and Remaining Balance'
+                    text: 'Sub-Allotment Release Order (SARO) , Downloaded, Utilized and Remaining Balance'
                 },
                 xAxis: {
                     categories: [<?php echo $region_format;?>],

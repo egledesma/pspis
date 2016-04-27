@@ -78,18 +78,86 @@
             <!-- End Example Panel With All -->
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <!-- Example Panel With All -->
             <div class="panel panel-bordered">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Budget</h1>
+                    <h1 class="panel-title">Project Budget</h1>
 
                     <div class="panel-actions">
-                        <a class= "btn btn-outline btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Add" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add</a>
+                        <a class= "btn btn-outline btn-primary "  data-toggle="tooltip" data-placement="top" data-original-title="Edit Project" href="<?php echo base_url('communities/updateCommunities/'.$projectdata->project_id.'') ?>"><i class="icon wb-edit" aria-hidden="true"></i> Edit</a>
                     </div>
                 </div>
+
                 <div class="panel-body">
-                    <p></P>
+                    <div class="col-lg-6">
+                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Fund Transfer:</b> <a data-toggle="tooltip" data-placement="top" data-original-title="Transfer Funds"  class= "btn btn-outline btn-danger pull-right btn-sm"><i class="icon wb-plus"></i></a></h5>
+                        <table class="table table-striped margin-bottom-10">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1st Tranche:</td>
+                                <td><?php echo '₱ '. number_format($budgetdata->first_tranche,2); ?></td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>2nd Tranche</td>
+                                <td>121,228</td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>3rd Tranche</td>
+                                <td>10,685</td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-1"></div>
+
+                    <div class="col-lg-5">
+                        <h5><i class="icon wb-clipboard" aria-hidden="true"></i><b>Liquidation Report:</b><a data-toggle="tooltip" data-placement="top" data-original-title="Liquidate Funds"  class= "btn btn-outline btn-danger pull-right  btn-sm"><i class="icon wb-plus"></i></a></h5>
+                        <table class="table table-striped margin-bottom-10">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1st Tranche</td>
+                                <td><?php echo  '₱ '. number_format($budgetdata->first_liquidate,2); ?></td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>2nd Tranche</td>
+                                <td>121,228</td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>3rd Tranche</td>
+                                <td>10,685</td>
+                                <td>4/27/2016</td>
+                                <td>90%</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!-- End Example Panel With All -->
