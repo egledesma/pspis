@@ -4,13 +4,18 @@ $alloc = '';
 $util = '';
 $remaining = '';
 $region = '';
+$status = '';
 foreach($getAllocUtil as $key=>$value){
     $alloc .= "".$value['funds_allocated'].",";
     $util .= "".$value['funds_utilized'].",";
     $remaining .= "".$value['RemainingBudget'].",";
     $region .= "'".$value['region_name']."',";
+    $status .= "".$value['Status'].",";
 }
+
+
 $region_format =  substr($region,0,-1);
+$status_format =  substr($status,0,-1);
 $alloc_format =  substr($alloc,0,-1);
 $util_format =  substr($util,0,-1);
 $remaining_format =  substr($remaining,0,-1);
@@ -39,7 +44,18 @@ $remaining_format =  substr($remaining,0,-1);
         ${demo.css}
     </style>
     <script type="text/javascript">
+
         $(function () {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false,
+
+                },
+                lang: {
+                    decimalPoint: '.',
+                    thousandsSep: ','
+                }
+            });
             $('#container').highcharts({
                 chart: {
                     type: 'column'
@@ -50,6 +66,7 @@ $remaining_format =  substr($remaining,0,-1);
                 subtitle: {
                     text: 'Allocated , Utilized and Remaining Balance'
                 },
+
                 xAxis: {
                     categories: [<?php echo $region_format;?>],
                     crosshair: true
@@ -61,12 +78,14 @@ $remaining_format =  substr($remaining,0,-1);
                     }
                 },
                 tooltip: {
+
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    '<td style="padding:0"><b>₱ {point.y:,.1f} </b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
+
                 },
                 plotOptions: {
                     column: {
@@ -85,6 +104,10 @@ $remaining_format =  substr($remaining,0,-1);
                 }, {
                     name: 'Remaining Balance',
                     data: [<?php echo $remaining_format;?>]
+
+                }, {
+                    name: 'Status',
+                    data: [<?php echo $status_format;?>]
 
                 }]
             });
