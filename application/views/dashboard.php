@@ -100,9 +100,10 @@ foreach($getGrand as $key=>$value){
         });
     </script>
 
-    <div id="container2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
     <script type="text/javascript">
 
