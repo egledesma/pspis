@@ -22,15 +22,19 @@ class implementation_model extends CI_Model
 
     }
 
-    public function InsertAssistance($assistance_name)
+    public function insertImplementation($project_id, $start_date, $target_date, $project_status)
     {
         $this->db->trans_begin();
-        $this->db->query('INSERT INTO lib_assistance_type(assistance_name,date_created,date_modified)
+        $this->db->query('INSERT INTO tbl_project_implementation(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
                           VALUES
                           (
-                          "'.$assistance_name.'",
+                          "'.$project_id.'",
+                          "'.$start_date.'",
+                          "'.$target_date.'",
+                          "'.$project_status.'",
 						  now(),
-						  now()
+						  "'.$this->session->userdata('uid').'",
+						  0
                           )');
 
         if ($this->db->trans_status() === FALSE)

@@ -11,7 +11,7 @@ class implementation extends CI_Controller
 {
 
     public function index(){
-       $communities_model = new communities_model();
+        $communities_model = new communities_model();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
@@ -38,70 +38,40 @@ class implementation extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function addCommunities(){
+    public function addImplementation($project_id){
         $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
+        $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
 
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->assistance_session();
-            $this->init_rpmb_session();
-            $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-            $getList['regionlist'] = $communities_model->get_regions();
 
-            if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-                $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
-            }
-            if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-                $getList['munilist'] = $communities_model->get_muni($_SESSION['province']);
-            }
-            if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-                $getList['brgylist'] = $communities_model->get_brgy($_SESSION['muni']);
-            }
-
-            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
-            }
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
 
-            $this->load->view('communities_add', $getList);
+            $this->load->view('implementation_add', $getList);
             $this->load->view('footer');
         }
         else
         {
-
-            $assistancelist = $this->input->post('assistancelist');
-            $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
-            $provlist = $this->input->post('provlist');
-            $munilist = $this->input->post('munilist');
-            $brgylist = $this->input->post('brgylist');
-            $number_bene = $this->input->post('number_bene');
-            $natureofworklist = $this->input->post('natureofworklist');
-            $fundsourcelist = $this->input->post('fundsourcelist');
-            $project_amount = $this->input->post('project_amount');
-            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
-            $lgu_amount = $this->input->post('lgu_amount');
-            $lgu_fundsource = $this->input->post('lgu_fundsource');
-            $project_cost = $this->input->post('project_cost');
-            $implementing_agency = $this->input->post('implementing_agency');
-            $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+            $project_id = $this->input->post('project_id');
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
+            $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
+            $project_status = $this->input->post('project_status');
+            $addResult = $implementation_model->insertImplementation($project_id,$start_date,$target_date,$project_status);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
 
-            $this->load->view('communities_list',array(
+                $this->load->view('communities_list',array(
                     'project' => $communities_model->get_project()
                 ));
             $this->load->view('footer');
             }
-            $this->redirectIndex();
+            $this->redirectIndex($project_id);
         }
     }
 
@@ -310,17 +280,17 @@ class implementation extends CI_Controller
     {
         $config = array(
             array(
-                'field' => 'project_title',
-                'label' => 'Project Title',
+                'field' => 'start_date',
+                'label' => 'Start Date',
                 'rules' => 'required'
             )
         );
         return $this->form_validation->set_rules($config);
 
     }
-    public function redirectIndex()
+    public function redirectIndex($project_id)
     {
-        $page = base_url('communities/index');
+        $page = base_url('communities/view/'.$project_id.'');
 
         header("LOCATION: $page");
     }

@@ -55,7 +55,7 @@
 
                     <div class="panel-actions">
                         <?php if($implementationdata->implementation_id == '') { ?>
-                        <a class="btn btn-outline btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Add" href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true" ></i> Add</a>
+                        <a class="btn btn-outline btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Add" href="<?php echo base_url('implementation/addImplementation/'.$projectdata->project_id.'') ?>"><i class="icon wb-plus" aria-hidden="true" ></i> Add</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -91,7 +91,7 @@
 
                 <div class="panel-body">
                     <div class="col-lg-6">
-                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Fund Transfer:</b> <a data-toggle="tooltip" data-placement="top" data-original-title="Transfer Funds"  class= "btn btn-outline btn-danger pull-right btn-sm"><i class="icon wb-plus"></i></a></h5>
+                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Fund Transfer:</b> <a href="<?php echo base_url('budget/addfunds/'.$projectdata->project_id.'') ?>" data-toggle="tooltip" data-placement="top" data-original-title="Transfer Funds"  class= "btn btn-outline btn-danger pull-right btn-sm"><i class="icon wb-plus"></i></a></h5>
                         <table class="table table-striped margin-bottom-10">
                             <thead>
                             <tr>
