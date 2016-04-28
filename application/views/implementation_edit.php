@@ -28,11 +28,12 @@
 
                 <?php
                 $attributes = array("class" => "form-horizontal", "id" => "implementationformedit", "name" => "implementationformedit");
-                 echo form_open("implementation/updateImplementation", $attributes);?>
+                 echo form_open("implementation/editImplementation", $attributes);?>
 
 
                 <div class="form-group row">
-
+                <input type = "hidden" name = 'project_id' id = 'project_id' value = "<?php echo $implementationdetails->project_id;?>">
+                <input type = "hidden" name = 'implementation_id' id = 'implementation_id' value = "<?php echo $implementationdetails->implementation_id;?>">
                 <div class="example">
                     <div id="start_date" class="col-sm-4">
                         <label for="start_date" class="control-label">Start Date:</label>
@@ -60,9 +61,9 @@
                 <div class="form-group row">
 
                     <div class="example">
-                        <div id="proejct_status" class="col-sm-4">
-                            <label for="proejct_status" class="control-label">Project Status:</label>
-                            <select name="proejct_status" id="proejct_status" data-plugin="selectpicker">
+                        <div id="project_status" class="col-sm-4">
+                            <label for="project_status" class="control-label">Project Status:</label>
+                            <select name="project_status" id="project_status" data-plugin="selectpicker">
                                 <?php echo '<option data-icon="wb-briefcase" value="On-Going">On-Going</option>'.$implementationdetails->project_status .'</option>' ?>
                                 <option data-icon="wb-heart" value="Completed">Completed</option>
                                 <option data-icon="wb-briefcase" value="On-Going">On-Going</option>

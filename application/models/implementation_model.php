@@ -98,7 +98,27 @@ class implementation_model extends CI_Model
         }
         $this->db->close();
     }
+    public function updateImplementation($implementation_id,$start_date, $target_date, $project_status)
+    {
+        $this->db->trans_begin();
+        $this->db->query('update tbl_project_implementation
+                          set
+                          start_date ="'.$start_date.'",
+                          target_date = "'.$target_date.'", project_status = "'.$project_status.'",date_modefied = NOW()
+                          where implementation_id = "'.$implementation_id.'";');
 
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
 
 
 

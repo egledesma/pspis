@@ -78,7 +78,7 @@ class implementation extends CI_Controller
     public function editImplementation($implementation_id)
     {
         $implementation_model = new implementation_model();
-
+        $communities_model = new communities_model();
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
@@ -92,40 +92,23 @@ class implementation extends CI_Controller
         }
         else
         {
-
+            $impid = $this->input->post('implementation_id');
             $project_id = $this->input->post('project_id');
-            $assistancelist = $this->input->post('assistancelist');
-            $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
-            $provlist = $this->input->post('provlist');
-            $munilist = $this->input->post('munilist');
-            $brgylist = $this->input->post('brgylist');
-            $number_bene = $this->input->post('number_bene');
-            $natureofworklist = $this->input->post('natureofworklist');
-            $fundsourcelist = $this->input->post('fundsourcelist');
-            $project_amount = $this->input->post('project_amount');
-            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
-            $lgu_amount = $this->input->post('lgu_amount');
-            $lgu_fundsource = $this->input->post('lgu_fundsource');
-            $project_cost = $this->input->post('project_cost');
-            $implementing_agency = $this->input->post('implementing_agency');
-            $status = $this->input->post('status');
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
+            $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
+            $project_status = $this->input->post('project_status');
+            $updateResult = $implementation_model->updateImplementation($impid,$start_date,$target_date,$project_status);
+            if ($updateResult){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
 
-            $updateResult = $communities_model->updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
-                ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
-            if ($updateResult) {
-
-                    $this->load->view('header');
-                    $this->load->view('navbar');
-                    $this->load->view('sidebar');
-
-                    $this->load->view('communities_list',array(
-                        'project' => $communities_model->get_project()
-                    ));
-                    $this->load->view('footer');
+                $this->load->view('communities_list',array(
+                    'project' => $communities_model->get_project()
+                ));
+                $this->load->view('footer');
             }
-
-            $this->redirectIndex();
+            $this->redirectIndex($project_id);
         }
     }
     
