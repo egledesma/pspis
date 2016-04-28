@@ -21,7 +21,7 @@
             <i class="icon wb-search" aria-hidden="true"></i>
         </button>
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-            <img class="navbar-brand-logo" src="../assets/images/logo.png" title="PSPIS">
+            <img class="navbar-brand-logo" src="/pspis/assets/images/logo.png" title="PSPIS">
             <span class="navbar-brand-text"> PSPIS</span>
         </div>
     </div>
