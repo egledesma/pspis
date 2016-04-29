@@ -64,7 +64,7 @@ class communities extends CI_Controller
             }
 
             if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
+                $getList['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
             }
             $this->load->view('header');
             $this->load->view('navbar');

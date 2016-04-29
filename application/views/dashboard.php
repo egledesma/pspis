@@ -101,77 +101,11 @@ foreach($getGrand as $key=>$value){
     </script>
 
 
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <div id="container2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
-    <script type="text/javascript">
 
-        $(function () {
-            Highcharts.setOptions({
-                global: {
-                    useUTC: false,
-
-                },
-                lang: {
-                    decimalPoint: '.',
-                    thousandsSep: ','
-                }
-            });
-            $('#container').highcharts({
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'FUND MONITORING'
-                },
-                subtitle: {
-                    text: 'Sub-Allotment Release Order (SARO) , Downloaded, Utilized and Remaining Balance'
-                },
-
-                xAxis: {
-                    categories: [<?php echo $region_format;?>],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Funds'
-                    }
-                },
-                tooltip: {
-
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>₱ {point.y:.2f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0,
-
-                    }
-                },
-                series: [{
-                    name: 'SARO',
-                    data: [<?php echo $alloc_format;?>]
-
-                }, {
-                    name: 'Utilized',
-                    data: [<?php echo $util_format;?>]
-
-                }, {
-                    name: 'Remaining Balance',
-                    data: [<?php echo $remaining_format;?>]
-
-                }]
-            });
-        });
-    </script>
 
     <script type="text/javascript">
         $(function () {
