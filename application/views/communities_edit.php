@@ -60,6 +60,7 @@
                 success: function(data) {
                     $('#provinceID').html(data);
                     $('#provlist').val(provCode);
+                    $('#provlist').val(provCode);
                 }
             });
         } else {
@@ -340,29 +341,17 @@
                 </div>
 
                 <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="lgucounterpartlist" class="control-label">LGU counterpart:</label>
-                            <select name="lgucounterpartlist" id="lgucounterpartlist" class="form-control">
-                                <option value="">Choose LGU counterpart</option>
-                                <?php foreach($lgucounterpartlist as $lgucounterpartselect): ?>
-                                    <option value="<?php echo $lgucounterpartselect->lgucounterpart_id; ?>"
-                                        <?php
-                                        if (isset($projectdata->lgucounterpart_id) and $lgucounterpartselect->lgucounterpart_id == $projectdata->lgucounterpart_id) {
-                                            echo " selected";
-                                        } ?>
-                                    >
-                                        <?php echo $lgucounterpartselect->lgu_counterpart; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                    <div class="col-sm-4">
+                        <label for="lgucounterpart_prov" class="control-label">Province:</label>
+                        <input id="lgucounterpart_prov" name="lgucounterpart_prov" placeholder="LGU counterpart Province" type="text"  class="form-control"  value="<?php echo $projectdata->lgucounterpart_prov ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgucounterpart_prov'); ?></span>
+                    </div>
 
-                        <div class="col-sm-4">
-                            <label for="lgu_amount" class="control-label">LGU amount:</label>
-                            <input id="lgu_amount" name="lgu_amount" placeholder="LGU amount" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_amount ?>"required />
-                            <span class="text-danger"><?php echo form_error('lgu_amount'); ?></span>
-                        </div>
-
+                    <div class="col-sm-4">
+                        <label for="lgu_amount_prov" class="control-label">LGU amount province:</label>
+                        <input id="lgu_amount_prov" name="lgu_amount_prov" placeholder="LGU amount province" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_amount_prov ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_amount_prov'); ?></span>
+                    </div>
                         <div class="col-sm-4">
                             <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
                             <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo $projectdata->lgu_fundsource ?>" required />

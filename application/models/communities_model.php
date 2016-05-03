@@ -14,8 +14,8 @@ class communities_model extends CI_Model
     public function get_project()
     {
         $sql = 'select a.project_id,a.project_title, b.assistance_name,
-                c.work_nature, d.fund_source,e.lgu_counterpart,
-                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
+                c.work_nature, d.fund_source,a.lgucounterpart_prov,
+                a.lgu_fundsource,a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
                 from tbl_projects a
                 INNER JOIN lib_assistance_type b
                 on a.assistance_id = b.assistance_id
@@ -25,8 +25,7 @@ class communities_model extends CI_Model
                 on a.fundsource_id = d.fundsource_id
 				INNER JOIN lib_fund_source f
 				on a.implementing_agency = f.fundsource_id
-                INNER JOIN lib_lgu_counterpart e
-                on a.lgucounterpart_id = e.lgucounterpart_id
+
                 INNER JOIN lib_region g
                 on a.region_code = g.region_code
 
@@ -53,8 +52,8 @@ class communities_model extends CI_Model
     public function view_projectbyid($project_id = 0)
     {
         $sql = 'select a.project_id,a.project_title, b.assistance_name,
-                c.work_nature, d.fund_source,e.lgu_counterpart, h.prov_name, i.city_name, j.brgy_name, a.no_of_bene,
-                a.lgu_fundsource,a.lgu_amount, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
+                c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, a.no_of_bene,
+                a.lgu_fundsource,a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
                 from tbl_projects a
                 INNER JOIN lib_assistance_type b
                 on a.assistance_id = b.assistance_id
@@ -64,8 +63,6 @@ class communities_model extends CI_Model
                 on a.fundsource_id = d.fundsource_id
 				INNER JOIN lib_fund_source f
 				on a.implementing_agency = f.fundsource_id
-                INNER JOIN lib_lgu_counterpart e
-                on a.lgucounterpart_id = e.lgucounterpart_id
                 INNER JOIN lib_region g
                 on a.region_code = g.region_code
                 INNER JOIN lib_provinces h
@@ -162,18 +159,20 @@ class communities_model extends CI_Model
 
     }
     public function insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
-                                  $lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status)
+                                  $lgucounterpart_prov,$lgucounterpart_muni,$lgucounterpart_brgy,
+                                  $lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_projects(assistance_id,
-                          project_title,region_code,prov_code,city_code,brgy_code,no_of_bene,nature_id,fundsource_id,project_amount,lgucounterpart_id,lgu_amount
-                          ,lgu_fundsource,project_cost,implementing_agency,status,deleted)
+                          project_title,region_code,prov_code,city_code,brgy_code,no_of_bene,nature_id,fundsource_id,project_amount,lgucounterpart_prov,lgu_amount_prov
+                          ,lgucounterpart_muni,lgu_amount_muni,lgucounterpart_brgy,lgu_amount_brgy
+                          ,lgu_fundsource,project_cost,implementing_agency,created_by,date_created,status,deleted)
                           values
                           ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$munilist.'","'.$brgylist.'","'.$number_bene.'",
                           "'.$natureofworklist.'","'.$fundsourcelist.'",
-                          "'.$project_amount.'","'.$lgucounterpartlist.'","'.$lgu_amount.'",
+                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgucounterpart_muni.'",
                           "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$status.'","0")');
 
         if ($this->db->trans_status() === FALSE)
@@ -283,6 +282,20 @@ class communities_model extends CI_Model
         return $this->db->query($get_prov,$region_code)->result();
     }
 
+
+    public function get_province_name($province_code) {
+        $get_prov_name = "
+        SELECT
+            prov_code,
+            prov_name
+        FROM
+          lib_provinces
+       WHERE
+          prov_code = ?
+        ";
+
+        return $this->db->query($get_prov_name,$province_code)->row();
+    }
     public function get_muni($prov_code) {
         $get_cities = "
         SELECT
@@ -298,7 +311,19 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_cities,$prov_code)->result();
     }
+    public function get_muni_name($city_code) {
+        $get_cities_name = "
+        SELECT
+            city_code,
+            city_name
+        FROM
+          lib_municipality
+        WHERE
+          city_code = ?
+        ";
 
+        return $this->db->query($get_cities_name,$city_code)->row();
+    }
     public function get_brgy($city_code) {
         $get_brgy = "
         SELECT
@@ -314,5 +339,17 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_brgy,$city_code)->result();
     }
+    public function get_brgy_name($brgy_code) {
+        $get_brgy_name = "
+        SELECT
+            brgy_code,
+            brgy_name
+        FROM
+          lib_brgy
+        WHERE
+          brgy_code = ?
+        ";
 
+        return $this->db->query($get_brgy_name,$brgy_code)->row();
+    }
 }

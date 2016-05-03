@@ -50,7 +50,7 @@ class communities extends CI_Controller
             $this->init_rpmb_session();
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+//            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
             $getList['regionlist'] = $communities_model->get_regions();
 
             if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
@@ -75,7 +75,7 @@ class communities extends CI_Controller
         }
         else
         {
-
+            $myid = $this->input->post('myid');
             $assistancelist = $this->input->post('assistancelist');
             $project_title = $this->input->post('project_title');
             $regionlist = $this->input->post('regionlist');
@@ -86,13 +86,19 @@ class communities extends CI_Controller
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
             $project_amount = $this->input->post('amount_requested');
-            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
-            $lgu_amount = $this->input->post('lgu_amount');
+            $lgucounterpart_prov = $this->input->post('lgucounterpart_prov');
+            $lgucounterpart_muni = $this->input->post('lgucounterpart_muni');
+            $lgucounterpart_brgy = $this->input->post('lgucounterpart_brgy');
+            $lgu_amount_prov = $this->input->post('lgu_amount_prov');
+            $lgu_amount_muni= $this->input->post('lgu_amount_muni');
+            $lgu_amount_brgy = $this->input->post('lgu_amount_brgy');
             $lgu_fundsource = $this->input->post('lgu_fundsource');
             $project_cost = $this->input->post('project_cost');
             $implementing_agency = $this->input->post('implementing_agency');
             $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
+                $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgucounterpart_muni,
+                $lgucounterpart_brgy,$lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');
@@ -288,6 +294,17 @@ class communities extends CI_Controller
         if($_POST['prov_code'] > 0 and isset($_POST) and isset($_POST['prov_code'])) {
             $prov_code = $_POST['prov_code'];
             $munilist = $this->communities_model->get_muni($prov_code);
+            $prov_name = $this->communities_model->get_province_name($prov_code);
+            $data1 = array(
+                'type'        => 'hidden',
+                'id'          => 'lgucounterpart_prov_name',
+                'name'       => 'lgucounterpart_prov_name',
+                'value'   =>  $prov_name->prov_name,
+                'class'        => 'form-control',
+                'disabled' => true
+            );
+
+            echo form_input($data1);
 
             $muni_list[] = "Choose Municipality";
             foreach($munilist as $tempmuni) {
@@ -302,15 +319,46 @@ class communities extends CI_Controller
         if($_POST['city_code'] > 0 and isset($_POST) and isset($_POST['city_code'])) {
             $city_code = $_POST['city_code'];
             $brgylist = $this->communities_model->get_brgy($city_code);
+            $city_name = $this->communities_model->get_muni_name($city_code);
+
+            $data1 = array(
+                'type'        => 'hidden',
+                'id'          => 'lgucounterpart_muni_name',
+                'name'       => 'lgucounterpart_muni_name',
+                'value'   =>  $city_name->city_name,
+                'class'        => 'form-control',
+                'disabled' => true
+            );
+
+            echo form_input($data1);
 
             $brgy_list[] = "Choose Barangay";
             foreach($brgylist as $tempbrgy) {
                 $brgy_list[$tempbrgy->brgy_code] = $tempbrgy->brgy_name;
             }
 
-            $brgylist_prop = 'required="required" required id="brgylist" name="brgylist" class="form-control"';
+            $brgylist_prop = 'required="required" required id="brgylist" name="brgylist" onChange="get_brgy_name();" class="form-control"';
             echo form_dropdown('brgylist', $brgy_list,'',$brgylist_prop);
         }
+    }
+    public function populate_brgy_name() {
+        if($_POST['brgy_code'] > 0 and isset($_POST) and isset($_POST['brgy_code'])) {
+            $brgy_code = $_POST['brgy_code'];
+            $brgy_name = $this->communities_model->get_brgy_name($brgy_code);
+
+            $data1 = array(
+                'type'        => 'text',
+                'id'          => 'lgucounterpart_brgy_name',
+                'name'       => 'lgucounterpart_brgy_name',
+                'value'   =>  $brgy_name->brgy_name,
+                'class'        => 'form-control',
+                'disabled' => true
+            );
+            echo form_input($data1);
+
+
+        }
+
     }
     public function init_rpmb_session() {
         if(isset($_POST['regionlist']) and $_POST['regionlist'] > 0) {

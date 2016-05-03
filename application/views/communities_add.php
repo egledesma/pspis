@@ -19,12 +19,29 @@
             });
         }
     }
-
+    function get_brgy_name() {
+        var brgy_code =  $('#brgylist').val();
+        if(brgy_code > 0) {
+            $.ajax({
+                url: "<?php echo base_url('communities/populate_brgy_name'); ?>",
+                async: false,
+                type: "POST",
+                data: "brgy_code="+brgy_code,
+                dataType: "html",
+                success: function(data1) {
+                    $('#brgyID').html(data1);
+                    var brgy_name = $('#lgucounterpart_brgy_name').val();
+                    $('#lgucounterpart_brgy_code').val(brgy_code);
+                    $('#lgucounterpart_brgy').val(brgy_name);
+                }
+            });
+        }
+    }
 
 
     function get_natureofwork() {
         var assistance_id = $('#assistancelist').val();
-
+        alert(assistance_id);
         if(assistance_id > 0) {
             $.ajax({
                 url: "<?php echo base_url('communities/populate_natureofwork'); ?>",
@@ -54,6 +71,7 @@
                 dataType: "html",
                 success: function(data) {
                     $('#provinceID').html(data);
+
                 }
             });
         } else {
@@ -72,6 +90,10 @@
                 dataType: "html",
                 success: function(data) {
                     $('#muniID').html(data);
+                    var prov_name = $('#lgucounterpart_prov_name').val();
+                    $('#lgucounterpart_prov_code').val(prov_code);
+                    $('#lgucounterpart_prov').val(prov_name);
+
                 }
             });
         } else {
@@ -89,6 +111,9 @@
                 dataType: "html",
                 success: function(data) {
                     $('#brgyID').html(data);
+                    var city_name = $('#lgucounterpart_muni_name').val();
+                    $('#lgucounterpart_muni_code').val(city_code);
+                    $('#lgucounterpart_muni').val(city_name);
                 }
             });
         } else {
@@ -141,7 +166,7 @@
                 //input here the next location when click insert
 
                 echo form_open("communities/addCommunities", $attributes);?>
-
+                <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="assistancelist">Type of Assistance:</label>
@@ -247,9 +272,9 @@
                     </div>
 
                     <div class="col-sm-3">
-                        <label for="provlist" class="control-label">Barangay :</label>
+                        <label for="brgylist" class="control-label">Barangay :</label>
                         <div id="brgyID">
-                            <select required id="brgylist" name="brgylist" class="form-control" required>
+                            <select required id="brgylist" name="brgylist" class="form-control" onChange="get_brgy_name();" required>
                                 <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
                                     ?>
                                     <option value="">Choose Barangay</option>
@@ -342,23 +367,67 @@
 
                 </div>
 
+                <label  class="control-label">LGU counterparts:</label>
                 <div class="form-group row">
-                    <div class="col-sm-4">
-                        <label for="lgucounterpartlist" class="control-label">LGU counterpart:</label>
-                        <select name="lgucounterpartlist" id="lgucounterpartlist" class="form-control">
-                            <option value="">Choose LGU counterpart</option>
-                            <?php foreach($lgucounterpartlist as $lgucounterpartselect): ?>
-                                <option value="<?php echo $lgucounterpartselect->lgucounterpart_id; ?>">
-                                    <?php echo $lgucounterpartselect->lgu_counterpart; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+
+                    <div name = "counter_prov" id = "counter_prov" class="col-sm-4">
+                        <label for="lgucounterpart_prov" class="control-label">Province:</label>
+                        <input id="lgucounterpart_prov_code" name="lgucounterpart_prov_code" placeholder="LGU counterpart Province" type="hidden"  class="form-control"  value="<?php echo set_value('lgucounterpart_prov_code'); ?>" required autofocus/>
+                        <input id="lgucounterpart_prov" name="lgucounterpart_prov" placeholder="LGU counterpart Province" type="text"  class="form-control"  value="<?php echo set_value('lgucounterpart_prov'); ?>" disabled/>
+                        <span class="text-danger"><?php echo form_error('lgucounterpart_prov'); ?></span>
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="lgu_amount" class="control-label">LGU amount:</label>
-                        <input id="lgu_amount" name="lgu_amount" placeholder="LGU amount" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount'); ?>" required autofocus/>
-                        <span class="text-danger"><?php echo form_error('lgu_amount'); ?></span>
+                        <label for="lgu_amount_prov" class="control-label">LGU amount province:</label>
+                        <input id="lgu_amount_prov" name="lgu_amount_prov" placeholder="LGU amount province" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_prov'); ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_amount_prov'); ?></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
+                        <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo set_value('lgu_fundsource'); ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+
+                    <div name = "counter_muni" id = "counter_muni" class="col-sm-4">
+                        <label for="lgucounterpart_muni" class="control-label">City/Municipality:</label>
+                        <input id="lgucounterpart_muni_code" name="lgucounterpart_muni_code" placeholder="LGU counterpart City/Municipality" type="hidden"  class="form-control"  value="<?php echo set_value('lgucounterpart_muni_code'); ?>" required autofocus/>
+                        <input id="lgucounterpart_muni" name="lgucounterpart_muni" placeholder="LGU counterpart City/Municipality" type="text"  class="form-control"  value="<?php echo set_value('lgucounterpart_muni'); ?>" disabled/>
+                        <span class="text-danger"><?php echo form_error('lgucounterpart_muni'); ?></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="lgu_amount_muni" class="control-label">LGU amount City/Municipality:</label>
+                        <input id="lgu_amount_muni" name="lgu_amount_muni" placeholder="LGU amount City/Municipality:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_muni'); ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_amount_muni'); ?></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
+                        <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo set_value('lgu_fundsource'); ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+
+                    <div name = "counter_brgy" id = "counter_brgy" class="col-sm-4">
+
+                        <label for="lgucounterpart_brgy" class="control-label">Barangay:</label>
+                        <input id="lgucounterpart_brgy_code" name="lgucounterpart_brgy_code" placeholder="LGU counterpart Barangay" type="hidden"  class="form-control"  value="<?php echo set_value('lgucounterpart_brgy_code'); ?>" required autofocus/>
+                        <input id="lgucounterpart_brgy" name="lgucounterpart_brgy" placeholder="LGU counterpart Barangay" type="text"  class="form-control"  value="<?php echo set_value('lgucounterpart_brgy'); ?>" disabled/>
+                        <span class="text-danger"><?php echo form_error('lgucounterpart_brgy'); ?></span>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="lgu_amount_brgy" class="control-label">LGU amount Barangay:</label>
+                        <input id="lgu_amount_brgy" name="lgu_amount_brgy" placeholder="LGU amount Barangay:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_brgy'); ?>" required autofocus/>
+                        <span class="text-danger"><?php echo form_error('lgu_amount_brgy'); ?></span>
                     </div>
 
                     <div class="col-sm-4">
