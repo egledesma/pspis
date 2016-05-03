@@ -103,9 +103,9 @@ class communities extends CI_Controller
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-
+                $region_code = $this->session->userdata('uregion');
             $this->load->view('communities_list',array(
-                    'project' => $communities_model->get_project()
+                    'project' => $communities_model->get_project($region_code)
                 ));
             $this->load->view('footer');
             }
@@ -175,9 +175,10 @@ class communities extends CI_Controller
                     $this->load->view('header');
                     $this->load->view('navbar');
                     $this->load->view('sidebar');
+                    $region_code = $this->session->userdata('uregion');
 
                     $this->load->view('communities_list',array(
-                        'project' => $communities_model->get_project()
+                        'project' => $communities_model->get_project($region_code)
                     ));
                     $this->load->view('footer');
             }
@@ -194,9 +195,9 @@ class communities extends CI_Controller
             if ($deleteResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
-                $this->load->view('sidebar');
+                $this->load->view('sidebar');$region_code = $this->session->userdata('uregion');
                 $this->load->view('communities_list',array(
-                    'project' => $communities_model->get_project()
+                    'project' => $communities_model->get_project($region_code)
                 ));
 
                 $this->load->view('footer');
@@ -215,7 +216,7 @@ class communities extends CI_Controller
                 $natureofwork_list[$tempnatureofworklist->nature_id] = $tempnatureofworklist->work_nature;
             }
 
-            $natureofworklist_prop = 'required="required" required id="natureofworklist" name="natureofworklist" class="form-control" onChange="get_maxmin();"';
+            $natureofworklist_prop = 'required="required" required id="natureofworklist" name="natureofworklist" class="form-control" onChange="get_maxmin();recalculateSum();" ';
             echo form_dropdown('natureofworklist', $natureofwork_list,'',$natureofworklist_prop);
 
 
