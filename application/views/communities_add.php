@@ -41,7 +41,7 @@
 
     function get_natureofwork() {
         var assistance_id = $('#assistancelist').val();
-        alert(assistance_id);
+
         if(assistance_id > 0) {
             $.ajax({
                 url: "<?php echo base_url('communities/populate_natureofwork'); ?>",
@@ -306,8 +306,6 @@
                         <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                     </div>
 
-
-
                 </div>
 
                 <div class="form-group row">
@@ -405,12 +403,6 @@
                         <span class="text-danger"><?php echo form_error('lgu_amount_muni'); ?></span>
                     </div>
 
-                    <div class="col-sm-4">
-                        <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
-                        <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo set_value('lgu_fundsource'); ?>" required autofocus/>
-                        <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
-                    </div>
-
                 </div>
 
                 <div class="form-group row">
@@ -430,11 +422,7 @@
                         <span class="text-danger"><?php echo form_error('lgu_amount_brgy'); ?></span>
                     </div>
 
-                    <div class="col-sm-4">
-                        <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
-                        <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo set_value('lgu_fundsource'); ?>" required autofocus/>
-                        <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
-                    </div>
+
 
                 </div>
 

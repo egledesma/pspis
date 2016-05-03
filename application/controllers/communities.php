@@ -81,14 +81,14 @@ class communities extends CI_Controller
             $regionlist = $this->input->post('regionlist');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
-            $brgylist = $this->input->post('brgylist');
+            $brgylist = $this->input->post('lgucounterpart_brgy_code');
             $number_bene = $this->input->post('number_bene');
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
             $project_amount = $this->input->post('amount_requested');
-            $lgucounterpart_prov = $this->input->post('lgucounterpart_prov');
-            $lgucounterpart_muni = $this->input->post('lgucounterpart_muni');
-            $lgucounterpart_brgy = $this->input->post('lgucounterpart_brgy');
+            $lgucounterpart_prov = $this->input->post('lgucounterpart_prov_code');
+            $lgucounterpart_muni = $this->input->post('lgucounterpart_muni_code');
+            $lgucounterpart_brgy = $this->input->post('lgucounterpart_brgy_code');
             $lgu_amount_prov = $this->input->post('lgu_amount_prov');
             $lgu_amount_muni= $this->input->post('lgu_amount_muni');
             $lgu_amount_brgy = $this->input->post('lgu_amount_brgy');
@@ -96,7 +96,7 @@ class communities extends CI_Controller
             $project_cost = $this->input->post('project_cost');
             $implementing_agency = $this->input->post('implementing_agency');
             $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
+            $addResult = $communities_model->insertProject($myid,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
                 $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgucounterpart_muni,
                 $lgucounterpart_brgy,$lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status);
             if ($addResult){

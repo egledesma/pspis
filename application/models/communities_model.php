@@ -158,22 +158,23 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
+    public function insertProject($myid,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
                                   $lgucounterpart_prov,$lgucounterpart_muni,$lgucounterpart_brgy,
                                   $lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(assistance_id,
-                          project_title,region_code,prov_code,city_code,brgy_code,no_of_bene,nature_id,fundsource_id,project_amount,lgucounterpart_prov,lgu_amount_prov
+        $this->db->query('insert into tbl_projects(assistance_id,project_title,region_code,prov_code,city_code,brgy_code
+                          ,no_of_bene,nature_id,fundsource_id
+                          ,project_amount,lgucounterpart_prov,lgu_amount_prov
                           ,lgucounterpart_muni,lgu_amount_muni,lgucounterpart_brgy,lgu_amount_brgy
                           ,lgu_fundsource,project_cost,implementing_agency,created_by,date_created,status,deleted)
                           values
-                          ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'",
-                          "'.$provlist.'","'.$munilist.'","'.$brgylist.'","'.$number_bene.'",
-                          "'.$natureofworklist.'","'.$fundsourcelist.'",
-                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgucounterpart_muni.'",
-                          "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$status.'","0")');
+                          ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
+                          "'.$number_bene.'","'.$natureofworklist.'","'.$fundsourcelist.'",
+                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgu_amount_prov.'",
+                          "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'",
+                          "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {
