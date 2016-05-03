@@ -51,9 +51,9 @@ class communities_model extends CI_Model
 
     public function view_projectbyid($project_id = 0)
     {
-        $sql = 'select a.project_id,a.project_title, b.assistance_name,
-                c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, a.no_of_bene,
-                a.lgu_fundsource,a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
+        $sql = 'select a.project_id,a.project_title, a.region_code, b.assistance_name,
+                c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, k.status_name, l.agency_name, a.no_of_bene,
+                a.lgu_fundsource, a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
                 from tbl_projects a
                 INNER JOIN lib_assistance_type b
                 on a.assistance_id = b.assistance_id
@@ -71,6 +71,10 @@ class communities_model extends CI_Model
                 on a.city_code = i.city_code
                 INNER JOIN lib_brgy j
                 on a.brgy_code = j.brgy_code
+                INNER JOIN lib_status k
+                on a.status = k.status_id
+                INNER JOIN lib_implementing_agency l
+                on a.implementing_agency = l.agency_id
 
                 where a.deleted ="0"
                 and a.project_id ="'.$project_id.'"

@@ -3,6 +3,26 @@
 ?>
 <script type="text/javascript">
 
+    $(document).ready(function() {
+        //this calculates values automatically
+        sum();
+        $("#lgu_amount_prov, #amount_requested").on("keydown keyup", function() {
+            sum();
+        });
+    });
+
+
+    function sum() {
+        var txt1 = document.getElementById('lgu_amount_prov').value;
+        var txt2 = document.getElementById('amount_requested').value;
+        var txt3 = document.getElementById('lgu_amount_muni').value;
+        var txt4 = document.getElementById('lgu_amount_brgy').value;
+        var result = parseInt(txt1) + parseInt(txt2);
+        if (!isNaN(result)) {
+            document.getElementById('project_cost').value = result;
+        }
+    }
+
     function get_maxmin() {
         var nature_id1 = $('#natureofworklist').val();
         if(nature_id1 > 0) {
@@ -337,16 +357,14 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="natureofworklist" class="control-label">Minimum - Maximum Amount :</label>
-                        <div id = "nature_maxmin">
-                            <div>
-                            <input type = "text" id="maxmin_nature" name ="maxmin_nature" class = "form-control" disabled>
-                                </div>
-                            <div id = "amount_requested">
-                              <label for="amount_requested" class="control-label">Amount Requested:</label>
 
-                                  <input type = "number" id="amount_requested" name ="amount_requested" class = "form-control" >
+                        <div id = "nature_maxmin">
+                            <div id = "amount_requested">
+                                <label for="amount_requested" class="control-label">Amount Requested:</label>
+
+                                <input type = "number" id="amount_requested" onkeyup="sum();" name ="amount_requested" class = "form-control" >
                             </div>
+
                             </div>
                     </div>
 
@@ -377,7 +395,7 @@
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_prov" class="control-label">LGU amount province:</label>
-                        <input id="lgu_amount_prov" name="lgu_amount_prov" placeholder="LGU amount province" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_prov'); ?>" required autofocus/>
+                        <input id="lgu_amount_prov" name="lgu_amount_prov" onkeyup="sum();" placeholder="LGU amount province" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_prov'); ?>" required autofocus/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_prov'); ?></span>
                     </div>
 
@@ -399,7 +417,7 @@
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_muni" class="control-label">LGU amount City/Municipality:</label>
-                        <input id="lgu_amount_muni" name="lgu_amount_muni" placeholder="LGU amount City/Municipality:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_muni'); ?>" required autofocus/>
+                        <input id="lgu_amount_muni" name="lgu_amount_muni" onkeyup="sum();"  placeholder="LGU amount City/Municipality:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_muni'); ?>" required autofocus/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_muni'); ?></span>
                     </div>
 
@@ -418,7 +436,7 @@
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_brgy" class="control-label">LGU amount Barangay:</label>
-                        <input id="lgu_amount_brgy" name="lgu_amount_brgy" placeholder="LGU amount Barangay:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_brgy'); ?>" required autofocus/>
+                        <input id="lgu_amount_brgy" name="lgu_amount_brgy"  onkeyup="sum();" placeholder="LGU amount Barangay:" type="text"  class="form-control"  value="<?php echo set_value('lgu_amount_brgy'); ?>" required autofocus/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_brgy'); ?></span>
                     </div>
 

@@ -100,6 +100,12 @@
 									<span class="site-menu-title">Nature of Work</span>
 								</a>
 							</li>
+							<li class="site-menu-item">
+								<a class="animsition-link" href="<?php echo base_url('worknature/index') ?>" data-slug="layout-grids">
+									<i class="site-menu-icon " aria-hidden="true"></i>
+									<span class="site-menu-title">Status</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 

@@ -229,16 +229,6 @@ class communities extends CI_Controller
         $nature_id = $_POST['nature_id'];
         $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
 
-            $data = array(
-                'type'        => 'text',
-                'id'          => 'nature_label',
-                'name'       => 'nature_label',
-                'value'   =>  '₱ '.$natureofworklist->minimum_amount.' - ₱ '.$natureofworklist->maximum_amount,
-                'class'        => 'form-control',
-                'disabled' => true
-            );
-
-            echo form_input($data);
 
             $label = array(
                 'for'          => 'amount_requested',
@@ -251,12 +241,14 @@ class communities extends CI_Controller
                 'id'          => 'amount_requested',
                 'name'       => 'amount_requested',
                 'max'   => $natureofworklist->maximum_amount,
-                'min'   => $natureofworklist->minimum_amount,
-                'value'   =>  $natureofworklist->minimum_amount,
+                'min'   => '0',
+                'value'   =>  $natureofworklist->maximum_amount,
                 'class'        => 'form-control'
             );
 
             echo form_input($data1);
+            echo form_label('Maximum Amount: ₱ '.number_format($natureofworklist->maximum_amount,2), '','₱ '.$natureofworklist->maximum_amount);
+
 
 
 

@@ -45,12 +45,18 @@ class users extends CI_Controller {
             $regResult = $Model_user->registerUser();
             if ($regResult == 1){
                 $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password);
-                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$registerSendResult.'<a href="#" class="closed">&times;</a></div>';
+                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button><a class="alert-link" href="javascript:void(0)">'.$registerSendResult.'.</a>
+                </div>';
                 $this->load->view('header');
                 $this->load->view('register',array($rpmb,'form_message'=>$form_message));
                 $this->load->view('footer');
             } else {
-                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Fail!<a href="#" class="closed">&times;</a></div>';
+                $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button><a class="alert-link" href="javascript:void(0)">Fail!.</a>
+                </div>';
                 $this->load->view('header');
                 $this->load->view('register',array($rpmb,'form_message'=>$form_message));
                 $this->load->view('footer');
@@ -300,8 +306,8 @@ class users extends CI_Controller {
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'itsm-desk@dswd.gov.ph';                 // SMTP username
-        $mail->Password = 'm21l3rm0d3r@t0r123';                           // SMTP password
+        $mail->Username = '';                 // SMTP username
+        $mail->Password = '';                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;                                    // TCP port to connect to
 
@@ -340,8 +346,8 @@ class users extends CI_Controller {
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'itsm-desk@dswd.gov.ph';                 // SMTP username
-        $mail->Password = 'm21l3rm0d3r@t0r123';                           // SMTP password
+        $mail->Username = '';                 // SMTP username
+        $mail->Password = '';                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;                                    // TCP port to connect to
 

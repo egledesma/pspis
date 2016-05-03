@@ -13,8 +13,7 @@
  * another
  */
 if (!$this->session->userdata('user_data')){
-echo validation_errors();
-	error_reporting(0);
+error_reporting(0);
 ?>
 	<body class="page-login layout-full">
 	<!--[if lt IE 8]>
@@ -31,7 +30,7 @@ echo validation_errors();
 			</div>
 			<p>SIGN-IN</p>
 			<form method="post" action="">
-				<div class="form-group"><?php echo $form_message;?><?php echo validation_errors() ?>
+				<div class="form-group"><?php echo $form_message;?><?php echo validation_errors(); ?>
 					<label class="sr-only" for="username">Username</label>
 					<input type="text" name="username" class="form-control" id="inputName" placeholder="Username" required>
 				</div>
@@ -41,10 +40,6 @@ echo validation_errors();
 						   placeholder="Password">
 				</div>
 				<div class="form-group clearfix">
-					<div class="checkbox-custom checkbox-inline pull-left">
-						<input type="checkbox" id="inputCheckbox" name="checkbox">
-						<label for="inputCheckbox">Remember me</label>
-					</div>
 					<a class="pull-right" href="forgot-password.html">Forgot password?</a>
 				</div>
 				<button type="submit" class="btn btn-primary btn-block">Sign in</button>

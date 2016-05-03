@@ -22,16 +22,61 @@ class budget_model extends CI_Model
 
     }
 
-    public function InsertAssistance($assistance_name)
+    public function insertBudget($project_id, $region_code, $first_tranche, $first_tranche_date)
     {
         $this->db->trans_begin();
-        $this->db->query('INSERT INTO lib_assistance_type(assistance_name,date_created,date_modified)
+        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,first_tranche,first_tranche_date,first_tranche_status,date_created,created_by)
                           VALUES
                           (
-                          "'.$assistance_name.'",
+                          "'.$project_id.'",
+                          "'.$region_code.'",
+                          "'.$first_tranche.'",
+                          "'.$first_tranche_date.'",
+                          0,
 						  now(),
-						  now()
+						  "'.$this->session->userdata('uid').'"
                           )');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_downloaded= funds_downloaded + "'.$first_tranche.'",
+							  date_modified=now(),
+							  modified_by="'.$this->session->userdata('uid').'"
+                              WHERE
+                              region_code = "'.$region_code.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+
+    }
+
+    public function insertLiquidate($project_id, $region_code, $first_tranche, $first_tranche_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              first_liquidate = "'.$first_tranche.'",
+                              first_liquidate_date = "'.$first_tranche_date.'",
+							  date_modified = now(),
+							  modified_by="'.$this->session->userdata('uid').'"
+                              WHERE
+                              project_id = "'.$project_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_utilized = funds_utilized + "'.$first_tranche.'",
+							  date_modified=now(),
+							  modified_by="'.$this->session->userdata('uid').'"
+                              WHERE
+                              region_code = "'.$region_code.'"
+                              ');
 
         if ($this->db->trans_status() === FALSE)
         {

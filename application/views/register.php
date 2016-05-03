@@ -6,12 +6,13 @@
  * Time: 10:47 AM
  */
 error_reporting(0);
-$form_validation = '<div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+
+    $form_validation = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <?php echo validation_errors() ?> <a class="alert-link" href="javascript:void(0)"></a></div>';?>
+                  </button><a class="alert-link" href="javascript:void(0)">
+                </button>' . validation_errors() . '</a></div>';
+?>
 <body class="page-register layout-full">
 <!--[if lt IE 8]>
 
@@ -29,7 +30,7 @@ $form_validation = '<div class="alert alert-danger alert-dismissible" role="aler
         <p>Register</p>
         <form method="post" action="">
               <div class="form-group">
-                  <?php echo $form_message;?>
+                  <?php echo $form_message;?><?php if(validation_errors() != false) { echo $form_validation; } else {} ?>
                 <label class="sr-only" for="fullname">Full Name</label>
                 <input type="text" class="form-control" id="fullname" value="<?php echo htmlspecialchars($_POST['fullname']); ?>" name="fullname" placeholder="Full Name" required>
             </div>
