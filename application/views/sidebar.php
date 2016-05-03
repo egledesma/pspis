@@ -42,7 +42,7 @@ $region_code = $this->session->userdata('uregion');
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('cashforwork/index') ?>" data-slug="layout-grids">
+								<a class="animsition-link" href="<?php echo base_url('cashforwork/index/'.$region_code.'') ?>" data-slug="layout-grids">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Cash for Work</span>
 								</a>

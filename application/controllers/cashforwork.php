@@ -15,9 +15,9 @@ class cashforwork extends CI_Controller
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-
+        $region_code = $this->session->userdata('uregion');
         $this->load->view('cashforwork_list',array(
-            'project' => $cashforwork_model->get_project()));
+            'project' => $cashforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
     public function updateCashforwork($cashforwork_id)
@@ -77,9 +77,9 @@ class cashforwork extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
-
+                $region_code = $this->session->userdata('uregion');
                 $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project()
+                    'project' => $cashforwork_model->get_project($region_code)
                 ));
                 $this->load->view('footer');
             }
@@ -96,8 +96,9 @@ class cashforwork extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
+                $region_code = $this->session->userdata('uregion');
                 $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project()
+                    'project' => $cashforwork_model->get_project($region_code)
                 ));
 
                 $this->load->view('footer');
@@ -159,9 +160,9 @@ class cashforwork extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
-
+                $region_code = $this->session->userdata('uregion');
                 $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project()
+                    'project' => $cashforwork_model->get_project($region_code)
                 ));
                 $this->load->view('footer');
             }

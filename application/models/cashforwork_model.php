@@ -11,14 +11,14 @@ class cashforwork_model extends CI_Model
 {
 
 
-    public function get_project()
+    public function get_project($region_code)
     {
         $sql = 'SELECT a.cashforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance FROM `tbl_cashforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
 INNER JOIN lib_work_nature c
 on a.nature_id = c.nature_id
-where a.deleted = 0
+where a.deleted = 0 and a.region_code = "'.$region_code.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
