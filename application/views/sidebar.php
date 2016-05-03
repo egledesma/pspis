@@ -47,12 +47,12 @@ $region_code = $this->session->userdata('uregion');
 									<span class="site-menu-title">Cash for Work</span>
 								</a>
 							</li>
-<!--							<li class="site-menu-item">-->
-<!--								<a class="animsition-link" href="javascript:void(0)" data-slug="layout-grids">-->
-<!--									<i class="site-menu-icon " aria-hidden="true"></i>-->
-<!--									<span class="site-menu-title">Food for Work</span>-->
-<!--								</a>-->
-<!--							</li>-->
+							<li class="site-menu-item">
+								<a class="animsition-link" href="<?php echo base_url('foodforwork/index/'.$region_code.'') ?>" data-slug="layout-grids">
+									<i class="site-menu-icon " aria-hidden="true"></i>
+									<span class="site-menu-title">Food for Work</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 
