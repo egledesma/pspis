@@ -1,8 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+$region_code = $this->session->userdata('uregion');
 ?>
 <script type="text/javascript">
+    document.onreadystatechange=function(){
+        get_prov();
 
+
+    }
     $(document).ready(function() {
         //this calculates values automatically
         sum();
@@ -218,15 +222,16 @@
                 </div>
 
                 <label  class="control-label">Project Location:</label>
+                <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
                 <div class="form-group row">
                     <div id="regionID" class="col-sm-3">
                         <label for="regionlist" class="control-label">Region :</label>
-                        <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();">
+                        <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();"  disabled >
                             <option value="">Choose Region</option>
                             <?php foreach($regionlist as $regionselect): ?>
                                 <option value="<?php echo $regionselect->region_code; ?>"
-                                    <?php if(isset($_SESSION['region'])) {
-                                        if($regionselect->region_code == $_SESSION['region']) {
+                                    <?php if(isset($region_code)) {
+                                        if($regionselect->region_code == $region_code) {
                                             echo " selected";
                                         }
                                     } ?>

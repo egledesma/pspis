@@ -12,6 +12,7 @@
  * josef
  * another
  */
+$region_code = $this->session->userdata('uregion');
 if (!$this->session->userdata('user_data')){
 error_reporting(0);
 ?>
@@ -68,5 +69,5 @@ error_reporting(0);
 
 
 <?php } else { ?>
-    <?php redirect('/dashboardc/dashboard','location'); ?>
+    <?php redirect('/dashboardc/dashboard/'.$region_code.'','location'); ?>
 <?php } ?>

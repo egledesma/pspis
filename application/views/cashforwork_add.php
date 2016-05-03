@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+$region_code = $this->session->userdata('uregion');
 
 ?>
 <script type="text/javascript">

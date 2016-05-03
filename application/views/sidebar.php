@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+$region_code = $this->session->userdata('uregion');
 ?><div class="site-menubar">
 	<div class="site-menubar-body">
 		<div>
@@ -9,7 +9,7 @@
 
 					<!------------------------ DASHBOARD ------------------------>
 					<li class="site-menu-item">
-						<a href="<?php echo base_url('dashboardc/dashboard') ?>" data-slug="dashboard">
+						<a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>" data-slug="dashboard">
 							<i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
 							<span class="site-menu-title">Dashboard</span>
 						</a>
@@ -36,7 +36,7 @@
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('communities/index') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('communities/index/'.$region_code.'') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">ACN</span>
 								</a>

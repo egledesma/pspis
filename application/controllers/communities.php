@@ -78,7 +78,7 @@ class communities extends CI_Controller
             $myid = $this->input->post('myid');
             $assistancelist = $this->input->post('assistancelist');
             $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
+            $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('lgucounterpart_brgy_code');
