@@ -11,7 +11,7 @@ class communities_model extends CI_Model
 {
 
 
-    public function get_project()
+    public function get_project($region_code)
     {
         $sql = 'select a.project_id,a.project_title, b.assistance_name,
                 c.work_nature, d.fund_source,a.lgucounterpart_prov,
@@ -29,7 +29,7 @@ class communities_model extends CI_Model
                 INNER JOIN lib_region g
                 on a.region_code = g.region_code
 
-                where a.deleted ="0"
+                where a.deleted ="0" and a.region_code = "'.$region_code.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();

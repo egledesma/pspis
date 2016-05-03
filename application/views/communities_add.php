@@ -170,8 +170,8 @@ $region_code = $this->session->userdata('uregion');
 
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
-            <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>">Dashboard</a></li>
+            <li><a href="<?php echo base_url('communities/index/'.$region_code.'') ?>">Communities</a></li>
             <li class="active">Add</li>
         </ol>
     </div>

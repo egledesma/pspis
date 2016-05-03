@@ -1,11 +1,13 @@
-
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+$region_code = $this->session->userdata('uregion');
+?>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
 
         <h1 class="page-title">Assistance to Communities</h1>
         <ol class="breadcrumb">
-            <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
+            <li><a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>">Dashboard</a></li>
             <li class="active">Communities</li>
         </ol>
     </div>
