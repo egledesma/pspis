@@ -135,11 +135,12 @@
                     </div>
                 </div>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                <input class="form-control"  type="hidden" name="region_pass" value="<?php echo $cashforworkdata->region_code?>">
                 <label  class="control-label">Project Location:</label>
                 <div class="form-group row">
                     <div id="regionID" class="col-sm-3">
                         <label for="regionlist" class="control-label">Region :</label>
-                        <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();">
+                        <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();" disabled>
                             <option value="">Choose Region</option>
                             <?php foreach($regionlist as $regionselect): ?>
                                 <option value="<?php echo $regionselect->region_code; ?>"

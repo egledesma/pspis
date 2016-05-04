@@ -13,7 +13,7 @@ $region_code = $this->session->userdata('uregion');
         $('#brgylist option:gt(0)').remove().end();
         if(region_code > 0) {
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_prov'); ?>",
+                url: "<?php echo base_url('foodforwork/populate_prov'); ?>",
                 async: false,
                 type: "POST",
                 data: "region_code="+region_code,
@@ -31,7 +31,7 @@ $region_code = $this->session->userdata('uregion');
         $('#brgylist option:gt(0)').remove().end();
         if(prov_code > 0) {
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_muni'); ?>",
+                url: "<?php echo base_url('foodforwork/populate_muni'); ?>",
                 async: false,
                 type: "POST",
                 data: "prov_code="+prov_code,
@@ -48,7 +48,7 @@ $region_code = $this->session->userdata('uregion');
         var city_code = $('#munilist').val();
         if(city_code > 0) {
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_brgy'); ?>",
+                url: "<?php echo base_url('foodforwork/populate_brgy'); ?>",
                 async: false,
                 type: "POST",
                 data: "city_code="+city_code,
@@ -82,7 +82,7 @@ $region_code = $this->session->userdata('uregion');
         <div class="panel">
             <header class="panel-heading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Add New Project(Cash for work)</h3>
+                    <h3 class="panel-title">Add New Project(Food for work)</h3>
                 </div>
             </header>
             <div class="panel-body">
@@ -91,10 +91,10 @@ $region_code = $this->session->userdata('uregion');
                 $attributes = array("class" => "form-horizontal", "id" => "projectformadd", "name" => "projectformadd");
                 //input here the next location when click insert
 
-                echo form_open("cashforwork/addCashforwork", $attributes);?>
-<!--<pre>-->
-<?php //print_r($natureofworklist)?>
-<!--</pre>-->
+                echo form_open("foodforwork/addfoodforwork", $attributes);?>
+                <!--<pre>-->
+                <?php //print_r($natureofworklist)?>
+                <!--</pre>-->
 
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
@@ -103,9 +103,9 @@ $region_code = $this->session->userdata('uregion');
                         <span class="text-danger"><?php echo form_error('project_title'); ?></span>
                     </div>
                 </div>
+                <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <label  class="control-label">Project Location:</label>
-                <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
                 <div class="form-group row">
                     <div id="regionID" class="col-sm-3">
                         <label for="regionlist" class="control-label">Region :</label>
@@ -213,20 +213,20 @@ $region_code = $this->session->userdata('uregion');
                         <label class="control-label" for="natureofworklist">Nature of Work:</label>
                         <div id="natureofworkID">
                             <select required id="natureofworklist" name="natureofworklist" class="form-control" required="required">
-                                    <option value="">Choose Nature of work</option>
-                                    <?php
-                                    foreach ($natureofworklist as $natureofworkselect) { ?>
-                                        <option value="<?php echo $natureofworkselect->nature_id; ?>"
-                                            <?php
-                                            if (isset($_SESSION['natureofwork']) and $natureofworkselect->nature_id== $_SESSION['natureofwork']) {
-                                                echo " selected";
-                                            } ?>
-                                        >
-                                            <?php echo $natureofworkselect->work_nature; ?></option>
+                                <option value="">Choose Nature of work</option>
+                                <?php
+                                foreach ($natureofworklist as $natureofworkselect) { ?>
+                                    <option value="<?php echo $natureofworkselect->nature_id; ?>"
                                         <?php
-                                    }
+                                        if (isset($_SESSION['natureofwork']) and $natureofworkselect->nature_id== $_SESSION['natureofwork']) {
+                                            echo " selected";
+                                        } ?>
+                                    >
+                                        <?php echo $natureofworkselect->work_nature; ?></option>
+                                    <?php
+                                }
 
-                                    ?>
+                                ?>
 
 
                             </select>
@@ -254,16 +254,16 @@ $region_code = $this->session->userdata('uregion');
                     </div>
 
 
-                <div class="site-action">
-                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
-                             data-placement="top" data-original-title="Save">
-                        <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
-                    </button>
+                    <div class="site-action">
+                        <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                                 data-placement="top" data-original-title="Save">
+                            <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
+                    <?php echo form_close(); ?>
 
                 </div>
-                <?php echo form_close(); ?>
-
             </div>
         </div>
     </div>
-</div>

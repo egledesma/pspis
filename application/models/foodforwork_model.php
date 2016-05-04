@@ -7,45 +7,46 @@
  */
 
 
-class cashforwork_model extends CI_Model
+class foodforwork_model extends CI_Model
 {
 
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT a.cashforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance FROM `tbl_cashforwork` a
+        $sql = 'SELECT a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
+FROM `tbl_foodforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
 INNER JOIN lib_work_nature c
 on a.nature_id = c.nature_id
-where a.deleted = 0 and a.region_code = '.$region_code.'
+where a.deleted = 0 and a.region_code = "'.$region_code.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
 
     }
-    public function get_bene_list($cashforwork_id)
+    public function get_bene_list($foodforwork_id)
     {
         $sql = 'select a.bene_id,a.bene_fullname from tbl_cash_bene_list a
-        where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
 
     }
-    public function get_project_title($cashforwork_id)
+    public function get_project_title($foodforwork_id)
     {
-        $sql = 'select project_title from tbl_cashforwork
-                where cashforwork_id = "'.$cashforwork_id.'" ';
+        $sql = 'select project_title from tbl_foodforwork
+                where foodforwork_id = "'.$foodforwork_id.'" ';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
 
     }
-    public function get_project_byid($cashforwork_id = 0)
+    public function get_project_byid($foodforwork_id = 0)
     {
-        $query = $this->db->get_where('tbl_cashforwork',array('cashforwork_id'=>$cashforwork_id));
+        $query = $this->db->get_where('tbl_foodforwork',array('foodforwork_id'=>$foodforwork_id));
         if ($query->num_rows() > 0){
             return $query->row();
         } else {
@@ -58,7 +59,7 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_cashforwork(assistance_id,
+        $this->db->query('insert into tbl_foodforwork(assistance_id,
                           project_title,region_code,prov_code,city_code,brgy_code,nature_id,no_of_bene,no_of_days,cost_of_assistance,date_created,created_by,deleted)
                           values
                           ("2","'.$project_title.'","'.$regionlist.'",
@@ -79,14 +80,14 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
         $this->db->close();
 
     }
-    public function deleteCashforwork($cashforwork_id = 0)
+    public function deletefoodforwork($foodforwork_id = 0)
     {
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_cashforwork SET
+        $this->db->query('UPDATE tbl_foodforwork SET
                               deleted ="1"
                               WHERE
-                              cashforwork_id = "'.$cashforwork_id.'"
+                              foodforwork_id = "'.$foodforwork_id.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -102,12 +103,12 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
         $this->db->close();
     }
 
-    public function updateCashforwork($cashforwork_id,$myid,$project_title,$regionlist,$provlist
+    public function updatefoodforwork($foodforwork_id,$myid,$project_title,$regionlist,$provlist
         ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance){
 
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_cashforwork
+        $this->db->query('UPDATE tbl_foodforwork
                         SET
                         project_title = "'.$project_title.'",
                         region_code = "'.$regionlist.'",
@@ -121,7 +122,7 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE
-                        cashforwork_id = "'.$cashforwork_id.'"');
+                        foodforwork_id = "'.$foodforwork_id.'"');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -146,7 +147,7 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
         FROM
           lib_work_nature
         WHERE
-          assistance_id = 2
+          assistance_id = 1
         and deleted = 0
         ORDER BY
           work_nature

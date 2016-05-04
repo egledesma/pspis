@@ -11,18 +11,18 @@ class foodforwork extends CI_Controller
 {
 
     public function index(){
-        $cashforwork_model = new cashforwork_model();
+        $foodforwork_model = new foodforwork_model();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $region_code = $this->session->userdata('uregion');
-        $this->load->view('cashforwork_list',array(
-            'project' => $cashforwork_model->get_project($region_code)));
+        $this->load->view('foodforwork_list',array(
+            'project' => $foodforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
-    public function updateCashforwork($cashforwork_id)
+    public function updatefoodforwork($foodforwork_id)
     {
-        $cashforwork_model = new cashforwork_model();
+        $foodforwork_model = new foodforwork_model();
 
         $this->validateAddForm();
 
@@ -30,24 +30,24 @@ class foodforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
-            $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
-            $getList['regionlist'] = $cashforwork_model->get_regions();
-            $getList['cashforworkdata'] = $cashforwork_model->get_project_byid($cashforwork_id);
+            $getList['natureofworklist'] = $foodforwork_model->get_work_nature();
+            $getList['regionlist'] = $foodforwork_model->get_regions();
+            $getList['foodforworkdata'] = $foodforwork_model->get_project_byid($foodforwork_id);
 
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
 
-            $this->load->view('cashforwork_edit', $getList);
+            $this->load->view('foodforwork_edit', $getList);
             $this->load->view('footer');
         }
         else
         {
 
             $myid = $this->input->post('myid');
-            $cashforwork_id = $this->input->post('cashforwork_id');
+            $foodforwork_id = $this->input->post('foodforwork_id');
             $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
+            $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
@@ -57,7 +57,7 @@ class foodforwork extends CI_Controller
             $number_days = $this->input->post('number_days');
             $costofassistance = $this->input->post('cost_of_assistance');
 
-            $updateResult = $cashforwork_model->updateCashforwork($cashforwork_id,$myid,$project_title,$regionlist,$provlist
+            $updateResult = $foodforwork_model->updatefoodforwork($foodforwork_id,$myid,$project_title,$regionlist,$provlist
                 ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance);
             if ($updateResult) {
 
@@ -65,8 +65,8 @@ class foodforwork extends CI_Controller
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
                 $region_code = $this->session->userdata('uregion');
-                $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project($region_code)
+                $this->load->view('foodforwork_list',array(
+                    'project' => $foodforwork_model->get_project($region_code)
                 ));
                 $this->load->view('footer');
             }
@@ -74,18 +74,18 @@ class foodforwork extends CI_Controller
             $this->redirectIndex();
         }
     }
-    public function deleteCashforwork($cashforwork_id)
+    public function deletefoodforwork($foodforwork_id)
     {
-        $cashforwork_model = new cashforwork_model();
-        if ($cashforwork_id > 0){
-            $deleteResult = $cashforwork_model->deleteCashforwork($cashforwork_id);
+        $foodforwork_model = new foodforwork_model();
+        if ($foodforwork_id > 0){
+            $deleteResult = $foodforwork_model->deletefoodforwork($foodforwork_id);
             if ($deleteResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
                 $region_code = $this->session->userdata('uregion');
-                $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project($region_code)
+                $this->load->view('foodforwork_list',array(
+                    'project' => $foodforwork_model->get_project($region_code)
                 ));
 
                 $this->load->view('footer');
@@ -93,36 +93,36 @@ class foodforwork extends CI_Controller
             $this->redirectIndex();
         }
     }
-    public function addCashforwork()
+    public function addfoodforwork()
     {
-        $cashforwork_model = new cashforwork_model();
+        $foodforwork_model = new foodforwork_model();
 
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
-            $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
-            $getList['regionlist'] = $cashforwork_model->get_regions();
+            $getList['natureofworklist'] = $foodforwork_model->get_work_nature();
+            $getList['regionlist'] = $foodforwork_model->get_regions();
 
             if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-                $getList['provlist'] = $cashforwork_model->get_provinces($_SESSION['region']);
+                $getList['provlist'] = $foodforwork_model->get_provinces($_SESSION['region']);
             }
             if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-                $getList['munilist'] = $cashforwork_model->get_muni($_SESSION['province']);
+                $getList['munilist'] = $foodforwork_model->get_muni($_SESSION['province']);
             }
             if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-                $getList['brgylist'] = $cashforwork_model->get_brgy($_SESSION['muni']);
+                $getList['brgylist'] = $foodforwork_model->get_brgy($_SESSION['muni']);
             }
 
 //            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-//                $rpmb['natureofworklist'] = $cashforwork_model->get_work_nature($_SESSION['assistance']);
+//                $rpmb['natureofworklist'] = $foodforwork_model->get_work_nature($_SESSION['assistance']);
 //            }
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
 
-            $this->load->view('cashforwork_add', $getList);
+            $this->load->view('foodforwork_add', $getList);
             $this->load->view('footer');
         }
         else
@@ -131,7 +131,7 @@ class foodforwork extends CI_Controller
 //            $assistancelist = 2;
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
+            $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
@@ -141,15 +141,15 @@ class foodforwork extends CI_Controller
             $number_days = $this->input->post('number_days');
             $costofassistance = $this->input->post('cost_of_assistance');
 
-            $addResult = $cashforwork_model->insertProject($myid,$project_title,$regionlist,$provlist
+            $addResult = $foodforwork_model->insertProject($myid,$project_title,$regionlist,$provlist
                 ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
                 $region_code = $this->session->userdata('uregion');
-                $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project($region_code)
+                $this->load->view('foodforwork_list',array(
+                    'project' => $foodforwork_model->get_project($region_code)
                 ));
                 $this->load->view('footer');
             }
@@ -158,19 +158,19 @@ class foodforwork extends CI_Controller
     }
 
 
-    public function cash_addbene($cashforwork_id)
+    public function cash_addbene($foodforwork_id)
     {
 
-        $cashforwork_model = new cashforwork_model();
+        $foodforwork_model = new foodforwork_model();
         $this->validateAddTypeAssistanceForm();
 
         if (!$this->form_validation->run()){
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('cashforwork_beneAdd',array(
-                'cash_benelist' => $cashforwork_model->get_bene_list($cashforwork_id),
-                'title' => $cashforwork_model->get_project_title($cashforwork_id)
+            $this->load->view('foodforwork_beneAdd',array(
+                'cash_benelist' => $foodforwork_model->get_bene_list($foodforwork_id),
+                'title' => $foodforwork_model->get_project_title($foodforwork_id)
                 /*'form_message'=>$form_message*/));
             $this->load->view('footer');
 
@@ -206,7 +206,7 @@ class foodforwork extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
-                $this->load->view('cashforwork_beneAdd',array(
+                $this->load->view('foodforwork_beneAdd',array(
                     'cash_benelist' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
                 $this->load->view('footer');
             }
@@ -237,7 +237,7 @@ class foodforwork extends CI_Controller
         if($_POST['region_code'] > 0 and isset($_POST) and isset($_POST['region_code'])) {
 
             $region_code = $_POST['region_code'];
-            $provlist = $this->cashforwork_model->get_provinces($region_code);
+            $provlist = $this->foodforwork_model->get_provinces($region_code);
 
             $province_list[] = "Choose Province";
             foreach($provlist as $tempprov) {
@@ -253,7 +253,7 @@ class foodforwork extends CI_Controller
     public function populate_muni() {
         if($_POST['prov_code'] > 0 and isset($_POST) and isset($_POST['prov_code'])) {
             $prov_code = $_POST['prov_code'];
-            $munilist = $this->cashforwork_model->get_muni($prov_code);
+            $munilist = $this->foodforwork_model->get_muni($prov_code);
 
             $muni_list[] = "Choose Municipality";
             foreach($munilist as $tempmuni) {
@@ -267,7 +267,7 @@ class foodforwork extends CI_Controller
     public function populate_brgy() {
         if($_POST['city_code'] > 0 and isset($_POST) and isset($_POST['city_code'])) {
             $city_code = $_POST['city_code'];
-            $brgylist = $this->cashforwork_model->get_brgy($city_code);
+            $brgylist = $this->foodforwork_model->get_brgy($city_code);
 
             $brgy_list[] = "Choose Barangay";
             foreach($brgylist as $tempbrgy) {
@@ -307,7 +307,7 @@ class foodforwork extends CI_Controller
     }
     public function redirectIndex()
     {
-        $page = base_url('cashforwork/index');
+        $page = base_url('foodforwork/index');
 
         header("LOCATION: $page");
     }

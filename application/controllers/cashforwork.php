@@ -60,7 +60,7 @@ class cashforwork extends CI_Controller
             $myid = $this->input->post('myid');
             $cashforwork_id = $this->input->post('cashforwork_id');
             $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
+            $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
@@ -144,7 +144,7 @@ class cashforwork extends CI_Controller
 //            $assistancelist = 2;
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
+            $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
             $brgylist = $this->input->post('brgylist');
