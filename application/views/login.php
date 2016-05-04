@@ -69,5 +69,5 @@ error_reporting(0);
 
 
 <?php } else { ?>
-    <?php redirect('/dashboardc/dashboard/'.$region_code.'','location'); ?>
+    <?php redirect('/dashboardc/dashboard','location'); ?>
 <?php } ?>

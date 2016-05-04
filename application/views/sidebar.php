@@ -9,7 +9,7 @@ $region_code = $this->session->userdata('uregion');
 
 					<!------------------------ DASHBOARD ------------------------>
 					<li class="site-menu-item">
-						<a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>" data-slug="dashboard">
+						<a href="<?php echo base_url('dashboardc/dashboard/') ?>" data-slug="dashboard">
 							<i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
 							<span class="site-menu-title">Dashboard</span>
 						</a>
@@ -36,19 +36,19 @@ $region_code = $this->session->userdata('uregion');
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('communities/index/'.$region_code.'') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('communities/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">ACN</span>
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('cashforwork/index/'.$region_code.'') ?>" data-slug="layout-grids">
+								<a class="animsition-link" href="<?php echo base_url('cashforwork/index') ?>" data-slug="layout-grids">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Cash for Work</span>
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('foodforwork/index/'.$region_code.'') ?>" data-slug="layout-grids">
+								<a class="animsition-link" href="<?php echo base_url('foodforwork/index') ?>" data-slug="layout-grids">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Food for Work</span>
 								</a>

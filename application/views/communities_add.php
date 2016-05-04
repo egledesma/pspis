@@ -181,8 +181,8 @@ $region_code = $this->session->userdata('uregion');
 
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
-            <li><a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index/'.$region_code.'') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
+            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
@@ -377,7 +377,7 @@ $region_code = $this->session->userdata('uregion');
                         <div id = "nature_maxmin">
                             <div id = "amount_requested">
                                 <label for="amount_requested" class="control-label">Amount Requested:</label>
-                                <input type = "number" id="amount_requested"  name ="amount_requested" class = "form-control" onchange="recalculateSum();" value = "0">
+                                <input type = "number" id="amount_requested"  name ="amount_requested" class = "form-control">
                             </div>
 
                             </div>

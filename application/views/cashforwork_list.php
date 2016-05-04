@@ -13,7 +13,7 @@
 
         <h1 class="page-title">Cash for work</h1>
         <ol class="breadcrumb">
-            <li><a href="<?php echo base_url('dashboardc/dashboard/'.$region_code.'') ?>">Dashboard</a></li>
+            <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
             <li class="active">Cash for work</li>
         </ol>
     </div>

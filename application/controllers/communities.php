@@ -244,7 +244,8 @@ class communities extends CI_Controller
                 'max'   => $natureofworklist->maximum_amount,
                 'min'   => '0',
                 'value'   =>  $natureofworklist->maximum_amount,
-                'class'        => 'form-control'
+                'class'        => 'form-control',
+                 'onblur'=> "recalculateSum();"
             );
 
             echo form_input($data1);
