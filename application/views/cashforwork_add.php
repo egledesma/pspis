@@ -4,6 +4,10 @@ $region_code = $this->session->userdata('uregion');
 ?>
 <script type="text/javascript">
 
+    document.onreadystatechange=function(){
+        get_prov();
+
+    }
 
 
     function get_prov() {
