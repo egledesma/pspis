@@ -35,7 +35,7 @@ class communities_model extends CI_Model
         $result = $query->result();
         return $result;
 
-    } //updated
+    } //updated123
 
 
     public function get_project_byid($project_id = 0)
