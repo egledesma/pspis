@@ -7,82 +7,18 @@
  */
 
 
-class communities_model extends CI_Model
+class cofunds_model extends CI_Model
 {
 
 
-    public function get_project($region_code)
+    public function get_cofunds()
     {
-        $sql = 'select a.project_id,a.project_title, b.assistance_name,
-                c.work_nature, d.fund_source,a.lgucounterpart_prov,
-                a.lgu_fundsource,a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
-                from tbl_projects a
-                INNER JOIN lib_assistance_type b
-                on a.assistance_id = b.assistance_id
-                INNER JOIN lib_work_nature c
-                on a.nature_id = c.nature_id
-                INNER JOIN lib_fund_source d
-                on a.fundsource_id = d.fundsource_id
-				INNER JOIN lib_fund_source f
-				on a.implementing_agency = f.fundsource_id
-
-                INNER JOIN lib_region g
-                on a.region_code = g.region_code
-
-                where a.deleted ="0" and a.region_code = "'.$region_code.'"
+        $sql = 'select * from tbl_co_funds
+                where deleted ="0"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
-
-    } //updated
-
-
-    public function get_project_byid($project_id = 0)
-    {
-        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
-        if ($query->num_rows() > 0){
-            return $query->row();
-        } else {
-            return FALSE;
-        }
-        $this->db->close();
-    }
-
-    public function view_projectbyid($project_id = 0)
-    {
-        $sql = 'select a.project_id,a.project_title, a.region_code, b.assistance_name,
-                c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, k.status_name, l.agency_name, a.no_of_bene,
-                a.lgu_fundsource, a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
-                from tbl_projects a
-                INNER JOIN lib_assistance_type b
-                on a.assistance_id = b.assistance_id
-                INNER JOIN lib_work_nature c
-                on a.nature_id = c.nature_id
-                INNER JOIN lib_fund_source d
-                on a.fundsource_id = d.fundsource_id
-				INNER JOIN lib_fund_source f
-				on a.implementing_agency = f.fundsource_id
-                INNER JOIN lib_region g
-                on a.region_code = g.region_code
-                INNER JOIN lib_provinces h
-                on a.prov_code = h.prov_code
-                INNER JOIN lib_municipality i
-                on a.city_code = i.city_code
-                INNER JOIN lib_brgy j
-                on a.brgy_code = j.brgy_code
-                INNER JOIN lib_status k
-                on a.status = k.status_id
-                INNER JOIN lib_implementing_agency l
-                on a.implementing_agency = l.agency_id
-
-                where a.deleted ="0"
-                and a.project_id ="'.$project_id.'"
-               ';
-        $query = $this->db->query($sql);
-        $result = $query->row();
-        return $result;
-
     }
 
     public function get_lib_assistance()
@@ -125,8 +61,6 @@ class communities_model extends CI_Model
         return $this->db->query($get_work_nature,$assistance_id)->result();
 
     }
-
-
     public function get_naturemaxmin($nature_id) {
         $get_work_naturemaxmin = "
         SELECT
@@ -162,24 +96,16 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($myid,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
-                                  $lgucounterpart_prov,$lgucounterpart_muni,$lgucounterpart_brgy,
-                                  $lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status)
+    public function insertFunds($year,$regionlist,$funds_allocated,$funds_utilized,$myid,$status,$funds_identifier)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(assistance_id,project_title,region_code,prov_code,city_code,brgy_code
-                          ,no_of_bene,nature_id,fundsource_id
-                          ,project_amount,lgucounterpart_prov,lgu_amount_prov
-                          ,lgucounterpart_muni,lgu_amount_muni,lgucounterpart_brgy,lgu_amount_brgy
-                          ,lgu_fundsource,project_cost,implementing_agency,created_by,date_created,status,deleted)
+        $this->db->query('insert into tbl_funds_allocated(
+                          for_year,region_code,funds_allocated,funds_utilized,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
-                          "'.$number_bene.'","'.$natureofworklist.'","'.$fundsourcelist.'",
-                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgu_amount_prov.'",
-                          "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'",
-                          "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
-
+                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
+                          "'.$funds_utilized.'",now(),"'.$myid.'","'.$status.'",
+                          "'.$funds_identifier.'")');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -254,7 +180,16 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
-
+    public function get_project_byid($project_id = 0)
+    {
+        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
+        if ($query->num_rows() > 0){
+            return $query->row();
+        } else {
+            return FALSE;
+        }
+        $this->db->close();
+    }
     public function get_regions() {
         $get_regions = "
         SELECT
@@ -287,20 +222,6 @@ class communities_model extends CI_Model
         return $this->db->query($get_prov,$region_code)->result();
     }
 
-
-    public function get_province_name($province_code) {
-        $get_prov_name = "
-        SELECT
-            prov_code,
-            prov_name
-        FROM
-          lib_provinces
-       WHERE
-          prov_code = ?
-        ";
-
-        return $this->db->query($get_prov_name,$province_code)->row();
-    }
     public function get_muni($prov_code) {
         $get_cities = "
         SELECT
@@ -316,19 +237,7 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_cities,$prov_code)->result();
     }
-    public function get_muni_name($city_code) {
-        $get_cities_name = "
-        SELECT
-            city_code,
-            city_name
-        FROM
-          lib_municipality
-        WHERE
-          city_code = ?
-        ";
 
-        return $this->db->query($get_cities_name,$city_code)->row();
-    }
     public function get_brgy($city_code) {
         $get_brgy = "
         SELECT
@@ -344,17 +253,5 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_brgy,$city_code)->result();
     }
-    public function get_brgy_name($brgy_code) {
-        $get_brgy_name = "
-        SELECT
-            brgy_code,
-            brgy_name
-        FROM
-          lib_brgy
-        WHERE
-          brgy_code = ?
-        ";
 
-        return $this->db->query($get_brgy_name,$brgy_code)->row();
-    }
 }

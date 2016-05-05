@@ -24,6 +24,12 @@ $region_code = $this->session->userdata('uregion');
 						</a>
 						<ul class="site-menu-sub">
 							<li class="site-menu-item">
+								<a class="animsition-link" href="<?php echo base_url('cofunds/index') ?>" data-slug="uikit-buttons">
+									<i class="site-menu-icon " aria-hidden="true"></i>
+									<span class="site-menu-title">Central Office Funds</span>
+								</a>
+							</li>
+							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('fundsallocation/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Funds Allocation</span>
