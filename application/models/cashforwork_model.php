@@ -13,12 +13,32 @@ class cashforwork_model extends CI_Model
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT a.cashforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance FROM `tbl_cashforwork` a
+        $sql = 'SELECT a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,sum(d.no_of_bene_muni) as total_bene, sum(d.cost_of_assistance) as total_cost
+FROM `tbl_cashforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
 INNER JOIN lib_work_nature c
 on a.nature_id = c.nature_id
-where a.deleted = 0 and a.region_code = '.$region_code.'
+inner join tbl_cash_muni d
+on d.cashforwork_id = a.cashforwork_id
+where a.deleted = 0 and a.region_code = '.$region_code.' and d.deleted = 0
+GROUP BY a.cashforwork_id
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
+
+    public function get_cashforworkDetails($cashforwork_id)
+    {
+        $sql = 'SELECT a.project_title, b.region_name,c.work_nature,a.no_of_days,a.daily_payment
+FROM `tbl_cashforwork`a
+inner join lib_region b
+on a.region_code = b.region_code
+inner join lib_work_nature c
+on a.nature_id = c.nature_id
+where a.cashforwork_id = "'.$cashforwork_id.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
@@ -34,10 +54,34 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
         return $result;
 
     }
+    public function get_cashmuni_list($cashforwork_id)
+    {
+        $sql = 'SELECT a.cost_of_assistance,a.no_of_bene_muni,a.cash_muni_id,a.cashforwork_id,b.city_name,a.daily_payment
+FROM `tbl_cash_muni` a
+INNER JOIN lib_municipality b
+on a.city_code = b.city_code
+where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
     public function get_project_title($cashforwork_id)
     {
-        $sql = 'select project_title from tbl_cashforwork
-                where cashforwork_id = "'.$cashforwork_id.'" ';
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment from tbl_cashforwork a
+                where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+
+    public function get_project_province($cashforwork_id)
+    {
+        $sql = 'select a.prov_code,b.prov_name from tbl_cashforwork a
+                inner join lib_provinces b
+                on a.prov_code = b.prov_code
+                where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -54,17 +98,45 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
         $this->db->close();
     }
     public function insertProject($myid,$project_title,$regionlist,$provlist
-        ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance)
+        ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_cashforwork(assistance_id,
-                          project_title,region_code,prov_code,city_code,brgy_code,nature_id,no_of_bene,no_of_days,cost_of_assistance,date_created,created_by,deleted)
+                          project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,date_created,created_by,deleted)
                           values
                           ("2","'.$project_title.'","'.$regionlist.'",
-                          "'.$provlist.'","'.$munilist.'","'.$brgylist.'","'.$natureofworklist.'",
-                          "'.$number_bene.'","'.$number_days.'",
-                          "'.$costofassistance.'",now(),"'.$myid.'","0")');
+                          "'.$provlist.'","'.$natureofworklist.'",
+                          "'.$daily_payment.'",
+                          "'.$number_days.'",now(),"'.$myid.'","0")');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+
+            {   $insert_id = $this->db->insert_id();
+                $this->db->trans_commit();
+
+                //return TRUE;
+                return $insert_id;
+            }
+            $this->db->close();
+
+    }
+
+    public function insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
+        ,$daily_payment,$number_bene,$cost_of_assistance)
+    {
+
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_cash_muni(cashforwork_id,
+                          prov_code,city_code,daily_payment,no_of_bene_muni,cost_of_assistance,date_created,created_by,deleted)
+                          values
+                          ("'.$cashforworkpass_id.'","'.$provlist.'","'.$munilist.'",
+                          "'.$daily_payment.'","'.$number_bene.'","'.$cost_of_assistance.'",now(),"'.$myid.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -103,7 +175,7 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
     }
 
     public function updateCashforwork($cashforwork_id,$myid,$project_title,$regionlist,$provlist
-        ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance){
+        ,$natureofworklist,$number_bene,$number_days,$costofassistance){
 
         $this->db->trans_begin();
 
@@ -112,8 +184,6 @@ where a.deleted = 0 and a.region_code = '.$region_code.'
                         project_title = "'.$project_title.'",
                         region_code = "'.$regionlist.'",
                         prov_code = "'.$provlist.'",
-                        city_code = "'.$munilist.'",
-                        brgy_code = "'.$brgylist.'",
                         no_of_bene = "'.$number_bene.'",
                         no_of_days = "'.$number_days.'",
                         nature_id = "'.$natureofworklist.'",

@@ -9,7 +9,6 @@ $region_code = $this->session->userdata('uregion');
 
     }
 
-
     function get_prov() {
         var region_code = $('#regionlist').val();
 
@@ -70,14 +69,14 @@ $region_code = $this->session->userdata('uregion');
 </script>
 
 
-<div class="page ">
+ <div class="page ">
 
     <div class="page-header page-header-bordered">
 
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('cashforwork/index/') ?>">Cash for work</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
@@ -107,6 +106,7 @@ $region_code = $this->session->userdata('uregion');
                         <span class="text-danger"><?php echo form_error('project_title'); ?></span>
                     </div>
                 </div>
+
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <label  class="control-label">Project Location:</label>
                 <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
@@ -132,7 +132,7 @@ $region_code = $this->session->userdata('uregion');
                     <div class="col-sm-3">
                         <label for="provlist" class="control-label">Province :</label>
                         <div id="provinceID">
-                            <select required id="provlist" name="provlist" class="form-control" onChange="get_muni();" required>
+                            <select id="provlist" name="provlist" class="form-control" onChange="get_muni();" required>
                                 <?php if(isset($_SESSION['province']) or isset($user_region)) {
                                     ?>
                                     <option value="">Choose Province</option>
@@ -155,68 +155,13 @@ $region_code = $this->session->userdata('uregion');
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-sm-3">
-                        <label for="munilist" class="control-label">Municipality :</label>
-                        <div id="muniID">
-                            <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required>
-                                <?php if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-                                    ?>
-                                    <option value="">Choose Municipality</option>
-                                    <?php
-                                    foreach ($munilist as $muniselect) { ?>
-                                        <option value="<?php echo $muniselect->city_code; ?>"
-                                            <?php
-                                            if (isset($_SESSION['muni']) and $muniselect->city_code== $_SESSION['muni']) {
-                                                echo " selected";
-                                            } ?>
-                                        >
-                                            <?php echo $muniselect->city_name; ?></option>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="">Select Province First</option>
-                                    <?php
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="provlist" class="control-label">Barangay :</label>
-                        <div id="brgyID">
-                            <select required id="brgylist" name="brgylist" class="form-control" required>
-                                <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-                                    ?>
-                                    <option value="">Choose Barangay</option>
-                                    <?php
-                                    foreach ($brgylist as $brgyselect) { ?>
-                                        <option value="<?php echo $brgyselect->brgy_code; ?>"
-                                            <?php
-                                            if (isset($_SESSION['brgy']) and $brgyselect->brgy_code == $_SESSION['brgy']) {
-                                                echo " selected";
-                                            } ?>
-                                        >
-                                            <?php echo $brgyselect->brgy_name; ?></option>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="">Select Municipality First</option>
-                                    <?php
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
                 </div>
-
 
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label class="control-label" for="natureofworklist">Nature of Work:</label>
                         <div id="natureofworkID">
-                            <select required id="natureofworklist" name="natureofworklist" class="form-control" required="required">
+                            <select required id="natureofworklist" name="natureofworklist" class="form-control">
                                     <option value="">Choose Nature of work</option>
                                     <?php
                                     foreach ($natureofworklist as $natureofworkselect) { ?>
@@ -236,13 +181,10 @@ $region_code = $this->session->userdata('uregion');
                             </select>
                         </div>
                     </div>
+                    </div>
 
                     <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="number_bene" class="control-label">Number of Beneficiaries:</label>
-                            <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_bene'); ?>" required autofocus/>
-                            <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
-                        </div>
+
 
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
@@ -250,9 +192,9 @@ $region_code = $this->session->userdata('uregion');
                             <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                         </div>
                         <div class="col-sm-4">
-                            <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
-                            <input id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"  value="<?php echo set_value('cost_of_assistance'); ?>" required autofocus/>
-                            <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
+                            <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
+                            <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  class="form-control"  value="<?php echo set_value('number_days'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
+                            <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
                         </div>
 
                     </div>
@@ -270,4 +212,50 @@ $region_code = $this->session->userdata('uregion');
             </div>
         </div>
     </div>
+
+
+
+
+        <div class="page-content">
+            <div class="panel">
+                <header class="panel-heading">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add City/Municipality</h3>
+                    </div>
+                </header>
+                <div class="panel-body">
+
+            <div id="exampleTableAddToolbar" >
+                <a class= "btn btn-outline btn-danger" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
+            </div><br>
+            <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
+                <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>City/Municipality</th>
+                    <th>Daily Payment</th>
+                    <th>Number of Beneficiaries</th>
+                    <th>Number of Days</th>
+                    <th>Cost of Assistance</th>
+                    <!-- <th>Status</th> -->
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Action</th>
+                    <th>City/Municipality</th>
+                    <th>Daily Payment</th>
+                    <th>Number of Beneficiaries</th>
+                    <th>Number of Days</th>
+                    <th>Cost of Assistance</th>
+
+                </tr>
+                </tfoot>
+                <tbody  data-plugin="scrollable" data-direction="horizontal">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
