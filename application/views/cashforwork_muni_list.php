@@ -93,7 +93,7 @@
 
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('cashforwork/addCash_muni/'.$cashforworkpass_id.'/'.$proj_prov->prov_code.'') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
+                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('cashforwork/addCash_muni/'.$cashforworkpass_id.'') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
                     </div><br>
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead><h2> <?php echo $proj_prov->prov_name;?></h2>
@@ -136,7 +136,7 @@
                                            href="<?php echo base_url('cashforwork/deleteCashforwork/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-success btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/addCash_muni/'.$cashmuni_listData->cash_muni_id.'/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashforworkpass_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add City/Municipality"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                     </div>
 

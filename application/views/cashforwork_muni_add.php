@@ -75,7 +75,7 @@ $region_code = $this->session->userdata('uregion');
 
                 <input class="form-control" id = "prov_pass" name ="prov_pass" type = "hidden" value = "<?php echo $proj_prov->prov_code;?>" >
                 <input class="form-control" id = "cashforworkpass_id" name ="cashforworkpass_id" type = "hidden" value = "<?php echo $cashforworkpass_id;?>" >
-                <input class="form-control" id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_pass;?>" >
+<!--                <input class="form-control" id = "region_pass" name ="region_pass" type = "hidden" value = "--><?php //echo $region_pass;?><!--" >-->
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label for="provlist" class="control-label">Province :</label>
@@ -85,7 +85,7 @@ $region_code = $this->session->userdata('uregion');
                     <div class="col-sm-3">
                         <label for="munilist" class="control-label">Municipality :</label>
                         <div id="muniID">
-                            <select  id="munilist" name="munilist" class="form-control" required required="required">
+                            <select  id="munilist" name="munilist" class="form-control" required required="required" autofocus>
                                 <?php if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
                                     ?>
                                     <option value="">Choose Municipality</option>
@@ -112,8 +112,8 @@ $region_code = $this->session->userdata('uregion');
 
                     <div class="form-group row">
                         <div class="col-sm-4">
-                            <label for="number_bene" class="control-label">Number of Beneficiaries:</label>
-                            <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="0" required autofocus onchange = "recalculateMultiply();"/>
+                            <label for="number_bene" class="control-label">Number of Beneficiaries in City/Municipality:</label>
+                            <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_bene'); ?>" required autofocus onchange = "recalculateMultiply();"/>
                             <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                         </div>
                         <div class="col-sm-4">

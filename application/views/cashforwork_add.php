@@ -193,7 +193,7 @@ $region_code = $this->session->userdata('uregion');
                         </div>
                         <div class="col-sm-4">
                             <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
-                            <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  class="form-control"  value="<?php echo set_value('number_days'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
+                            <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
                         </div>
 

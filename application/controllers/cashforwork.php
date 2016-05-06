@@ -179,7 +179,7 @@ class cashforwork extends CI_Controller
             $this->load->view('footer');
 
     }
-    public function addCash_muni($cashforwork_id,$region_code)
+    public function addCash_muni($cashforwork_id)
     {
         $cashforwork_model = new cashforwork_model();
 
@@ -188,7 +188,83 @@ class cashforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->init_rpmb_session();
             $getList['cashforworkpass_id'] = $cashforwork_id;
-            $getList['region_pass'] = $region_code;
+//            $getList['region_pass'] = $region_code;
+//            $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
+            $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
+            $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
+            if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
+                $getList['munilist'] = $cashforwork_model->get_muni($_SESSION['province']);
+            }
+            if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
+                $getList['brgylist'] = $cashforwork_model->get_brgy($_SESSION['muni']);
+            }
+
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+
+            $this->load->view('cashforwork_muni_add', $getList);
+            $this->load->view('footer');
+        }
+        else
+        {
+            $region_code = $this->session->userdata('uregion');
+//            $assistancelist = 2;
+            $myid = $this->input->post('myid');
+            $provlist = $this->input->post('prov_pass');
+            $cashforworkpass_id = $this->input->post('cashforworkpass_id');
+            $munilist = $this->input->post('munilist');
+            $daily_payment = $this->input->post('daily_payment');
+            $number_bene = $this->input->post('number_bene');
+            $cost_of_assistance = $this->input->post('cost_of_assistance');
+            $addResult = $cashforwork_model->insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
+                ,$daily_payment,$number_bene,$cost_of_assistance);
+            if ($addResult){
+                $getList['cashforworkpass_id'] = $cashforwork_id;
+                $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
+                $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
+                $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
+                $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+
+                $this->load->view('cashforwork_muni_list', $getList);
+                $this->load->view('footer');
+
+            }
+            $this->redirectIndexviewCash_muni($cashforworkpass_id);
+        }
+    }
+
+    public function viewCash_brgy($cashforwork_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+
+        $getList['cashforworkpass_id'] = $cashforwork_id;
+//            $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
+        $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
+        $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
+        $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
+        $getList['cashforworkinfo'] = $cashforwork_model->get_cashforworkDetails($cashforwork_id);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+
+        $this->load->view('cashforwork_brgy_list', $getList);
+        $this->load->view('footer');
+
+    }
+    public function addCash_brgy($cashforwork_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+
+        $this->validateAddbrgyForm();
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->init_rpmb_session();
+            $getList['cashforworkpass_id'] = $cashforwork_id;
+
 //            $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
             $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
             $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
@@ -222,7 +298,6 @@ class cashforwork extends CI_Controller
                 ,$daily_payment,$number_bene,$cost_of_assistance);
             if ($addResult){
                 $getList['cashforworkpass_id'] = $cashforwork_id;
-                $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
                 $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
                 $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
                 $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
@@ -325,7 +400,7 @@ class cashforwork extends CI_Controller
                 $province_list[$tempprov->prov_code] = $tempprov->prov_name;
             }
 
-            $provlist_prop = 'id="provlist" required name="provlist" class="form-control" onChange="get_muni();"';
+            $provlist_prop = 'id="provlist" required name="provlist" class="form-control" onChange="get_muni();" autofocus';
 
             echo form_dropdown('provlist', $province_list, '', $provlist_prop);
         }
@@ -341,7 +416,7 @@ class cashforwork extends CI_Controller
                 $muni_list[$tempmuni->city_code] = $tempmuni->city_name;
             }
 
-            $munilist_prop = 'required="required" required  id="munilist" name="munilist" onchange="get_brgy();" class="form-control"';
+            $munilist_prop = 'required="required" required  id="munilist" name="munilist" onchange="get_brgy();" class="form-control" autofocus';
             echo form_dropdown('munilist', $muni_list,'',$munilist_prop);
         }
     }
@@ -355,7 +430,7 @@ class cashforwork extends CI_Controller
                 $brgy_list[$tempbrgy->brgy_code] = $tempbrgy->brgy_name;
             }
 
-            $brgylist_prop = 'required="required" required id="brgylist" name="brgylist" class="form-control"';
+            $brgylist_prop = 'required="required" required id="brgylist" name="brgylist" class="form-control" autofocus';
             echo form_dropdown('brgylist', $brgy_list,'',$brgylist_prop);
         }
     }
@@ -405,15 +480,27 @@ class cashforwork extends CI_Controller
         return $this->form_validation->set_rules($config);
 
     }
+    protected function validateAddbrgyForm()
+    {
+        $config = array(
+            array(
+                'field' => 'number_bene',
+                'label' => 'number_bene',
+                'rules' => 'required'
+            )
+        );
+        return $this->form_validation->set_rules($config);
+
+    }
     public function redirectIndex()
     {
         $page = base_url('cashforwork/index');
 
         header("LOCATION: $page");
     }
-    public function redirectIndexviewCash_muni($cashforwork_id,$region_code)
+    public function redirectIndexviewCash_muni($cashforwork_id)
     {
-        $page = base_url('cashforwork/viewCash_muni/'.$cashforwork_id.'/'.$region_code.'');
+        $page = base_url('cashforwork/viewCash_muni/'.$cashforwork_id.'');
 
         header("LOCATION: $page");
     }
