@@ -5,29 +5,31 @@ $region_code = $this->session->userdata('uregion');
 <script type="text/javascript">
 
     document.onreadystatechange=function(){
-        get_brgy();
+        get_muni();
         recalculateMultiply();
     }
 
 
-    function get_brgy() {
-        var city_code = $('#muni_pass').val();
-        if(city_code > 0) {
+    function get_muni() {
+        var prov_code = $('#prov_pass').val();
+        var cityCode = $('#city_pass').val();
+        $('#brgylist option:gt(0)').remove().end();
+        if(prov_code > 0) {
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_brgy'); ?>",
+                url: "<?php echo base_url('cashforwork/populate_muni'); ?>",
                 async: false,
                 type: "POST",
-                data: "city_code="+city_code,
+                data: "prov_code="+prov_code,
                 dataType: "html",
                 success: function(data) {
-                    $('#brgyID').html(data);
+                    $('#muniID').html(data);
+                    $('#munilist').val(cityCode);
                 }
             });
         } else {
-            $('#brgylist option:gt(0)').remove().end();
+            $('#munilist option:gt(0)').remove().end();
         }
     }
-
     function recalculateMultiply()
     {
         var num1 = parseInt(document.getElementById("number_bene").value);
@@ -46,7 +48,7 @@ $region_code = $this->session->userdata('uregion');
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('cashforwork/view') ?>">Add Barangay</a></li>
+            <li><a href="<?php echo base_url('cashforwork/view') ?>">Add City/Municipality</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
@@ -61,44 +63,50 @@ $region_code = $this->session->userdata('uregion');
             <div class="panel-body">
 
                 <?php
-                $attributes = array("class" => "form-horizontal", "id" => "cashbrgyformadd", "name" => "cashbrgyformadd");
+                $attributes = array("class" => "form-horizontal", "id" => "cashmuniformedit", "name" => "cashmuniformedit");
                 //input here the next location when click insert
 
-                echo form_open("cashforwork/addCash_brgy", $attributes);?>
-
+                echo form_open("cashforwork/updateCashforwork_muni", $attributes);?>
+                <pre>
+                <?php print_r($proj_prov)?>
+                </pre>
 
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
-                <input class="form-control" id = "muni_pass" name ="muni_pass" type = "hidden" value = "<?php echo $proj_prov->city_code;?>">
-                <input class="form-control" id = "cashforwork_id_pass" name ="cashforwork_id_pass" type = "hidden" value = "<?php echo $proj_prov->cashforwork_id;?>">
-                <input class="form-control" id = "cash_muni_id_pass" name ="cash_muni_id_pass" type = "hidden" value = "<?php echo $proj_prov->cash_muni_id;?>">
 
+
+                <input class="form-control" id = "prov_pass" name ="prov_pass" type = "hidden" value = "<?php echo $proj_prov->prov_code;?>" >
+                <input class="form-control" id = "cash_muni_id" name ="cash_muni_id" type = "hidden" value = "<?php echo $proj_prov->cash_muni_id;?>" >
+                <input class="form-control" id = "cashforwork_id" name ="cashforwork_id" type = "hidden" value = "<?php echo $proj_prov->cashforwork_id;?>" >
+                <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo $proj_prov->city_code ?>" >
+<!--                <input class="form-control" id = "cashforworkpass_id" name ="cashforworkpass_id" type = "hidden" value = "--><?php //echo $cashforworkpass_id;?><!--" >-->
+                <!--                <input class="form-control" id = "region_pass" name ="region_pass" type = "hidden" value = "--><?php //echo $region_pass;?><!--" >-->
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label for="munilist" class="control-label">Municipality :</label>
-                        <input class="form-control" id = "proj_city_name" name ="proj_city_name" type = "text" value = "<?php echo $proj_prov->city_name;?>" disabled>
+                        <label for="provlist" class="control-label">Province :</label>
+                        <input class="form-control" id = "proj_prov_name" name ="proj_prov_name" type = "text" value = "<?php echo $proj_prov->prov_name;?>" disabled>
                     </div>
 
                     <div class="col-sm-3">
-                        <label for="brgylist" class="control-label">Barangay :</label>
-                        <div id="brgyID">
-                            <select  id="brgylist" name="brgylist" class="form-control" required required="required" autofocus>
-                                <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
+                        <label for="munilist" class="control-label">Municipality :</label>
+                        <div id="muniID">
+                            <select  id="munilist" name="munilist" class="form-control" required required="required" autofocus>
+                                <?php if(isset($proj_prov->city_code)) {
                                     ?>
-                                    <option value="">Choose Barangay</option>
+                                    <option value="">Choose Municipality</option>
                                     <?php
-                                    foreach ($brgylist as $brgyselect) { ?>
-                                        <option value="<?php echo $brgyselect->city_code; ?>"
+                                    foreach ($munilist as $muniselect) { ?>
+                                        <option value="<?php echo $muniselect->city_code; ?>"
                                             <?php
-                                            if (isset($_SESSION['brgy']) and $brgyselect->city_code== $_SESSION['brgy']) {
+                                            if ($muniselect->city_code == $proj_prov->city_code) {
                                                 echo " selected";
                                             } ?>
                                         >
-                                            <?php echo $brgyselect->city_name; ?></option>
+                                            <?php echo $muniselect->city_name; ?></option>
                                         <?php
                                     }
                                 } else {
                                     ?>
-                                    <option value="">Select Municipality First</option>
+                                    <option value="">Select Province First</option>
                                     <?php
                                 } ?>
                             </select>
@@ -108,8 +116,8 @@ $region_code = $this->session->userdata('uregion');
 
                 <div class="form-group row">
                     <div class="col-sm-4">
-                        <label for="number_bene" class="control-label">Number of Beneficiaries in Barangay:</label>
-                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_bene'); ?>" required autofocus onchange = "recalculateMultiply();"/>
+                        <label for="number_bene" class="control-label">Number of Beneficiaries in City/Municipality:</label>
+                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo $proj_prov->no_of_bene_muni; ?>" required autofocus onchange = "recalculateMultiply();"/>
                         <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                     </div>
                     <div class="col-sm-4">
@@ -124,7 +132,6 @@ $region_code = $this->session->userdata('uregion');
                         <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $proj_prov->no_of_days; ?>" disabled/>
                         <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                     </div>
-
                     <div class="col-sm-4">
                         <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
                         <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"   required autofocus/>
