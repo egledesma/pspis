@@ -278,7 +278,14 @@ ON d.nature_id = f.nature_id
                         date_modified = now()
                         WHERE
                         cashforwork_id = "'.$cashforwork_id.'"');
-
+        $day_daily = $daily_payment * $number_days;
+        $this->db->query('UPDATE tbl_cash_muni
+                        SET
+                        cost_of_assistance_muni = no_of_bene_muni * "'.$day_daily.'",
+                        modified_by = "'.$myid.'",
+                        date_modified = now()
+                        WHERE
+                        cashforwork_id = "'.$cashforwork_id.'"');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

@@ -102,7 +102,6 @@
                             <th>City/Municipality</th>
                             <th>Daily Payment</th>
                             <th>Number of Beneficiaries</th>
-                            <th>Daily Payment</th>
                             <th>Number of Days</th>
                             <th>Cost of Assistance</th>
                             <!-- <th>Status</th> -->
@@ -114,7 +113,7 @@
                             <th>City/Municipality</th>
                             <th>Daily Payment</th>
                             <th>Number of Beneficiaries</th>
-                            <th>Daily Payment</th>
+
                             <th>Number of Days</th>
                             <th>Cost of Assistance</th>
 
@@ -144,7 +143,6 @@
                                 <td><?php echo $cashmuni_listData->city_name; ?></td>
                                 <td><?php echo '₱ '. number_format($cashmuni_listData->daily_payment,2); ?></td>
                                 <td><?php echo  $cashmuni_listData->no_of_bene_muni; ?></td>
-                                <td><?php echo $title->daily_payment; ?></td>
                                 <td><?php echo $title->no_of_days; ?></td>
                                 <td><?php echo '₱ '. number_format($cashmuni_listData->cost_of_assistance_muni,2); ?></td>
 
