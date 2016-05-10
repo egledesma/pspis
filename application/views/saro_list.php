@@ -23,58 +23,36 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Year</th>
-                        <th>Region</th>
-                        <th>Allocated Funds</th>
-                        <th>Funds Downloaded to LGU</th>
+                        <th>SARO Number</th>
+                        <th>Funds Amount</th>
                         <th>Funds Utilized</th>
-                        <th>Remaining Budget</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Year</th>
-                        <th>Region</th>
-                        <th>Allocated Funds</th>
-                        <th>Funds Downloaded to LGU</th>
+                        <th>SARO Number</th>
+                        <th>Funds Amount</th>
                         <th>Funds Utilized</th>
-                        <th>Remaining Budget</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </tfoot>
                     <tbody>
-                    <?php foreach($fundsdetails as $fundsData):
-                       $fundsallocate = $fundsData->funds_allocated;
-                       $fundsdownload = $fundsData->funds_downloaded;
-                       $fundsutilize = $fundsData->funds_utilized;
-                       $budget =($fundsallocate - $fundsdownload);
-                        if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
-
-                            $status = number_format( $percent * 100, 2 ) . '%';
-                        } else {
-                            $status = "0.00%";
-                        }
+                    <?php foreach($sarodetails as $saroData):
 
 
                         ?>  <!--pagination buttons -->
 
                         <tr>
-                            <td><?php echo $fundsData->funds_id ?></td>
-                            <td><?php echo $fundsData->for_year; ?></td>
-                            <td><?php echo $fundsData->region_name; ?></td>
-                            <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsutilize,2); ?></td>
-                            <td><?php echo '₱ '. number_format($budget,2); ?></td>
-                            <td><?php echo $status; ?></td>
+                            <td><?php echo $saroData->saro_id ?></td>
+                            <td><?php echo $saroData->saro_number; ?></td>
+                            <td><?php echo '₱ '. number_format($saroData->saro_funds,2); ?></td>
+                            <td><?php echo '₱ '. number_format($saroData->saro_funds_utilized,2); ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$saroData->region_code.'') ?>" data-toggle="tooltip"
+                                       data-placement="top" data-original-title="View Projects"><i class="icon wb-search" aria-hidden="true" ></i> </a>
                                     <a class="btn btn-info btn-outline"  href="<?php echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"

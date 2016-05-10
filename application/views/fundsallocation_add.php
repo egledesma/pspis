@@ -47,6 +47,13 @@
                 </div>
 
                 <div class="form-group row">
+                    <div id="saro" class="col-sm-4">
+                        <label for="saro" class="control-label">SARO Number:</label>
+                        <input id="saro" name="saro" placeholder="SARO ############" type="text"  value="<?php echo set_value('saro'); ?>"  class="form-control" required autofocus/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <div id="regionID" class="col-sm-4">
                         <label for="regionlist" class="control-label">Region :</label>
                         <select  name="regionlist" id="regionlist" class="form-control" onchange="get_region_code()">
@@ -75,20 +82,9 @@
                         </div>
                 </div>
 
-                <div class="form-group row">
-
-                    <div id="funds_utilized" class="col-sm-4">
-
-                        <label for="funds_utilized" class="control-label">Funds Utilized:</label>
-
-                        <input id="funds_utilized" name="funds_utilized" placeholder="Funds Utilized" type="number" pattern="(d{3})([.])(d{2})" min="0" value="<?php echo set_value('funds_utilized'); ?>"  class="form-control" required/>
-                        <input id="status" name="status" placeholder="Status" type="text"  value="<?php echo set_value('status'); ?>"  class="form-control" required/>
-                    </div>
-
-
-                </div>
 
                 <input id="funds_identifier" name="funds_identifier"  type="hidden" class="form-control"/>
+                <input class="form-control"  type="hidden" name="status" value="0">
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="site-action">
                     <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
