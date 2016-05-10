@@ -67,18 +67,19 @@
                         <a class="confirmation btn btn-danger btn-outline" id="confirm"
                            href="<?php echo base_url('cashforwork/deleteCashforwork/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
+
                         <a class="confirmation btn btn-success btn-outline" id="confirm"
-                           href="<?php echo base_url('cashforwork/cash_addbene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
-                           data-placement="top" data-original-title="Add beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
+                           href="<?php echo base_url('cashforwork/viewCash_muni/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
+                           data-placement="top" data-original-title="Add City/Municipality"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                     </div>
 
                 </td>
                 <td><?php echo $projectData->project_title; ?></td>
                 <td><?php echo $projectData->region_name; ?></td>
                 <td><?php echo $projectData->work_nature; ?></td>
-                <td><?php echo $projectData->no_of_bene; ?></td>
+                <td><?php echo $projectData->total_bene; ?></td>
                 <td><?php echo $projectData->no_of_days; ?></td>
-                <td><?php echo '₱ '. number_format($projectData->cost_of_assistance,2); ?></td>
+                <td><?php echo '₱ '. number_format($projectData->total_cost,2); ?></td>
 
                 <!-- <td><?php // echo $projectData->status; ?></td> -->
 

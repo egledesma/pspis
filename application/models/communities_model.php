@@ -35,7 +35,7 @@ class communities_model extends CI_Model
         $result = $query->result();
         return $result;
 
-    } //updated1231
+    } //updated
 
 
     public function get_project_byid($project_id = 0)
@@ -75,7 +75,6 @@ class communities_model extends CI_Model
                 on a.status = k.status_id
                 INNER JOIN lib_implementing_agency l
                 on a.implementing_agency = l.agency_id
-
                 where a.deleted ="0"
                 and a.project_id ="'.$project_id.'"
                ';
