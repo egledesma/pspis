@@ -61,7 +61,7 @@
                         ?>  <!--pagination buttons -->
 
                         <tr>
-                            <td><?php echo $cofundsData->funds_id ?></td>
+                            <td><?php echo $cofundsData->co_funds_id ?></td>
                             <td><?php echo $cofundsData->for_year; ?></td>
                             <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
                             <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
@@ -70,6 +70,8 @@
                             <td><?php echo $status; ?></td>
                             <td>
                                 <div class="btn-group">
+                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('fundsallocation/add/') ?>" data-toggle="tooltip"
+                                       data-placement="top" data-original-title="Download funds to FO"><i class="icon wb-download" aria-hidden="true" ></i> </a>
                                     <a class="btn btn-info btn-outline"  href="<?php echo base_url('cofunds/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"

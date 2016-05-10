@@ -50,8 +50,7 @@
                 <div class="form-group row">
                         <div id="funds_allocated" class="col-sm-4">
                             <label for="funds_amount" class="control-label">Funds Amount:</label>
-                            <input id="funds_amount" name="funds_amount" placeholder="Funds Amount" data-plugin="formatter"
-                                   data-pattern="₱[[999]],[[999]],[[999]].[[99]]" type="number" min="0" value="<?php echo set_value('funds_amount'); ?>"  class="form-control" required/>
+                            <input id="funds_amount" name="funds_amount" placeholder="Funds Amount"  type="number" min="0" value="<?php echo set_value('funds_amount'); ?>"  class="form-control" required/>
                         </div>
                 </div>
 
@@ -65,7 +64,7 @@
 
                 </div>
 
-                <input id="funds_identifier" name="funds_identifier"  type="hidden" class="form-control"/>
+                <input id="funds_identifier" name="funds_identifier"  type="hidden" value="0" class="form-control"/>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="site-action">
                     <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"

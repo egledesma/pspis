@@ -7,52 +7,58 @@
  */
 
 
-class cofunds extends CI_Controller
+class saro extends CI_Controller
 {
 
-    public function index(){
+    public function index($region_code){
 
-        $cofunds_model = new cofunds_model();
+        $saro_model = new saro_model();
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('cofunds_list',array(
-                'cofundsdetails' => $cofunds_model->get_cofunds()/*'form_message'=>$form_message*/));
+            $this->load->view('saro_list',array(
+                'sarodetails' => $saro_model->get_saro_region($region_code)/*'form_message'=>$form_message*/));
             $this->load->view('footer');
 
     }
 
     public function add(){
-        $cofunds_model = new cofunds_model();
+        $fundsallocation_model = new fundsallocation_model();
 
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
+            $getList['regionlist'] = $fundsallocation_model->get_regions();
+
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('cofunds_add');
+
+            $this->load->view('fundsallocation_add', $getList);
             $this->load->view('footer');
         }
         else
         {
 
+            $regionlist = $this->input->post('regionlist');
             $year = $this->input->post('year');
-            $funds_amount = $this->input->post('funds_amount');
+            $saro = $this->input->post('saro');
+            $funds_allocated = $this->input->post('funds_allocated');
             $status = $this->input->post('status');
-            $regionlist = 190000000;
             $funds_identifier = $year.$regionlist;
             $myid = $this->input->post('myid');
-            $addResult = $cofunds_model->insertFunds($year,$funds_amount,$myid, $status, $funds_identifier);
+            $addResult = $fundsallocation_model->insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
 
-                $this->load->view('cofunds_list',array(
-                    'cofundsdetails' => $cofunds_model->get_cofunds()/*'form_message'=>$form_message*/));
+                $this->load->view('fundsallocation_list',array(
+                    'fundsdetails' => $fundsallocation_model->get_funds()
+                ));
                 $this->load->view('footer');
             }
+            $this->redirectIndex();
         }
     }
 
@@ -155,15 +161,10 @@ class cofunds extends CI_Controller
         $config = array(
 
             array(
-                'field'   => 'funds_amount',
-                'label'   => 'funds_amount',
+                'field'   => 'funds_allocated',
+                'label'   => 'Funds Allocated',
                 'rules'   => 'required'
             ),
-            array(
-                'field'   => 'funds_identifier',
-                'label'   => 'funds_identifier',
-                'rules'   => 'is_unique[tbl_co_funds.funds_identifier]'
-            )
         );
 
         return $this->form_validation->set_rules($config);
@@ -180,6 +181,13 @@ class cofunds extends CI_Controller
 
         );
         return $this->form_validation->set_rules($config);
+    }
+
+    public function redirectIndex()
+    {
+        $page = base_url('fundsallocation/index');
+
+        header("LOCATION: $page");
     }
 
 

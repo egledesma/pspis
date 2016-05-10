@@ -7,97 +7,21 @@
  */
 
 
-class fundsallocation_model extends CI_Model
+class saro_model extends CI_Model
 {
 
 
-    public function get_funds()
+    public function get_saro_region($region_code)
     {
-        $sql = 'select a.*, b.region_name from tbl_funds_allocated a
-                INNER JOIN lib_region b
-                on a.region_code = b.region_code
-                where a.deleted ="0"
+        $sql = 'select * from tbl_saro
+                where region_code ="'.$region_code.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
     }
 
-    public function get_lib_assistance()
-    {
-        $get_lib_assistance = "
-        SELECT
-          assistance_id,
-          assistance_name
-        FROM
-          lib_assistance_type
-        WHERE
-          assistance_id <> '0'
-          and deleted = 0
-        ORDER BY
-          assistance_id
-        ";
 
-        return $this->db->query($get_lib_assistance)->result();
-
-    }
-    public function get_work_nature($assistance_id)
-    {
-
-        $get_work_nature = "
-        SELECT
-            nature_id,
-            work_nature,
-            maximum_amount,
-            minimum_amount
-
-        FROM
-          lib_work_nature
-        WHERE
-          assistance_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_nature,$assistance_id)->result();
-
-    }
-    public function get_naturemaxmin($nature_id) {
-        $get_work_naturemaxmin = "
-        SELECT
-            maximum_amount,
-            minimum_amount
-        FROM
-          lib_work_nature
-        WHERE
-          nature_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
-    }
-    public function get_fund_source()
-    {
-        $sql = 'select fundsource_id,fund_source
-                from lib_fund_source
-                where deleted = 0';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
-
-    } public function get_lgu_counterpart()
-    {
-        $sql = 'select lgucounterpart_id,lgu_counterpart
-                from lib_lgu_counterpart
-                where deleted = 0';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
-
-    }
     public function insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
     {
 

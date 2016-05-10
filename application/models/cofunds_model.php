@@ -21,90 +21,14 @@ class cofunds_model extends CI_Model
         return $result;
     }
 
-    public function get_lib_assistance()
-    {
-        $get_lib_assistance = "
-        SELECT
-          assistance_id,
-          assistance_name
-        FROM
-          lib_assistance_type
-        WHERE
-          assistance_id <> '0'
-          and deleted = 0
-        ORDER BY
-          assistance_id
-        ";
-
-        return $this->db->query($get_lib_assistance)->result();
-
-    }
-    public function get_work_nature($assistance_id)
-    {
-
-        $get_work_nature = "
-        SELECT
-            nature_id,
-            work_nature,
-            maximum_amount,
-            minimum_amount
-
-        FROM
-          lib_work_nature
-        WHERE
-          assistance_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_nature,$assistance_id)->result();
-
-    }
-    public function get_naturemaxmin($nature_id) {
-        $get_work_naturemaxmin = "
-        SELECT
-            maximum_amount,
-            minimum_amount
-        FROM
-          lib_work_nature
-        WHERE
-          nature_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
-    }
-    public function get_fund_source()
-    {
-        $sql = 'select fundsource_id,fund_source
-                from lib_fund_source
-                where deleted = 0';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
-
-    } public function get_lgu_counterpart()
-    {
-        $sql = 'select lgucounterpart_id,lgu_counterpart
-                from lib_lgu_counterpart
-                where deleted = 0';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
-
-    }
-    public function insertFunds($year,$regionlist,$funds_allocated,$funds_utilized,$myid,$status,$funds_identifier)
+    public function insertFunds($year,$funds_amount,$myid, $status, $funds_identifier)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_funds_allocated(
-                          for_year,region_code,funds_allocated,funds_utilized,date_created,created_by,status,funds_identifier)
+        $this->db->query('insert into tbl_co_funds(
+                          for_year,co_funds,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
-                          "'.$funds_utilized.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$year.'","'.$funds_amount.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
         if ($this->db->trans_status() === FALSE)
         {

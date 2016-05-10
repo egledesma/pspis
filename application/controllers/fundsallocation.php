@@ -42,12 +42,12 @@ class fundsallocation extends CI_Controller
 
             $regionlist = $this->input->post('regionlist');
             $year = $this->input->post('year');
+            $saro = $this->input->post('saro');
             $funds_allocated = $this->input->post('funds_allocated');
-            $funds_utilized = $this->input->post('funds_utilized');
             $status = $this->input->post('status');
             $funds_identifier = $year.$regionlist;
             $myid = $this->input->post('myid');
-            $addResult = $fundsallocation_model->insertFunds($year,$regionlist,$funds_allocated,$funds_utilized,$myid, $status, $funds_identifier);
+            $addResult = $fundsallocation_model->insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
@@ -58,6 +58,7 @@ class fundsallocation extends CI_Controller
                 ));
                 $this->load->view('footer');
             }
+            $this->redirectIndex();
         }
     }
 
@@ -164,11 +165,6 @@ class fundsallocation extends CI_Controller
                 'label'   => 'Funds Allocated',
                 'rules'   => 'required'
             ),
-            array(
-                'field'   => 'funds_identifier',
-                'label'   => 'funds_identifier',
-                'rules'   => 'required|is_unique[tbl_funds_allocated.funds_identifier]'
-            )
         );
 
         return $this->form_validation->set_rules($config);
@@ -185,6 +181,13 @@ class fundsallocation extends CI_Controller
 
         );
         return $this->form_validation->set_rules($config);
+    }
+
+    public function redirectIndex()
+    {
+        $page = base_url('fundsallocation/index');
+
+        header("LOCATION: $page");
     }
 
 
