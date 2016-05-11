@@ -102,6 +102,30 @@ class communities_model extends CI_Model
         return $this->db->query($get_lib_assistance)->result();
 
     }
+
+    public function get_saro($region)
+    {
+        $get_saro = "
+        SELECT
+          saro_id,
+          saro_number
+        FROM
+          tbl_saro
+        WHERE
+          saro_id <> '0'
+          and deleted = 0
+          and region_code = '".$region."'
+        GROUP BY
+         saro_id
+        ORDER BY
+          saro_id
+        ";
+
+        return $this->db->query($get_saro)->result();
+
+    }
+
+
     public function get_work_nature($assistance_id)
     {
 

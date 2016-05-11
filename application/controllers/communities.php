@@ -48,8 +48,10 @@ class communities extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
+            $regionsaro = $this->session->userdata('uregion');
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['sarolist'] = $communities_model->get_saro($regionsaro);
 //            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
             $getList['regionlist'] = $communities_model->get_regions();
 
@@ -267,6 +269,7 @@ class communities extends CI_Controller
             $_SESSION['natureofwork'] = $_POST['natureofworklist'];
         }
     }
+
     public function populate_prov() {
         if($_POST['region_code'] > 0 and isset($_POST) and isset($_POST['region_code'])) {
 

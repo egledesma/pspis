@@ -25,6 +25,7 @@
                         <th>ID</th>
                         <th>SARO Number</th>
                         <th>Funds Amount</th>
+                        <th>Funds Downloaded</th>
                         <th>Funds Utilized</th>
                         <th>Action</th>
                     </tr>
@@ -34,6 +35,7 @@
                         <th>ID</th>
                         <th>SARO Number</th>
                         <th>Funds Amount</th>
+                        <th>Funds Downloaded</th>
                         <th>Funds Utilized</th>
                         <th>Action</th>
                     </tr>
@@ -48,6 +50,7 @@
                             <td><?php echo $saroData->saro_id ?></td>
                             <td><?php echo $saroData->saro_number; ?></td>
                             <td><?php echo '₱ '. number_format($saroData->saro_funds,2); ?></td>
+                            <td><?php echo '₱ '. number_format($saroData->saro_funds_downloaded,2); ?></td>
                             <td><?php echo '₱ '. number_format($saroData->saro_funds_utilized,2); ?></td>
                             <td>
                                 <div class="btn-group">

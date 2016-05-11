@@ -202,6 +202,28 @@ $region_code = $this->session->userdata('uregion');
 
                 echo form_open("communities/addCommunities", $attributes);?>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="sarolist">Saro Number:</label>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                            <option value="">Choose Saro Number</option>
+                            <?php foreach($sarolist as $saroselect): ?>
+                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                    <?php if(isset($saro_id)) {
+                                        if($saroselect->saro_id == $saro_id) {
+                                            echo " selected";
+                                        }
+                                    } ?>
+                                >
+                                    <?php echo $saroselect->saro_number; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                </div>
+
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="assistancelist">Type of Assistance:</label>
