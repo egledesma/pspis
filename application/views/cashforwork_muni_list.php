@@ -132,7 +132,7 @@
                                            href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-danger btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/deleteCashforwork/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-success btn-outline" id="confirm"
                                            href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"

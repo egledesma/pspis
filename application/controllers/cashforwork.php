@@ -146,6 +146,27 @@ class cashforwork extends CI_Controller
             $this->redirectIndex();
         }
     }
+    public function deleteCashforwork_muni($cashforwork_muni_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        if ($cashforwork_muni_id > 0){
+            $getList = $cashforwork_model->get_project_prov_muni($cashforwork_muni_id);
+            $cash_id = $getList->cashforwork_id;
+            $deleteResult = $cashforwork_model->deleteCash_muni_and_brgy($cashforwork_muni_id);
+            }
+            $this->redirectIndexviewCash_muni($cash_id);
+        }
+    public function deleteCashforwork_brgy($cashforwork_brgy_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        if ($cashforwork_brgy_id > 0){
+            $getList = $cashforwork_model->get_project_muni_brgy($cashforwork_brgy_id);
+            $cashforwork_muni_id = $getList->cashforwork_muni_id;
+            $deleteResult = $cashforwork_model->deleteCash_brgy($cashforwork_brgy_id);
+        }
+        $this->redirectIndexviewBrgy_muni($cashforwork_muni_id);
+    }
+
     public function addCashforwork()
     {
         $cashforwork_model = new cashforwork_model();

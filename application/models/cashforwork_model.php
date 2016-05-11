@@ -271,7 +271,7 @@ class cashforwork_model extends CI_Model
                               WHERE
                               cash_muni_id = "'.$cash_muni_id.'"
                               ');
-        $this->db->query('UPDATE tbl_cash_muni SET
+        $this->db->query('UPDATE tbl_cash_brgy SET
                               deleted ="1"
                               WHERE
                               cashforwork_muni_id = "'.$cash_muni_id.'"
@@ -293,7 +293,7 @@ class cashforwork_model extends CI_Model
     {
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_cash_muni SET
+        $this->db->query('UPDATE tbl_cash_brgy SET
                               deleted ="1"
                               WHERE
                               cash_brgy_id = "'.$cash_brgy_id.'"
