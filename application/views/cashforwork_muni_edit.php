@@ -67,9 +67,9 @@ $region_code = $this->session->userdata('uregion');
                 //input here the next location when click insert
 
                 echo form_open("cashforwork/updateCashforwork_muni", $attributes);?>
-                <pre>
-                <?php print_r($proj_prov)?>
-                </pre>
+<!--                <pre>-->
+<!--                --><?php //print_r($proj_prov)?>
+<!--                </pre>-->
 
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
 

@@ -130,7 +130,7 @@
                                            href="<?php echo base_url('cashforwork/view/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>
                                         <a class="btn btn-info btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/updateCashforwork/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/updateCashforwork_brgy/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-danger btn-outline" id="confirm"
                                            href="<?php echo base_url('cashforwork/deleteCashforwork/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"

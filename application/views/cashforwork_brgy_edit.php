@@ -12,6 +12,7 @@ $region_code = $this->session->userdata('uregion');
 
     function get_brgy() {
         var city_code = $('#muni_pass').val();
+        var brgy_code = $('#brgy_pass').val();
         if(city_code > 0) {
             $.ajax({
                 url: "<?php echo base_url('cashforwork/populate_brgy'); ?>",
@@ -21,6 +22,7 @@ $region_code = $this->session->userdata('uregion');
                 dataType: "html",
                 success: function(data) {
                     $('#brgyID').html(data);
+                    $('#brgylist').val(brgy_code);
                 }
             });
         } else {
@@ -43,10 +45,10 @@ $region_code = $this->session->userdata('uregion');
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Add </h1>
+        <h1 class="page-title">Edit </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('cashforwork/view') ?>">Add Barangay</a></li>
+            <li><a href="<?php echo base_url('cashforwork/view') ?>">Edit Barangay</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
@@ -55,45 +57,49 @@ $region_code = $this->session->userdata('uregion');
         <div class="panel">
             <header class="panel-heading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Add City/Municipality</h3>
+                    <h3 class="panel-title">Edit Barangay</h3>
                 </div>
             </header>
             <div class="panel-body">
-
+<!--<pre>-->
+<!--    --><?php //print_r($proj_brgy)?>
+<!--</pre>-->
                 <?php
-                $attributes = array("class" => "form-horizontal", "id" => "cashbrgyformadd", "name" => "cashbrgyformadd");
+                $attributes = array("class" => "form-horizontal", "id" => "cashbrgyformedit", "name" => "cashbrgyformedit");
                 //input here the next location when click insert
 
-                echo form_open("cashforwork/addCash_brgy", $attributes);?>
+                echo form_open("cashforwork/updateCashforwork_brgy", $attributes);?>
 
 
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
-                <input class="form-control" id = "muni_pass" name ="muni_pass" type = "hidden" value = "<?php echo $proj_prov->city_code;?>">
-                <input class="form-control" id = "cashforwork_id_pass" name ="cashforwork_id_pass" type = "hidden" value = "<?php echo $proj_prov->cashforwork_id;?>">
-                <input class="form-control" id = "cash_muni_id_pass" name ="cash_muni_id_pass" type = "hidden" value = "<?php echo $proj_prov->cash_muni_id;?>">
+                <input class="form-control" id = "muni_pass" name ="muni_pass" type = "hidden" value = "<?php echo $proj_brgy->city_code;?>">
+                <input class="form-control" id = "brgy_pass" name ="brgy_pass" type = "hidden" value = "<?php echo $proj_brgy->brgy_code;?>">
+<!--                <input class="form-control" id = "cashforwork_id_pass" name ="cashforwork_id_pass" type = "text" value = "--><?php //echo $proj_brgy->cashforwork_id;?><!--">-->
+                <input class="form-control" id = "cash_muni_id_pass" name ="cash_muni_id_pass" type = "hidden" value = "<?php echo $proj_brgy->cashforwork_muni_id;?>">
+                <input class="form-control" id = "cash_brgy_id_pass" name ="cash_brgy_id_pass" type = "hidden" value = "<?php echo $proj_brgy->cash_brgy_id;?>">
 
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label for="munilist" class="control-label">Municipality :</label>
-                        <input class="form-control" id = "proj_city_name" name ="proj_city_name" type = "text" value = "<?php echo $proj_prov->city_name;?>" disabled>
+                        <input class="form-control" id = "proj_city_name" name ="proj_city_name" type = "text" value = "<?php echo $proj_brgy->city_name;?>" disabled>
                     </div>
 
                     <div class="col-sm-3">
                         <label for="brgylist" class="control-label">Barangay :</label>
                         <div id="brgyID">
                             <select  id="brgylist" name="brgylist" class="form-control" required required="required" autofocus>
-                                <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
+                                <?php if(isset($proj_brgy->brgy_code)) {
                                     ?>
                                     <option value="">Choose Barangay</option>
                                     <?php
                                     foreach ($brgylist as $brgyselect) { ?>
                                         <option value="<?php echo $brgyselect->brgy_code; ?>"
                                             <?php
-                                            if (isset($_SESSION['brgy']) and $brgyselect->brgy_code== $_SESSION['brgy']) {
+                                            if ($brgyselect->city_code == $proj_brgy->brgy_code) {
                                                 echo " selected";
                                             } ?>
                                         >
-                                            <?php echo $brgyselect->brgy_name; ?></option>
+                                            <?php echo $brgyselect->city_name; ?></option>
                                         <?php
                                     }
                                 } else {
@@ -109,19 +115,19 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="number_bene" class="control-label">Number of Beneficiaries in Barangay:</label>
-                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_bene'); ?>" required autofocus onchange = "recalculateMultiply();"/>
+                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"   value="<?php echo $proj_brgy->no_of_bene_brgy; ?>"required autofocus onchange = "recalculateMultiply();"/>
                         <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                     </div>
                     <div class="col-sm-4">
                         <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
-                        <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  class="form-control"  value="<?php echo $proj_prov->daily_payment; ?>"required onblur = "recalculateMultiply();"disabled/>
+                        <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  class="form-control"  value="<?php echo $proj_brgy->daily_payment; ?>"required onblur = "recalculateMultiply();"disabled/>
                         <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
                     </div>
                     <div class="col-sm-4">
                         <label for="number_days" class="control-label">Number of Days:</label>
-                        <input id="number_days_hidden" name="number_days_hidden" placeholder="Number of Days" type="hidden" min="0"  class="form-control"  value="<?php echo $proj_prov->no_of_days; ?>" />
-                        <input id="daily_payment" name="daily_payment" placeholder="daily payment" type="hidden" min="0"  class="form-control"  value="<?php echo $proj_prov->daily_payment; ?>" />
-                        <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $proj_prov->no_of_days; ?>" disabled/>
+                        <input id="number_days_hidden" name="number_days_hidden" placeholder="Number of Days" type="hidden" min="0"  class="form-control"  value="<?php echo $proj_brgy->no_of_days; ?>" />
+                        <input id="daily_payment" name="daily_payment" placeholder="daily payment" type="hidden" min="0"  class="form-control"  value="<?php echo $proj_brgy->daily_payment; ?>" />
+                        <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $proj_brgy->no_of_days; ?>" disabled/>
                         <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                     </div>
 
