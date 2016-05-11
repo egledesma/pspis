@@ -20,7 +20,30 @@ class cashforwork extends CI_Controller
             'project' => $cashforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
+    public function finalize_saro($cashforwork_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        if ($cashforwork_id > 0){
+            $getResult = $cashforwork_model->finalize($cashforwork_id);
+            $total_cost = $getResult->total_cost;
+            $saro = $getResult->saro_id;
+            $regionsaro = $this->session->userdata('uregion');
+            $deleteResult = $cashforwork_model->finalize_update($total_cost,$saro,$regionsaro);
 
+            if ($deleteResult){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+                $region_code = $this->session->userdata('uregion');
+                $this->load->view('cashforwork_list',array(
+                    'project' => $cashforwork_model->get_project($region_code)
+                ));
+
+                $this->load->view('footer');
+            }
+            $this->redirectIndex();
+        }
+    }
     public function updateCashforwork($cashforwork_id)
     {
         $cashforwork_model = new cashforwork_model();
@@ -31,6 +54,8 @@ class cashforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
+            $regionsaro = $this->session->userdata('uregion');
+            $getList['sarolist'] = $cashforwork_model->get_saro($regionsaro);
             $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
             $getList['regionlist'] = $cashforwork_model->get_regions();
             $getList['cashforworkdata'] = $cashforwork_model->get_project_byid($cashforwork_id);
@@ -46,8 +71,9 @@ class cashforwork extends CI_Controller
         {
 
             $myid = $this->input->post('myid');
-            $cashforwork_id = $this->input->post('cashforwork_id');
+            $cashforwork_id1 = $this->input->post('cashforwork_id');
             $project_title = $this->input->post('project_title');
+            $sarolist = $this->input->post('sarolist');
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $natureofworklist = $this->input->post('natureofworklist');
@@ -55,7 +81,7 @@ class cashforwork extends CI_Controller
 
             $number_days = $this->input->post('number_days');
 
-            $updateResult = $cashforwork_model->updateCashforwork($cashforwork_id,$myid,$project_title,$regionlist,$provlist
+            $updateResult = $cashforwork_model->updateCashforwork($sarolist,$cashforwork_id1,$myid,$project_title,$regionlist,$provlist
                 ,$natureofworklist,$number_days,$daily_payment);
             if ($updateResult) {
 
@@ -176,6 +202,8 @@ class cashforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
+            $regionsaro = $this->session->userdata('uregion');
+            $getList['sarolist'] = $cashforwork_model->get_saro($regionsaro);
             $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
             $getList['regionlist'] = $cashforwork_model->get_regions();
 
@@ -200,6 +228,7 @@ class cashforwork extends CI_Controller
         {
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
+            $saro = $this->input->post('sarolist');
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $natureofworklist = $this->input->post('natureofworklist');
@@ -208,7 +237,7 @@ class cashforwork extends CI_Controller
             $number_days = $this->input->post('number_days');
 //            $costofassistance = $this->input->post('cost_of_assistance');
 
-            $addResult = $cashforwork_model->insertProject($myid,$project_title,$regionlist,$provlist
+            $addResult = $cashforwork_model->insertProject($saro,$myid,$project_title,$regionlist,$provlist
                 ,$natureofworklist,$daily_payment,$number_days);
             if ($addResult){
                 $this->load->view('header');

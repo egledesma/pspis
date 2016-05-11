@@ -20,6 +20,31 @@ class foodforwork extends CI_Controller
             'project' => $foodforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
+
+    public function finalize_saro($foodforwork_id)
+    {
+        $foodforwork_model = new foodforwork_model();
+        if ($foodforwork_id > 0){
+            $getResult = $foodforwork_model->finalize($foodforwork_id);
+            $total_cost = $getResult->cost_of_assistance;
+            $saro = $getResult->saro_id;
+            $regionsaro = $this->session->userdata('uregion');
+            $deleteResult = $foodforwork_model->finalize_update($total_cost,$saro,$regionsaro);
+
+            if ($deleteResult){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+                $region_code = $this->session->userdata('uregion');
+                $this->load->view('foodforwork_list',array(
+                    'project' => $foodforwork_model->get_project($region_code)
+                ));
+
+                $this->load->view('footer');
+            }
+            $this->redirectIndex();
+        }
+    }
     public function updatefoodforwork($foodforwork_id)
     {
         $foodforwork_model = new foodforwork_model();
@@ -30,6 +55,8 @@ class foodforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
+            $regionsaro = $this->session->userdata('uregion');
+            $getList['sarolist'] = $foodforwork_model->get_saro($regionsaro);
             $getList['natureofworklist'] = $foodforwork_model->get_work_nature();
             $getList['regionlist'] = $foodforwork_model->get_regions();
             $getList['foodforworkdata'] = $foodforwork_model->get_project_byid($foodforwork_id);
@@ -50,6 +77,7 @@ class foodforwork extends CI_Controller
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
+            $sarolist = $this->input->post('sarolist');
             $brgylist = $this->input->post('brgylist');
             $natureofworklist = $this->input->post('natureofworklist');
             $number_bene = $this->input->post('number_bene');
@@ -57,7 +85,7 @@ class foodforwork extends CI_Controller
             $number_days = $this->input->post('number_days');
             $costofassistance = $this->input->post('cost_of_assistance');
 
-            $updateResult = $foodforwork_model->updatefoodforwork($foodforwork_id,$myid,$project_title,$regionlist,$provlist
+            $updateResult = $foodforwork_model->updatefoodforwork($sarolist,$foodforwork_id,$myid,$project_title,$regionlist,$provlist
                 ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance);
             if ($updateResult) {
 
@@ -102,6 +130,8 @@ class foodforwork extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
+            $regionsaro = $this->session->userdata('uregion');
+            $getList['sarolist'] = $foodforwork_model->get_saro($regionsaro);
             $getList['natureofworklist'] = $foodforwork_model->get_work_nature();
             $getList['regionlist'] = $foodforwork_model->get_regions();
 
@@ -131,6 +161,7 @@ class foodforwork extends CI_Controller
 //            $assistancelist = 2;
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
+            $sarolist = $this->input->post('sarolist');
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
@@ -141,7 +172,7 @@ class foodforwork extends CI_Controller
             $number_days = $this->input->post('number_days');
             $costofassistance = $this->input->post('cost_of_assistance');
 
-            $addResult = $foodforwork_model->insertProject($myid,$project_title,$regionlist,$provlist
+            $addResult = $foodforwork_model->insertProject($sarolist,$myid,$project_title,$regionlist,$provlist
                 ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance);
             if ($addResult){
                 $this->load->view('header');

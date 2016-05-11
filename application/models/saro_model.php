@@ -52,9 +52,6 @@ class saro_model extends CI_Model
                           "'.$funds_identifier.'")');
         }
 
-
-
-
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

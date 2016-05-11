@@ -9,16 +9,56 @@
 
 class foodforwork_model extends CI_Model
 {
+    public function finalize($foodforwork_id)
+    {
 
+        $sql = 'select saro_id,cost_of_assistance
+                from tbl_foodforwork
+                where deleted = 0 and foodforwork_id = "'.$foodforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+    public function finalize_update($total_cost,$saro_id,$regionsaro)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded
+                              WHERE
+                              saro_id = "'.$saro_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_downloaded ="'.$total_cost.'" + funds_downloaded
+                              WHERE
+                              region_code = "'.$regionsaro.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+    }
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
+        $sql = 'SELECT d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
 FROM `tbl_foodforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
 INNER JOIN lib_work_nature c
 on a.nature_id = c.nature_id
+inner join tbl_saro d
+on d.saro_id = a.saro_id
 where a.deleted = 0 and a.region_code = "'.$region_code.'"
                ';
         $query = $this->db->query($sql);
@@ -54,15 +94,15 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         }
         $this->db->close();
     }
-    public function insertProject($myid,$project_title,$regionlist,$provlist
+    public function insertProject($sarolist,$myid,$project_title,$regionlist,$provlist
         ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_foodforwork(assistance_id,
+        $this->db->query('insert into tbl_foodforwork(assistance_id,saro_id,
                           project_title,region_code,prov_code,city_code,brgy_code,nature_id,no_of_bene,no_of_days,cost_of_assistance,date_created,created_by,deleted)
                           values
-                          ("2","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$sarolist.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$munilist.'","'.$brgylist.'","'.$natureofworklist.'",
                           "'.$number_bene.'","'.$number_days.'",
                           "'.$costofassistance.'",now(),"'.$myid.'","0")');
@@ -103,13 +143,14 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         $this->db->close();
     }
 
-    public function updatefoodforwork($foodforwork_id,$myid,$project_title,$regionlist,$provlist
+    public function updatefoodforwork($sarolist,$foodforwork_id,$myid,$project_title,$regionlist,$provlist
         ,$munilist,$brgylist,$natureofworklist,$number_bene,$number_days,$costofassistance){
 
         $this->db->trans_begin();
 
         $this->db->query('UPDATE tbl_foodforwork
                         SET
+                        saro_id = "'.$sarolist.'",
                         project_title = "'.$project_title.'",
                         region_code = "'.$regionlist.'",
                         prov_code = "'.$provlist.'",
@@ -136,6 +177,28 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         }
 
         $this->db->close();
+    }
+
+    public function get_saro($region)
+    {
+        $get_saro = "
+        SELECT
+          saro_id,
+          saro_number
+        FROM
+          tbl_saro
+        WHERE
+          saro_id <> '0'
+          and deleted = 0
+          and region_code = '".$region."'
+        GROUP BY
+         saro_id
+        ORDER BY
+          saro_id
+        ";
+
+        return $this->db->query($get_saro)->result();
+
     }
     public function get_work_nature()
     {
