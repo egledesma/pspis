@@ -55,6 +55,7 @@
                     <div>
                         <ul class="list-group list-group-dividered list-group-full col-lg-3">
                             <h5><i class="icon fa-money" aria-hidden="true"></i><b>Project Cost:</b></h5>
+                            <li class="list-group-item"> SAro Number: <b><?php echo $projectdata->saro_number ?></b></li>
                             <li class="list-group-item"> Funds Source: <b><?php echo $projectdata->fund_source ?></b></li>
                             <li class="list-group-item"> Amount Requested: <b><?php echo '₱ '. number_format($projectdata->project_amount,2);  ?></b></li>
                             <li class="list-group-item"> LGU Amount/s: <b><?php echo '₱ '. number_format($projectdata->lgu_amount,2);  ?></b></li>
@@ -65,9 +66,9 @@
                     <div>
                         <ul class="list-group list-group-dividered list-group-full col-lg-3">
                             <h5><i class="icon fa-calendar" aria-hidden="true"></i><b>Project Timeline:</b></h5>
-                            <li class="list-group-item"> Type of Assistance: <b><?php echo $projectdata->assistance_name ?></b></li>
-                            <li class="list-group-item"> Nature of Work: <b><?php echo $projectdata->work_nature ?></b></li>
-                            <li class="list-group-item"> Number of Beneficiaries: <b><?php echo $projectdata->no_of_bene ?></b></li>
+                            <li class="list-group-item"> Start Date: <b><?php echo $projectdata->start_date ?></b></li>
+                            <li class="list-group-item"> Target Date: <b><?php echo $projectdata->target_date ?></b></li>
+                            <li class="list-group-item"> Status: <b><?php echo $projectdata->project_status ?></b></li>
                             <!--<li class="list-group-item"> Barangay: <b><?php //echo $projectdata->region_name ?></b></li> -->
                         </ul>
                     </div>
@@ -115,9 +116,16 @@
 
                 </div>
 
+                <?php
+                $first_tranche = ($projectdata->project_amount * 0.50);
+                $second_tranche = ($projectdata->project_amount * 0.40);
+                $third_tranche = ($projectdata->project_amount * 0.10);
+
+                ?>
+
                 <div class="panel-body">
                     <div class="col-lg-6">
-                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Fund Transfer:</b> <a href="<?php echo base_url('budget/addBudget/'.$projectdata->project_id.'') ?>" data-toggle="tooltip" data-placement="top" data-original-title="Transfer Funds"  class= "btn btn-outline btn-danger pull-right btn-sm"><i class="icon wb-plus"></i></a></h5>
+                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Fund Transfer:</b></h5>
                         <table class="table table-striped margin-bottom-10">
                             <thead>
                             <tr>
@@ -130,29 +138,72 @@
                             <tbody>
                             <tr>
                                 <td>1st Tranche:</td>
-                                <td><b><?php echo '₱ '. number_format($budgetdata->first_tranche,2); ?></td>
+                                <td><b><?php echo '₱ '. number_format($first_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_tranche_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#examplePositionCenter" data-toggle="modal" data-original-title="Transfer Funds"></button></td>
                             </tr>
+                            <div class="modal fade" id="examplePositionCenter" aria-hidden="true" aria-labelledby="examplePositionCenter"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Transfer Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group row">
+                                            <div id="start_date" class="col-sm-8">
+                                                <label for="start_date" class="control-label">Start Date:</label>
+                                                <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="icon wb-calendar" aria-hidden="true"></i>
+                    </span>
+                                                    <input id="start_date" name="start_date" placeholder="Start Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('start_date'); ?></span>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="project_title" class="col-sm-10">
+                                                    <label for="project_title" class="control-label">Remarks:</label>
+                                                    <input id="project_title" name="project_title" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" required/>
+                                                    <span class="text-danger"><?php echo form_error('project_title'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <tr>
                                 <td>2nd Tranche</td>
-                                <td><b><?php echo '₱ '. number_format($budgetdata->second_tranche,2); ?></td>
+                                <td><b><?php echo '₱ '. number_format($second_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_tranche_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
                             </tr>
                             <tr>
                                 <td>3rd Tranche</td>
-                                <td><b><?php echo '₱ '. number_format($budgetdata->third_tranche,2); ?></td>
+                                <td><b><?php echo '₱ '. number_format($third_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_tranche_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-1"></div>
 
-                    <div class="col-lg-5">
-                        <h5><i class="icon wb-clipboard" aria-hidden="true"></i><b>Liquidation Report:</b><a data-toggle="tooltip" data-placement="top" href="<?php echo base_url('budget/addLiquidate/'.$projectdata->project_id.'') ?>" data-original-title="Liquidate"  class= "btn btn-outline btn-danger pull-right  btn-sm"><i class="icon wb-plus"></i></a></h5>
+                    <div class="col-lg-6">
+                        <h5><i class="icon wb-clipboard" aria-hidden="true"></i><b>Liquidation Report:</b></h5>
                         <table class="table table-striped margin-bottom-10">
                             <thead>
                             <tr>
@@ -165,21 +216,24 @@
                             <tbody>
                             <tr>
                                 <td>1st Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($budgetdata->first_liquidate,2); ?></td>
+                                <td><b><?php echo  '₱ '. number_format($first_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_liquidate_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
                             </tr>
                             <tr>
                                 <td>2nd Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($budgetdata->second_liquidate,2); ?></td>
+                                <td><b><?php echo  '₱ '. number_format($second_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_liquidate_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
                             </tr>
                             <tr>
                                 <td>3rd Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($budgetdata->third_liquidate,2); ?></td>
+                                <td><b><?php echo  '₱ '. number_format($third_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_liquidate_date ))); ?></td>
                                 <td><b>90%</td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
                             </tr>
                             </tbody>
                         </table>

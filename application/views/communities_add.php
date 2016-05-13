@@ -209,7 +209,7 @@ $region_code = $this->session->userdata('uregion');
                         <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
-                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                <option value="<?php echo $saroselect->saro_number; ?>"
                                     <?php if(isset($saro_id)) {
                                         if($saroselect->saro_id == $saro_id) {
                                             echo " selected";
@@ -437,9 +437,9 @@ $region_code = $this->session->userdata('uregion');
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="lgu_fundsource" class="control-label">LGU fundsource:</label>
-                        <input id="lgu_fundsource" name="lgu_fundsource" placeholder="LGU fund source" type="text"  class="form-control"  value="<?php echo set_value('lgu_fundsource'); ?>" required autofocus/>
-                        <span class="text-danger"><?php echo form_error('lgu_fundsource'); ?></span>
+                        <label for="remarks_prov" class="control-label">Remarks:</label>
+                        <input id="remarks_prov" name="remarks_prov" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks_prov'); ?>"/>
+                        <span class="text-danger"><?php echo form_error('remarks_prov'); ?></span>
                     </div>
 
                 </div>
@@ -456,6 +456,12 @@ $region_code = $this->session->userdata('uregion');
                         <label for="lgu_amount_muni" class="control-label">LGU amount City/Municipality:</label>
                         <input onblur="recalculateSum();" id="lgu_amount_muni" name="lgu_amount_muni"  placeholder="LGU amount City/Municipality:" type="number"  class="form-control"  value="0" required autofocus/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_muni'); ?></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="remarks_muni" class="control-label">Remarks:</label>
+                        <input id="remarks_muni" name="remarks_muni" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks_muni'); ?>"/>
+                        <span class="text-danger"><?php echo form_error('remarks_muni'); ?></span>
                     </div>
 
                 </div>
@@ -477,6 +483,12 @@ $region_code = $this->session->userdata('uregion');
                         <span class="text-danger"><?php echo form_error('lgu_amount_brgy'); ?></span>
                     </div>
 
+                    <div class="col-sm-4">
+                        <label for="remarks_brgy" class="control-label">Remarks:</label>
+                        <input id="remarks_brgy" name="remarks_brgy" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks_brgy'); ?>" />
+                        <span class="text-danger"><?php echo form_error('remarks_brgy'); ?></span>
+                    </div>
+
 
 
                 </div>
@@ -492,21 +504,59 @@ $region_code = $this->session->userdata('uregion');
                         <label for="implementing_agency" class="control-label">Implementing Agency:</label>
                         <select name="implementing_agency" id="implementing_agency" class="form-control">
                             <option value="">Choose Implementing Agency</option>
-                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
-                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
-                                    <?php echo $fundsourceselect->fund_source; ?>
+                            <?php foreach($implementingagency as $implementingagencyselect): ?>
+                                <option value="<?php echo $implementingagencyselect->agency_id; ?>">
+                                    <?php echo $implementingagencyselect->agency_name; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <div class="col-sm-4">
-                        <label for="status" class="control-label">Status:</label>
-                        <input id="status" name="status" placeholder="Status" type="text"  class="form-control"  value="<?php echo set_value('status'); ?>" required autofocus/>
-                        <span class="text-danger"><?php echo form_error('status'); ?></span>
+                </div>
+
+                <div class="example form-group row">
+                    <div id="start_date" class="col-sm-4">
+                        <label for="start_date" class="control-label">Start Date:</label>
+                        <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="icon wb-calendar" aria-hidden="true"></i>
+                    </span>
+                            <input id="start_date" name="start_date" placeholder="Start Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('start_date'); ?></span>
+                        </div>
                     </div>
 
+                    <div id="start_date" class="col-sm-4">
+                        <label for="target_date" class="control-label">Target Date:</label>
+                        <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="icon wb-calendar" aria-hidden="true"></i>
+                    </span>
+                            <input id="target_date" name="target_date" placeholder="Target Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('target_date'); ?></span>
+                        </div>
+                    </div>
+
+
+                    <div id="projectstatuslist" class="col-sm-4">
+                        <label for="projectstatuslist" class="control-label">Project Status:</label>
+
+                            <select name="projectstatuslist" id="projectstatuslist" class="form-control"  required="required" autofocus>
+                                <option value="">Choose Project Status</option>
+                                <?php foreach($projectstatuslist as $projectselect): ?>
+                                    <option value="<?php echo $projectselect->status_id; ?>"
+                                        <?php if(isset($status_id)) {
+                                            if($projectselect->status_id == $status_id) {
+                                                echo " selected";
+                                            }
+                                        } ?>
+                                    >
+                                        <?php echo $projectselect->status_name; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                    </div>
                 </div>
+
+
 
                 <div class="site-action">
                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"

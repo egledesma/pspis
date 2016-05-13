@@ -52,7 +52,8 @@ class communities extends CI_Controller
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
             $getList['sarolist'] = $communities_model->get_saro($regionsaro);
-//            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectstatuslist'] = $communities_model->get_project_status();
+            $getList['implementingagency'] = $communities_model->get_implementing_agency();
             $getList['regionlist'] = $communities_model->get_regions();
 
             if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
@@ -78,6 +79,7 @@ class communities extends CI_Controller
         else
         {
             $myid = $this->input->post('myid');
+            $saro_number = $this->input->post('sarolist');
             $assistancelist = $this->input->post('assistancelist');
             $project_title = $this->input->post('project_title');
             $regionlist = $this->input->post('region_pass');
@@ -94,13 +96,17 @@ class communities extends CI_Controller
             $lgu_amount_prov = $this->input->post('lgu_amount_prov');
             $lgu_amount_muni= $this->input->post('lgu_amount_muni');
             $lgu_amount_brgy = $this->input->post('lgu_amount_brgy');
-            $lgu_fundsource = $this->input->post('lgu_fundsource');
+            $lgu_remarks_prov = $this->input->post('remarks_prov');
+            $lgu_remarks_muni = $this->input->post('remarks_muni');
+            $lgu_remarks_brgy = $this->input->post('remarks_brgy');
             $project_cost = $this->input->post('project_cost');
             $implementing_agency = $this->input->post('implementing_agency');
-            $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($myid,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
-                $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgucounterpart_muni,
-                $lgucounterpart_brgy,$lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status);
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
+            $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
+            $status = $this->input->post('projectstatuslist');
+            $addResult = $communities_model->insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
+                $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,
+                $lgucounterpart_brgy,$lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');

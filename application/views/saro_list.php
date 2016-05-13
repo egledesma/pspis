@@ -27,6 +27,7 @@
                         <th>Funds Amount</th>
                         <th>Funds Downloaded</th>
                         <th>Funds Utilized</th>
+                        <th>Remaining Balance</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -37,6 +38,7 @@
                         <th>Funds Amount</th>
                         <th>Funds Downloaded</th>
                         <th>Funds Utilized</th>
+                        <th>Remaining Balance</th>
                         <th>Action</th>
                     </tr>
                     </tfoot>
@@ -52,6 +54,7 @@
                             <td><?php echo '₱ '. number_format($saroData->saro_funds,2); ?></td>
                             <td><?php echo '₱ '. number_format($saroData->saro_funds_downloaded,2); ?></td>
                             <td><?php echo '₱ '. number_format($saroData->saro_funds_utilized,2); ?></td>
+                            <td><?php echo '₱ '. number_format($saroData->saro_balance,2); ?></td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$saroData->region_code.'') ?>" data-toggle="tooltip"

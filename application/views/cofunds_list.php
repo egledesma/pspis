@@ -50,8 +50,8 @@
                        $fundsdownload = $cofundsData->co_funds_downloaded;
                        $fundsutilize = $cofundsData->co_funds_utilized;
                        $budget =($fundsallocate - $fundsdownload);
-                        if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
-
+                        if ($fundsdownload != 0) {
+                            $percent = ($fundsutilize / $fundsdownload);
                             $status = number_format( $percent * 100, 2 ) . '%';
                         } else {
                             $status = "0.00%";

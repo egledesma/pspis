@@ -51,9 +51,9 @@ class communities_model extends CI_Model
 
     public function view_projectbyid($project_id = 0)
     {
-        $sql = 'select a.project_id,a.project_title, a.region_code, b.assistance_name,
+        $sql = 'select a.project_id,a.saro_number,a.project_title, a.region_code, b.assistance_name,
                 c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, k.status_name, l.agency_name, a.no_of_bene,
-                a.lgu_fundsource, a.lgu_amount_prov, a.project_cost,a.project_amount,f.fund_source as "implementing_agency", a.status, g.region_name
+                a.lgu_fundsource, sum(a.lgu_amount_prov + a.lgu_amount_muni + a.lgu_amount_brgy) as lgu_amount, a.project_cost,a.project_amount, f.fund_source as "implementing_agency", a.status, g.region_name, m.*
                 from tbl_projects a
                 INNER JOIN lib_assistance_type b
                 on a.assistance_id = b.assistance_id
@@ -75,6 +75,8 @@ class communities_model extends CI_Model
                 on a.status = k.status_id
                 INNER JOIN lib_implementing_agency l
                 on a.implementing_agency = l.agency_id
+                INNER JOIN tbl_project_implementation m
+                on a.project_id = m.project_id
                 where a.deleted ="0"
                 and a.project_id ="'.$project_id.'"
                ';
@@ -103,6 +105,25 @@ class communities_model extends CI_Model
 
     }
 
+    public function get_project_status()
+    {
+        $get_project_status = "
+        SELECT
+          status_id,
+          status_name
+        FROM
+          lib_status
+        WHERE
+          status_id <> '0'
+          and deleted = 0
+        ORDER BY
+          status_id
+        ";
+
+        return $this->db->query($get_project_status)->result();
+
+    }
+
     public function get_saro($region)
     {
         $get_saro = "
@@ -114,6 +135,7 @@ class communities_model extends CI_Model
         WHERE
           saro_id <> '0'
           and deleted = 0
+          and saro_balance != '0.00'
           and region_code = '".$region."'
         GROUP BY
          saro_id
@@ -175,7 +197,19 @@ class communities_model extends CI_Model
         $result = $query->result();
         return $result;
 
-    } public function get_lgu_counterpart()
+    }
+    public function get_implementing_agency()
+    {
+        $sql = 'select agency_id,agency_name
+                from lib_implementing_agency
+                where deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
+
+    public function get_lgu_counterpart()
     {
         $sql = 'select lgucounterpart_id,lgu_counterpart
                 from lib_lgu_counterpart
@@ -185,24 +219,40 @@ class communities_model extends CI_Model
         return $result;
 
     }
-    public function insertProject($myid,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
-                                  $lgucounterpart_prov,$lgucounterpart_muni,$lgucounterpart_brgy,
-                                  $lgu_fundsource,$lgu_amount_prov,$lgu_amount_muni,$lgu_amount_brgy,$project_cost,$project_amount,$implementing_agency,$status)
+    public function insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
+                                  $lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,$lgucounterpart_brgy,
+                                  $lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(assistance_id,project_title,region_code,prov_code,city_code,brgy_code
+        $this->db->query('insert into tbl_projects(saro_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
                           ,no_of_bene,nature_id,fundsource_id
-                          ,project_amount,lgucounterpart_prov,lgu_amount_prov
-                          ,lgucounterpart_muni,lgu_amount_muni,lgucounterpart_brgy,lgu_amount_brgy
-                          ,lgu_fundsource,project_cost,implementing_agency,created_by,date_created,status,deleted)
+                          ,project_amount,lgucounterpart_prov,lgu_amount_prov,lgu_remarks_prov
+                          ,lgucounterpart_muni,lgu_amount_muni,lgu_remarks_muni,lgucounterpart_brgy,lgu_amount_brgy,lgu_remarks_brgy
+                          ,project_cost,implementing_agency,created_by,date_created,status,deleted)
                           values
-                          ("'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
+                          ("'.$saro_number.'","'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
                           "'.$number_bene.'","'.$natureofworklist.'","'.$fundsourcelist.'",
-                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgu_amount_prov.'",
-                          "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'",
-                          "'.$lgu_fundsource.'","'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
+                          "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgu_amount_prov.'","'.$lgu_remarks_prov.'",
+                          "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgu_remarks_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'","'.$lgu_remarks_brgy.'",
+                          "'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
 
+        $insert_id = $this->db->insert_id();
+        $this->db->query('INSERT INTO tbl_project_implementation(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
+                          VALUES
+                          (
+                          "'.$insert_id.'",
+                          "'.$start_date.'",
+                          "'.$target_date.'",
+                          "'.$status.'",
+						  now(),
+						  "'.$this->session->userdata('uid').'",
+						  0
+                          )');
+        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'"
+        where saro_number ="'.$saro_number.'"');
+        $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = "'.$project_amount.'"
+        where region_code ="'.$regionlist.'"');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

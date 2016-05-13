@@ -103,9 +103,9 @@ class fundsallocation_model extends CI_Model
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_saro(
-                          for_year,saro_number,region_code,saro_funds,date_created,created_by,status,funds_identifier)
+                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
 
 
@@ -127,6 +127,10 @@ class fundsallocation_model extends CI_Model
                           now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
         }
+        $this->db->query('Update tbl_co_funds set
+                  co_funds_downloaded = "'.$funds_allocated.'",
+                  date_modified = now(),
+                  modified_by = "'.$myid.'" ');
 
 
 

@@ -22,14 +22,14 @@ class saro_model extends CI_Model
     }
 
 
-    public function insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
+    public function insertFunds1($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_saro(
-                          for_year,saro_number,region_code,saro_funds,date_created,created_by,status,funds_identifier)
+                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
 
 
