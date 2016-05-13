@@ -123,6 +123,26 @@
                 <!--<pre>-->
                 <?php //print_r($natureofworklist)?>
                 <!--</pre>-->
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="sarolist">Saro Number:</label>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                            <option value="">Choose Saro Number</option>
+                            <?php foreach($sarolist as $saroselect): ?>
+                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                    <?php if(isset($cashforworkdata->saro_id)) {
+                                        if($saroselect->saro_id == $cashforworkdata->saro_id) {
+                                            echo " selected";
+                                        }
+                                    } ?>
+                                >
+                                    <?php echo $saroselect->saro_number; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
                 <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $cashforworkdata->prov_code ?>" >
 <!--                <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="--><?php //echo $cashforworkdata->city_code ?><!--" >-->
 <!--                <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="--><?php //echo $cashforworkdata->brgy_code ?><!--" >-->

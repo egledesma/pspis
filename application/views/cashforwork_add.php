@@ -97,7 +97,25 @@ $region_code = $this->session->userdata('uregion');
                 echo form_open("cashforwork/addCashforwork", $attributes);?>
 <!--<pre>-->
 <?php //print_r($natureofworklist)?>
-<!--</pre>-->
+<!--</pre>-->  <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="sarolist">Saro Number:</label>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                            <option value="">Choose Saro Number</option>
+                            <?php foreach($sarolist as $saroselect): ?>
+                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                    <?php if(isset($saro_id)) {
+                                        if($saroselect->saro_id == $saro_id) {
+                                            echo " selected";
+                                        }
+                                    } ?>
+                                >
+                                    <?php echo $saroselect->saro_number; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">

@@ -26,12 +26,13 @@
                 </header>
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('foodforwork/addfoodforwork') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
+                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('foodforwork/addfoodforwork') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Project</a>
                     </div><br>
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead>
                         <tr>
                             <th>Action</th>
+                            <th>Saro Number</th>
                             <th>Project Title</th>
                             <th>Region</th>
                             <th>Nature of work</th>
@@ -44,6 +45,7 @@
                         <tfoot>
                         <tr>
                             <th>Action</th>
+                            <th>Saro Number</th>
                             <th>Project Title</th>
                             <th>Region</th>
                             <th>Nature of work</th>
@@ -70,9 +72,13 @@
                                         <a class="confirmation btn btn-success btn-outline" id="confirm"
                                            href="<?php echo base_url('foodforwork/cash_addbene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
+                                        <a class="btn btn-info btn-outline" id="confirm"
+                                           href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                                           data-placement="top" data-original-title="Finalize"><i class="icon wb-thumb-up" aria-hidden="true"></i></a>
                                     </div>
 
                                 </td>
+                                <td><?php echo $projectData->saro_number; ?></td>
                                 <td><?php echo $projectData->project_title; ?></td>
                                 <td><?php echo $projectData->region_name; ?></td>
                                 <td><?php echo $projectData->work_nature; ?></td>

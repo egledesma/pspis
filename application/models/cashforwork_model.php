@@ -10,10 +10,73 @@
 class cashforwork_model extends CI_Model
 {
 
+    public function get_saro($region)
+    {
+        $get_saro = "
+        SELECT
+          saro_id,
+          saro_number
+        FROM
+          tbl_saro
+        WHERE
+          saro_id <> '0'
+          and deleted = 0
+          and region_code = '".$region."'
+        GROUP BY
+         saro_id
+        ORDER BY
+          saro_id
+        ";
+
+        return $this->db->query($get_saro)->result();
+
+    }
+
+    public function finalize($cashforwork_id)
+    {
+
+        $sql = 'select a.saro_id,sum(b.cost_of_assistance_muni) total_cost
+                                    from tbl_cashforwork a
+                                    inner join tbl_cash_muni b
+                                    on a.cashforwork_id = b.cashforwork_id
+                                    where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+    public function finalize_update($total_cost,$saro_id,$regionsaro)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded
+                              WHERE
+                              saro_id = "'.$saro_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_downloaded ="'.$total_cost.'" + funds_downloaded
+                              WHERE
+                              region_code = "'.$regionsaro.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+    }
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,sum(d.no_of_bene_muni) as total_bene, sum(d.cost_of_assistance_muni) as total_cost
+        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,sum(d.no_of_bene_muni) as total_bene, sum(d.cost_of_assistance_muni) as total_cost
                 FROM `tbl_cashforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
@@ -21,6 +84,8 @@ class cashforwork_model extends CI_Model
                 on a.nature_id = c.nature_id
                 inner join tbl_cash_muni d
                 on d.cashforwork_id = a.cashforwork_id
+                  inner join tbl_saro g
+                on a.saro_id = g.saro_id
                 where a.deleted = 0 and a.region_code = '.$region_code.' and d.deleted = 0
                 GROUP BY a.cashforwork_id
                ';
@@ -113,6 +178,7 @@ class cashforwork_model extends CI_Model
                 on d.region_code = e.region_code
                 INNER JOIN lib_work_nature f
                 ON d.nature_id = f.nature_id
+
                 where a.cash_muni_id = "'.$cashforwork_muni_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -152,15 +218,15 @@ class cashforwork_model extends CI_Model
         }
         $this->db->close();
     }
-    public function insertProject($myid,$project_title,$regionlist,$provlist
+    public function insertProject($saro,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_cashforwork(assistance_id,
+        $this->db->query('insert into tbl_cashforwork(assistance_id,saro_id,
                           project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,date_created,created_by,deleted)
                           values
-                          ("2","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$saro.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
                           "'.$number_days.'",now(),"'.$myid.'","0")');
@@ -312,13 +378,14 @@ class cashforwork_model extends CI_Model
         $this->db->close();
     }
 
-    public function updateCashforwork($cashforwork_id,$myid,$project_title,$regionlist,$provlist
+    public function updateCashforwork($sarolist,$cashforwork_id1,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$number_days,$daily_payment){
 
         $this->db->trans_begin();
 
         $this->db->query('UPDATE tbl_cashforwork
                         SET
+                        saro_id = "'.$sarolist.'",
                         project_title = "'.$project_title.'",
                         region_code = "'.$regionlist.'",
                         prov_code = "'.$provlist.'",
@@ -328,7 +395,7 @@ class cashforwork_model extends CI_Model
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE
-                        cashforwork_id = "'.$cashforwork_id.'"');
+                        cashforwork_id = "'.$cashforwork_id1.'"');
         $day_daily = $daily_payment * $number_days;
         $this->db->query('UPDATE tbl_cash_muni
                         SET
@@ -336,14 +403,14 @@ class cashforwork_model extends CI_Model
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE
-                        cashforwork_id = "'.$cashforwork_id.'"');
+                        cashforwork_id = "'.$cashforwork_id1.'"');
         $this->db->query('UPDATE tbl_cash_brgy
                         SET
                         cost_of_assistance_brgy = no_of_bene_brgy * "'.$day_daily.'",
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE
-                        cashforwork_id = "'.$cashforwork_id.'"');
+                        cashforwork_id = "'.$cashforwork_id1.'"');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

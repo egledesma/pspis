@@ -129,6 +129,25 @@
                 <input type="hidden" id = "foodforwork_id" name = "foodforwork_id" value = "<?php echo $foodforworkdata->foodforwork_id ?>">
                 <input class="form-control"  type="hidden" name="region_pass" value="<?php echo $foodforworkdata->region_code?>">
                 <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="sarolist">Saro Number:</label>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                            <option value="">Choose Saro Number</option>
+                            <?php foreach($sarolist as $saroselect): ?>
+                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                    <?php if(isset($foodforworkdata->saro_id)) {
+                                        if($saroselect->saro_id == $foodforworkdata->saro_id) {
+                                            echo " selected";
+                                        }
+                                    } ?>
+                                >
+                                    <?php echo $saroselect->saro_number; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                         <label for="project_title" class="control-label">Project Title:</label>
                         <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo $foodforworkdata->project_title ?>" required/>
