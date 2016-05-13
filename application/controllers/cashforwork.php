@@ -42,7 +42,22 @@ class cashforwork extends CI_Controller
                 $this->load->view('footer');
             }
             $this->redirectIndex();
+
         }
+    }
+    public function masterviewcashforwork($cashforwork_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+//        $region_code = $this->session->userdata('uregion');
+        $this->load->view('cashforwork_view',array(
+            'project' => $cashforwork_model->viewcashforwork($cashforwork_id),
+            'call_muni' => $cashforwork_model->viewcashforwork_callmuni($cashforwork_id),
+            'call_brgy' => $cashforwork_model->viewcashforwork_callbrgy($cashforwork_id)
+        ));
+        $this->load->view('footer');
     }
     public function updateCashforwork($cashforwork_id)
     {

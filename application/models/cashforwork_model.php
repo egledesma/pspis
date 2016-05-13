@@ -10,6 +10,56 @@
 class cashforwork_model extends CI_Model
 {
 
+    public function viewcashforwork($cashforwork_id)
+    {
+
+        $sql = 'SELECT a.cashforwork_id,d.saro_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+FROM `tbl_cashforwork` a
+inner join lib_region b
+on a.region_code = b.region_code
+inner join lib_provinces c
+on a.prov_code = c.prov_code
+inner join tbl_saro d
+on a.saro_id = d.saro_id
+inner join lib_work_nature e
+on a.nature_id = e.nature_id
+inner join tbl_cash_muni f
+on a.cashforwork_id = f.cashforwork_id
+where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"
+GROUP BY f.cashforwork_id';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+    public function viewcashforwork_callmuni($cashforwork_id)
+    {
+
+        $sql = 'SELECT a.cash_muni_id,c.city_name,a.city_code
+FROM `tbl_cash_muni` a
+inner join tbl_cash_brgy b
+on a.cash_muni_id = b.cashforwork_muni_id
+inner join lib_municipality c
+on a.city_code = c.city_code
+where a.deleted = 0 and a.cashforwork_id= "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
+    public function viewcashforwork_callbrgy($cashforwork_id)
+    {
+
+        $sql = 'SELECT a.city_code,b.brgy_name
+FROM `tbl_cash_brgy` a
+inner join lib_brgy b
+on a.brgy_code = b.brgy_code
+where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
     public function get_saro($region)
     {
         $get_saro = "
@@ -84,9 +134,9 @@ class cashforwork_model extends CI_Model
                 on a.nature_id = c.nature_id
                 inner join tbl_cash_muni d
                 on d.cashforwork_id = a.cashforwork_id
-                  inner join tbl_saro g
+                inner join tbl_saro g
                 on a.saro_id = g.saro_id
-                where a.deleted = 0 and a.region_code = '.$region_code.' and d.deleted = 0
+                where a.deleted = 0 and d.deleted = 0 and a.region_code = '.$region_code.'
                 GROUP BY a.cashforwork_id
                ';
         $query = $this->db->query($sql);
@@ -193,7 +243,7 @@ class cashforwork_model extends CI_Model
                 on a.cashforwork_id = b.cashforwork_id
                 inner join lib_municipality c
                 on a.city_code = c.city_code
-                where a.cash_brgy_id = "'.$cashforwork_brgy_id.'" and a.deleted = 0';
+                where a.cash_brgy_id = "'.$cashforwork_brgy_id.'" and a.deleted = 0 and b.deleted = 0';// for verification
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;

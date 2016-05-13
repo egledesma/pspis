@@ -20,7 +20,17 @@ class foodforwork extends CI_Controller
             'project' => $foodforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
-
+    public function masterview_project()
+    {
+        $foodforwork_model = new foodforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $region_code = $this->session->userdata('uregion');
+        $this->load->view('foodforwork_list',array(
+            'project' => $foodforwork_model->get_project($region_code)));
+        $this->load->view('footer');
+    }
     public function finalize_saro($foodforwork_id)
     {
         $foodforwork_model = new foodforwork_model();

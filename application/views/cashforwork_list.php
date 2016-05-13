@@ -61,7 +61,7 @@
                 <td>
                     <div class="btn-group btn-group-sm" role="group">
                         <a class="btn btn-dark btn-outline" id="confirm"
-                           href="<?php echo base_url('cashforwork/view/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
+                           href="<?php echo base_url('cashforwork/masterviewcashforwork/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                            data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>
 
                         <a class="btn btn-info btn-outline" id="confirm"
