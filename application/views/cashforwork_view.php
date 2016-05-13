@@ -61,36 +61,40 @@
 <!--                    </pre>-->
 <!--                    <h4 class="example-title">--><?php //echo $project->project_title ?><!--</h4>-->
                     <div class="example">
+                        <div class="panel-heading">
+                            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon wb-globe" aria-hidden="true"></i><b>City/Municipality:</b></h5>
+                        </div>
                         <?php foreach($call_muni as $muni_data):?>
                         <div class="panel-group" id="exampleAccordionDefault" aria-multiselectable="false"
                              role="tablist">
 
                             <div class="panel">
-
                                 <div class="panel-heading" id="<?php echo 'heading'.$muni_data->city_code?>" role="tab">
                                     <a class="panel-title" data-toggle="collapse" href="#<?php echo 'collapse'.$muni_data->city_code?>"
                                        data-parent="#exampleAccordionDefault" aria-expanded="false"
                                        aria-controls="<?php echo 'collapse'.$muni_data->city_code?>">
 <!--                                        --><?php //echo $muni_data->city_name?>
-                                        <ul class="list-group list-group-dividered list-group-full col-lg-3">
-                                            <li class="list-group-item"> City/Municipality:   <?php echo $muni_data->city_name?></b></li>
+                                        <ul class="list-group list-group-dividered list-group-full col-lg-12">
+                                            <li class="list-group-item">   <b><?php echo $muni_data->city_name?></b></li>
                                         </ul>
                                     </a>
                                 </div>
-                                <div class="panel-collapse collapse in" id="<?php echo 'collapse'.$muni_data->city_code?>" aria-labelledby="<?php echo 'heading'.$muni_data->city_code?>"
+                                <div class="panel-collapse collapse" id="<?php echo 'collapse'.$muni_data->city_code?>" aria-labelledby="<?php echo 'heading'.$muni_data->city_code?>"
                                      role="tabpanel">
-                                    <div class="panel-body">
+                                    <div class="panel-body"><br>
                                             <h5><i class="icon wb-globe" aria-hidden="true"></i><b>Barangays:</b></h5>
                                         <?php foreach($call_brgy as $brgy_data):?>
                                             <?php if( $muni_data->city_code  == $brgy_data->city_code) {?>
-                                            <ul class="list-group list-group-dividered list-group-full col-lg-3">
+                                            <ul class="list-group list-group-dividered list-group-full col-lg-6">
                                                 <li class="list-group-item"><b><?php echo $brgy_data->brgy_name?></b></li>
                                             </ul>
                                             <?php }?>
                                         <?php endforeach;?>
+
                                     </div>
 
                                 </div>
                             </div>
                         </div>
                         <?php endforeach;?>
+
