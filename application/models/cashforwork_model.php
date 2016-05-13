@@ -37,8 +37,6 @@ GROUP BY f.cashforwork_id';
 
         $sql = 'SELECT a.cash_muni_id,c.city_name,a.city_code
 FROM `tbl_cash_muni` a
-inner join tbl_cash_brgy b
-on a.cash_muni_id = b.cashforwork_muni_id
 inner join lib_municipality c
 on a.city_code = c.city_code
 where a.deleted = 0 and a.cashforwork_id= "'.$cashforwork_id.'"';
