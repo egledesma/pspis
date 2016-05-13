@@ -21,6 +21,54 @@ class communities extends CI_Controller
         ));
         $this->load->view('footer');
     }
+    public function addFirstTranche($project_id)
+    {
+        $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
+        $budget_model = new budget_model();
+
+        $this->validateAddTrancheForm();
+
+        if (!$this->form_validation->run()){
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        } else {
+            $remarks = $this->input->post('remarks');
+            $budget_id = $this->input->post('budget_id');
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
+            $myid = $this->input->post('myid');
+            $project_idpass = $this->input->post('project_idpass');
+
+            $firsttrancheupdate = $communities_model->updateFirstTranche($myid,$remarks,$budget_id,$start_date);
+
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        }
+        $this->redirectview($project_idpass);
+
+    }
 
     public function view($project_id){
         $communities_model = new communities_model();
@@ -90,6 +138,9 @@ class communities extends CI_Controller
             $natureofworklist = $this->input->post('natureofworklist');
             $fundsourcelist = $this->input->post('fundsourcelist');
             $project_amount = $this->input->post('amount_requested');
+            $first_tranche = ($project_amount * 0.50);
+            $second_tranche = ($project_amount* 0.40);
+            $third_tranche = ($project_amount * 0.10);
             $lgucounterpart_prov = $this->input->post('lgucounterpart_prov_code');
             $lgucounterpart_muni = $this->input->post('lgucounterpart_muni_code');
             $lgucounterpart_brgy = $this->input->post('lgucounterpart_brgy_code');
@@ -106,7 +157,9 @@ class communities extends CI_Controller
             $status = $this->input->post('projectstatuslist');
             $addResult = $communities_model->insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
                 $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,
-                $lgucounterpart_brgy,$lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status);
+                $lgucounterpart_brgy,$lgu_amount_brgy,$lgu_remarks_brgy,
+                $project_cost,$project_amount,$implementing_agency,$start_date,$target_date,
+                $status,$first_tranche,$second_tranche,$third_tranche);
             if ($addResult){
             $this->load->view('header');
             $this->load->view('navbar');
@@ -390,11 +443,28 @@ class communities extends CI_Controller
         return $this->form_validation->set_rules($config);
 
     }
+    protected function validateAddTrancheForm()
+    {
+        $config = array(
+            array(
+                'field' => 'remarks',
+                'label' => 'remarks remarks',
+                'rules' => 'required'
+            )
+        );
+        return $this->form_validation->set_rules($config);
+
+    }
     public function redirectIndex()
     {
         $page = base_url('communities/index');
 
         header("LOCATION: $page");
     }
+    public function redirectview($project_idpass)
+    {
+        $page = base_url('communities/view/'.$project_idpass);
 
+        header("LOCATION: $page");
+    }
 }

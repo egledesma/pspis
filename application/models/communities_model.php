@@ -221,7 +221,7 @@ class communities_model extends CI_Model
     }
     public function insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
                                   $lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,$lgucounterpart_brgy,
-                                  $lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status)
+                                  $lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status,$first_tranche,$second_tranche,$third_tranche)
     {
 
         $this->db->trans_begin();
@@ -253,6 +253,20 @@ class communities_model extends CI_Model
         where saro_number ="'.$saro_number.'"');
         $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = "'.$project_amount.'"
         where region_code ="'.$regionlist.'"');
+
+        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
+                          VALUES
+                          (
+                          "'.$insert_id.'",
+                          "'.$regionlist.'",
+                          "'.$first_tranche.'",
+                          0,
+                          "'.$second_tranche.'",
+                          "'.$third_tranche.'",
+						  now(),
+						  "'.$this->session->userdata('uid').'",
+						  0
+                          )');
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -430,4 +444,32 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_brgy_name,$brgy_code)->row();
     }
+
+    public function updateFirstTranche($myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              first_tranche_remarks ="'.$remarks.'",
+                              first_tranche_date ="'.$start_date.'",
+                              first_tranche_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+
+
 }
