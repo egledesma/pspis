@@ -35,7 +35,7 @@ GROUP BY f.cashforwork_id';
     public function viewcashforwork_callmuni($cashforwork_id)
     {
 
-        $sql = 'SELECT a.cash_muni_id,c.city_name,a.city_code
+        $sql = 'SELECT a.cash_muni_id,c.city_name,a.city_code,a.cost_of_assistance_muni,a.no_of_bene_muni
 FROM `tbl_cash_muni` a
 inner join lib_municipality c
 on a.city_code = c.city_code

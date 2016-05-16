@@ -470,6 +470,81 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
+    public function updateLiquidateTranche($first_liquidate,$myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              first_liquidate ="'.$first_liquidate.'",
+                              first_liquidate_remarks ="'.$remarks.'",
+                              first_liquidate_date ="'.$start_date.'",
+                              first_liquidate_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
 
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+    public function updateSecondTranche($myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              second_tranche_remarks ="'.$remarks.'",
+                              second_tranche_date ="'.$start_date.'",
+                              second_tranche_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
 
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+    public function updateSecondLiquidateTranche($second_liquidate,$myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              second_liquidate ="'.$second_liquidate.'",
+                              second_liquidate_remarks ="'.$remarks.'",
+                              second_liquidate_date ="'.$start_date.'",
+                              second_liquidate_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
 }

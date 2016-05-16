@@ -136,9 +136,9 @@
                                 <td><b><?php echo '₱ '. number_format($budgetdata->first_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_tranche_date ))); ?></td>
                                 <td><b><?php echo $budgetdata->first_tranche_remarks; ?></td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#examplePositionCenter" data-toggle="modal" data-original-title="Transfer Funds"></button></td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#firstTranche" data-toggle="modal" data-original-title="Transfer Funds"></button></td>
                             </tr>
-                            <div class="modal fade" id="examplePositionCenter" aria-hidden="true" aria-labelledby="examplePositionCenter"
+                            <div class="modal fade" id="firstTranche" aria-hidden="true" aria-labelledby="firstTranche"
                                  role="dialog" tabindex="-1">
                                 <div class="modal-dialog modal-center">
                                     <?php
@@ -166,7 +166,7 @@
                                             </div>
                                             </div>
                                             <div class="form-group row">
-                                                <div id="project_title" class="col-sm-10">
+                                                <div id="remarks" class="col-sm-10">
                                                     <label for="remarks" class="control-label">Remarks:</label>
                                                     <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
                                                     <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
@@ -191,12 +191,62 @@
                             <tr>
                                 <?php if($budgetdata->first_liquidate_status == 1) {?>
                                 <td>2nd Tranche</td>
-                                <td><b><?php echo '₱ '. number_format($budgetdata->second_tranche ,2); ?></td>
-                                <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_tranche_date ))); ?></td>
-                                <td><b>90%</td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                    <td><b><?php echo '₱ '. number_format($budgetdata->second_tranche,2); ?></td>
+                                    <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_tranche_date ))); ?></td>
+                                    <td><b><?php echo $budgetdata->second_tranche_remarks; ?></td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#secondTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
                                 <?php }?>
                             </tr>
+                            <div class="modal fade" id="secondTranche" aria-hidden="true" aria-labelledby="secondTranche"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <?php
+                                    $attributes = array("class" => "modal-content", "id" => "tranche2_add", "name" => "tranche2_add");
+                                    //input here the next location when click insert1
+                                    echo form_open("communities/addSecondTranche/".$implementationdata->project_id, $attributes);?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Transfer Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group row">
+                                                <div id="start_date" class="col-sm-8">
+                                                    <label for="start_date" class="control-label">Start Date:</label>
+                                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                                        <input id="start_date" name="start_date" placeholder="Start Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('start_date'); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="remarks" class="col-sm-10">
+                                                    <label for="remarks" class="control-label">Remarks:</label>
+                                                    <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
+                                                    <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
+                                                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                                                    <input class="form-control"  type="hidden" name="project_idpass" value="<?php echo $implementationdata->project_id?>">
+                                                    <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        <?php echo form_close(); ?>
+                                        <?php echo $this->session->flashdata('msg'); ?>
+                                    </div>
+                                </div>
+                            </div>
                             <tr>
                                 <?php if($budgetdata->second_liquidate_status == 1) {?>
                                 <td>3rd Tranche</td>
@@ -225,21 +275,133 @@
                             <tr>
                                 <?php if($budgetdata->first_tranche_status == 1) {?>
                                 <td>1st Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($first_tranche,2); ?></td>
+                                <td><b><?php echo  '₱ '. number_format($budgetdata->first_liquidate,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_liquidate_date ))); ?></td>
-                                <td><b>90%</td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
+                                <td><b><?php echo $budgetdata->first_liquidate_remarks; ?></td>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#firstLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
                                 <?php }?>
                             </tr>
+                            <div class="modal fade" id="firstLiquidate" aria-hidden="true" aria-labelledby="firstLiquidate"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <?php
+                                    $attributes = array("class" => "modal-content", "id" => "liquidate1_add", "name" => "liquidate1_add");
+                                    //input here the next location when click insert1
+                                    echo form_open("communities/addFirstLiquidate/".$implementationdata->project_id, $attributes);?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Liquidate Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group row">
+                                            <div class="col-sm-8">
+                                                <label for="first_liquidate" class="control-label">Liquidate Amount:</label>
+                                                <input id="first_liquidate" name="first_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->first_tranche; ?>" max = "<?php echo $budgetdata->first_tranche; ?>" type="number"  class="form-control" />
+                                                <span class="text-danger"><?php echo form_error('first_liquidate'); ?></span>
+                                            </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="liqui_date" class="col-sm-8">
+                                                    <label for="liqui_date" class="control-label">Date of Liquidation:</label>
+                                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                                        <input id="liqui_date" name="liqui_date" placeholder="Date of Liquidation" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="remarks" class="col-sm-10">
+                                                    <label for="remarks" class="control-label">Remarks:</label>
+                                                    <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
+                                                    <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
+                                                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                                                    <input class="form-control"  type="hidden" name="project_idpass" value="<?php echo $implementationdata->project_id?>">
+                                                    <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        <?php echo form_close(); ?>
+                                        <?php echo $this->session->flashdata('msg'); ?>
+                                    </div>
+                                </div>
+                            </div>
                             <tr>
                                 <?php if($budgetdata->second_tranche_status == 1) {?>
                                 <td>2nd Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($second_tranche,2); ?></td>
-                                <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_liquidate_date ))); ?></td>
-                                <td><b>90%</td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
+                                    <td><b><?php echo  '₱ '. number_format($budgetdata->second_liquidate,2); ?></td>
+                                    <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_liquidate_date ))); ?></td>
+                                    <td><b><?php echo $budgetdata->second_liquidate_remarks; ?></td>
+                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#secondLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
                                 <?php }?>
                             </tr>
+                            <div class="modal fade" id="secondLiquidate" aria-hidden="true" aria-labelledby="secondLiquidate"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <?php
+                                    $attributes = array("class" => "modal-content", "id" => "liquidate2_add", "name" => "liquidate2_add");
+                                    //input here the next location when click insert1
+                                    echo form_open("communities/addSecondLiquidate/".$implementationdata->project_id, $attributes);?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Liquidate Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group row">
+                                                <div class="col-sm-8">
+                                                    <label for="second_liquidate" class="control-label">Liquidate Amount:</label>
+                                                    <input id="second_liquidate" name="second_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->second_tranche; ?>" max = "<?php echo $budgetdata->second_tranche; ?>" type="number"  class="form-control" />
+                                                    <span class="text-danger"><?php echo form_error('second_liquidate'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="liqui_date" class="col-sm-8">
+                                                    <label for="liqui_date" class="control-label">Date of Liquidation:</label>
+                                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                                        <input id="liqui_date" name="liqui_date" placeholder="Date of Liquidation" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="remarks" class="col-sm-10">
+                                                    <label for="remarks" class="control-label">Remarks:</label>
+                                                    <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
+                                                    <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
+                                                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                                                    <input class="form-control"  type="hidden" name="project_idpass" value="<?php echo $implementationdata->project_id?>">
+                                                    <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        <?php echo form_close(); ?>
+                                        <?php echo $this->session->flashdata('msg'); ?>
+                                    </div>
+                                </div>
+                            </div>
                             <tr>
                                 <?php if($budgetdata->third_tranche_status == 1) {?>
                                 <td>3rd Tranche</td>
