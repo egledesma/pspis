@@ -69,7 +69,6 @@ class communities extends CI_Controller
         $this->redirectview($project_idpass);
 
     }
-
     public function addFirstLiquidate($project_id)
     {
         $communities_model = new communities_model();
@@ -119,6 +118,7 @@ class communities extends CI_Controller
         $this->redirectview($project_idpass);
 
     }
+
     public function addSecondTranche($project_id)
     {
         $communities_model = new communities_model();
@@ -167,7 +167,6 @@ class communities extends CI_Controller
         $this->redirectview($project_idpass);
 
     }
-
     public function addSecondLiquidate($project_id)
     {
         $communities_model = new communities_model();
@@ -217,6 +216,105 @@ class communities extends CI_Controller
         $this->redirectview($project_idpass);
 
     }
+
+    public function addThirdTranche($project_id)
+    {
+        $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
+        $budget_model = new budget_model();
+
+        $this->validateAddTrancheForm();
+
+        if (!$this->form_validation->run()){
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        } else {
+            $remarks = $this->input->post('remarks');
+            $budget_id = $this->input->post('budget_id');
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
+            $myid = $this->input->post('myid');
+            $project_idpass = $this->input->post('project_idpass');
+
+            $thirdtrancheupdate = $communities_model->updateThirdTranche($myid,$remarks,$budget_id,$start_date);
+
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        }
+        $this->redirectview($project_idpass);
+
+    }
+    public function addThirdLiquidate($project_id)
+    {
+        $communities_model = new communities_model();
+        $implementation_model = new implementation_model();
+        $budget_model = new budget_model();
+
+        $this->validateAddTrancheForm();
+
+        if (!$this->form_validation->run()){
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        } else {
+            $remarks = $this->input->post('remarks');
+            $third_liquidate = $this->input->post('third_liquidate');
+            $budget_id = $this->input->post('budget_id');
+            $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('liqui_date'))));
+            $myid = $this->input->post('myid');
+            $project_idpass = $this->input->post('project_idpass');
+
+            $thirdliquidateupdate = $communities_model->updateThirdLiquidateTranche($third_liquidate,$myid,$remarks,$budget_id,$start_date);
+
+            $getList['assistancelist'] = $communities_model->get_lib_assistance();
+            $getList['fundsourcelist'] = $communities_model->get_fund_source();
+            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
+            $getList['projectdata'] = $communities_model->view_projectbyid($project_id);
+            $getList['implementationdata'] = $implementation_model->view_implementationbyproject($project_id);
+            $getList['budgetdata'] = $budget_model->view_budgetbyproject($project_id);
+            $getList['regionlist'] = $communities_model->get_regions();
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('view_project', $getList);
+            $this->load->view('footer');
+
+        }
+        $this->redirectview($project_idpass);
+
+    }
+
     public function view($project_id){
         $communities_model = new communities_model();
         $implementation_model = new implementation_model();

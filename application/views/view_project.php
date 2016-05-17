@@ -252,10 +252,60 @@
                                 <td>3rd Tranche</td>
                                 <td><b><?php echo '₱ '. number_format($budgetdata->third_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_tranche_date ))); ?></td>
-                                <td><b>90%</td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                <td><b><?php echo $budgetdata->third_tranche_remarks; ?></td>
+                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#thirdTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
                                 <?php }?>
                             </tr>
+                            <div class="modal fade" id="thirdTranche" aria-hidden="true" aria-labelledby="thirdTranche"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <?php
+                                    $attributes = array("class" => "modal-content", "id" => "tranche3_add", "name" => "tranche3_add");
+                                    //input here the next location when click insert1
+                                    echo form_open("communities/addThirdTranche/".$implementationdata->project_id, $attributes);?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Transfer Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group row">
+                                                <div id="start_date" class="col-sm-8">
+                                                    <label for="start_date" class="control-label">Start Date:</label>
+                                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                                        <input id="start_date" name="start_date" placeholder="Start Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('start_date'); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="remarks" class="col-sm-10">
+                                                    <label for="remarks" class="control-label">Remarks:</label>
+                                                    <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
+                                                    <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
+                                                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                                                    <input class="form-control"  type="hidden" name="project_idpass" value="<?php echo $implementationdata->project_id?>">
+                                                    <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        <?php echo form_close(); ?>
+                                        <?php echo $this->session->flashdata('msg'); ?>
+                                    </div>
+                                </div>
+                            </div>
                             </tbody>
                         </table>
                     </div>
@@ -405,12 +455,68 @@
                             <tr>
                                 <?php if($budgetdata->third_tranche_status == 1) {?>
                                 <td>3rd Tranche</td>
-                                <td><b><?php echo  '₱ '. number_format($third_tranche,2); ?></td>
-                                <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_liquidate_date ))); ?></td>
-                                <td><b>90%</td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip" data-original-title="Liquidate"></button></td>
+                                    <td><b><?php echo  '₱ '. number_format($budgetdata->third_liquidate,2); ?></td>
+                                    <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_liquidate_date ))); ?></td>
+                                    <td><b><?php echo $budgetdata->third_liquidate_remarks; ?></td>
+                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#thirdLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
                                 <?php }?>
                             </tr>
+                            <div class="modal fade" id="thirdLiquidate" aria-hidden="true" aria-labelledby="thirdLiquidate"
+                                 role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-center">
+                                    <?php
+                                    $attributes = array("class" => "modal-content", "id" => "liquidate3_add", "name" => "liquidate3_add");
+                                    //input here the next location when click insert1
+                                    echo form_open("communities/addThirdLiquidate/".$implementationdata->project_id, $attributes);?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Liquidate Funds</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group row">
+                                                <div class="col-sm-8">
+                                                    <label for="third_liquidate" class="control-label">Liquidate Amount:</label>
+                                                    <input id="third_liquidate" name="third_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->third_tranche; ?>" max = "<?php echo $budgetdata->third_tranche; ?>" type="number"  class="form-control" />
+                                                    <span class="text-danger"><?php echo form_error('third_liquidate'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="liqui_date" class="col-sm-8">
+                                                    <label for="liqui_date" class="control-label">Date of Liquidation:</label>
+                                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                                        <input id="liqui_date" name="liqui_date" placeholder="Date of Liquidation" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div id="remarks" class="col-sm-10">
+                                                    <label for="remarks" class="control-label">Remarks:</label>
+                                                    <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks'); ?>" required/>
+                                                    <input id="budget_id" name="budget_id" placeholder="budget_id" type="hidden"  class="form-control"  value="<?php echo $budgetdata->budget_id; ?>" required/>
+                                                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                                                    <input class="form-control"  type="hidden" name="project_idpass" value="<?php echo $implementationdata->project_id?>">
+                                                    <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        <?php echo form_close(); ?>
+                                        <?php echo $this->session->flashdata('msg'); ?>
+                                    </div>
+                                </div>
+                            </div>
                             </tbody>
                         </table>
                     </div>

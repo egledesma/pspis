@@ -521,6 +521,31 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
+    public function updateThirdTranche($myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              third_tranche_remarks ="'.$remarks.'",
+                              third_tranche_date ="'.$start_date.'",
+                              third_tranche_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
     public function updateSecondLiquidateTranche($second_liquidate,$myid,$remarks,$budget_id,$start_date)
     {
         $this->db->trans_begin();
@@ -529,6 +554,32 @@ class communities_model extends CI_Model
                               second_liquidate_remarks ="'.$remarks.'",
                               second_liquidate_date ="'.$start_date.'",
                               second_liquidate_status= 1,
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              budget_id = "'.$budget_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+    public function updateThirdLiquidateTranche($third_liquidate,$myid,$remarks,$budget_id,$start_date)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_project_budget SET
+                              third_liquidate ="'.$third_liquidate.'",
+                              third_liquidate_remarks ="'.$remarks.'",
+                              third_liquidate_date ="'.$start_date.'",
+                              third_liquidate_status= 1,
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
