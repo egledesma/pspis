@@ -36,6 +36,12 @@ $region_code = $this->session->userdata('uregion');
 								</a>
 							</li>
 							<li class="site-menu-item">
+								<a class="animsition-link" href="<?php echo base_url('fundswithdrawal/index') ?>" data-slug="uikit-buttons">
+									<i class="site-menu-icon " aria-hidden="true"></i>
+									<span class="site-menu-title">Funds Withdrawal</span>
+								</a>
+							</li>
+							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('individual/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">AICS</span>
