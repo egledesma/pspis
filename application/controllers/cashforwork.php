@@ -562,7 +562,7 @@ class cashforwork extends CI_Controller
     function do_upload($cashforwork_brgy_id)
     {
         $config['upload_path'] = './uploads';
-        $config['allowed_types'] = 'pdf|jpg|png';
+        $config['allowed_types'] = 'pdf|jpg|png|docx';
         $config['max_size']	= '25000';
         $config['max_width']  = '1024';
         $config['max_height']  = '1024';

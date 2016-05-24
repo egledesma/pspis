@@ -69,12 +69,13 @@ $region_code = $this->session->userdata('uregion');
 					</li>
 
 					<!------------------------ REPORTS ------------------------>
-					<li class="site-menu-item has-sub">
-						<a href="javascript:void(0)" data-slug="layout">
+					<li class="site-menu-item">
+						<a href="<?php echo base_url('reports/index/') ?>" data-slug="Reports">
 							<i class="site-menu-icon fa-bar-chart" aria-hidden="true"></i>
 							<span class="site-menu-title">Reports</span>
 						</a>
 					</li>
+
 
 
 
