@@ -5,10 +5,18 @@ $util = '';
 $remaining = '';
 $region = '';
 $status = '';
+?>
+<!--<pre>-->
+<!--    --><?php
+//    print_r($getAllocUtil);
+//?>
+<!--    </pre>-->
+<?php
+
 foreach($getAllocUtil as $key=>$value){
     $alloc .= "".$value['funds_allocated'].",";
-    $util .= "".$value['funds_utilized'].",";
     $remaining .= "".$value['RemainingBudget'].",";
+    $util .= "".$value['funds_utilized'].",";
     $region .= "'".$value['region_name']."',";
     $status .= "".$value['Status'].",";
 }
@@ -19,6 +27,7 @@ $status_format =  substr($status,0,-1);
 $alloc_format =  substr($alloc,0,-1);
 $util_format =  substr($util,0,-1);
 $remaining_format =  substr($remaining,0,-1);
+
 
 ?>
 <?php

@@ -319,12 +319,13 @@ class cashforwork extends CI_Controller
 //            $assistancelist = 2;
             $myid = $this->input->post('myid');
             $provlist = $this->input->post('prov_pass');
+            $saro_id = $this->input->post('saro_id');
             $cashforworkpass_id = $this->input->post('cashforworkpass_id');
             $munilist = $this->input->post('munilist');
             $daily_payment = $this->input->post('daily_payment');
             $number_bene = $this->input->post('number_bene');
             $cost_of_assistance = $this->input->post('cost_of_assistance');
-            $addResult = $cashforwork_model->insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
+            $addResult = $cashforwork_model->insertCashmuni($saro_id,$myid,$cashforworkpass_id,$provlist,$munilist
                 ,$daily_payment,$number_bene,$cost_of_assistance);
             if ($addResult){
                 $getList['cashforworkpass_id'] = $cashforwork_id;
@@ -473,30 +474,32 @@ class cashforwork extends CI_Controller
     }
 
 
-    public function cash_addbene($cashforwork_id)
+    public function cash_addbene($cashforworkbrgy_id)
     {
 
         $cashforwork_model = new cashforwork_model();
-        $this->validateAddTypeAssistanceForm();
+        $this->validateBeneAddForm();
 
         if (!$this->form_validation->run()){
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
             $this->load->view('cashforwork_beneAdd',array(
-                'cash_benelist' => $cashforwork_model->get_bene_list($cashforwork_id),
-                'title' => $cashforwork_model->get_project_title($cashforwork_id)
-                /*'form_message'=>$form_message*/));
+                'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
+                'cashforwork_brgyidpass' => $cashforworkbrgy_id,
+                'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
             $this->load->view('footer');
 
 
         } else {
-            $assistance_name = $this->input->post('assistance_name');
+            $bene_fullname = $this->input->post('bene_fullname');
+            $myid = $this->session->userdata('uid');
+            $cashforwork_idpass = $this->input->post('cashforwork_idpass');
+            $cashforwork_brgyidpass = $this->input->post('cashforwork_brgyidpass');
 
 
-            $assistance_model = new assistance_model();
-            $assistanceResult = $assistance_model->InsertAssistance($assistance_name);
-            if ($assistanceResult == 1){
+            $cashbeneResult = $cashforwork_model->insertBene($cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass);
+            if ($cashbeneResult == 1){
                 $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=window.location.href">
                     <span aria-hidden="true">&times;</span>
@@ -507,8 +510,10 @@ class cashforwork extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
-                $this->load->view('assistance',array(
-                    'assistancedetails' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
+                $this->load->view('cashforwork_beneAdd',array(
+                    'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
+                    'cashforwork_brgyidpass' => $cashforworkbrgy_id,
+                    'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
                 $this->load->view('footer');
             } else {
                 $form_message = '<div class="alert alert-danger alert-dismissible" role="alert">
@@ -522,14 +527,115 @@ class cashforwork extends CI_Controller
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
                 $this->load->view('cashforwork_beneAdd',array(
-                    'cash_benelist' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
+                    'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
+                    'cashforwork_brgyidpass' => $cashforworkbrgy_id,
+                    'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
                 $this->load->view('footer');
             }
         }
 
     }
+    function upload_bene($cashforwork_brgy)
+    {
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $cashforwork_brgy_data['cashforwork_brgy_id'] = $cashforwork_brgy;
+        $this->load->view('upload_bene',$cashforwork_brgy_data);
+        $this->load->view('footer');
+    }
+    function download_bene($cashforwork_brgy)
+    {
+        $cashforwork_model = new cashforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
 
-    protected function validateAddTypeAssistanceForm()
+        $cashforwork_brgy_data = $cashforwork_model->get_upload_filename($cashforwork_brgy);
+        $name = $cashforwork_brgy_data->file_location;
+        $data = file_get_contents("./uploads/".$name); // Read the file's contents
+
+
+        force_download($name, $data);
+        $this->load->view('footer');
+    }
+    function do_upload($cashforwork_brgy_id)
+    {
+        $config['upload_path'] = './uploads';
+        $config['allowed_types'] = 'pdf|jpg|png';
+        $config['max_size']	= '25000';
+        $config['max_width']  = '1024';
+        $config['max_height']  = '1024';
+        $cashforwork_model = new cashforwork_model();
+      $this->upload->initialize($config);
+
+        if ( ! $this->upload->do_upload())
+        {
+            $error = array('error' => $this->upload->display_errors());
+
+            $this->load->view('cashforwork_beneAdd', $error);
+        }
+        else
+        {
+
+            $data['upload_data'] = $this->upload->data();
+            $myid = $this->session->userdata('uid');
+//            $data['userfile'] =  $this->input->post('userfile');
+            $file_name =  $this->upload->data()['file_name'];
+            $updateUpload = $cashforwork_model->uploadBenefile($myid,$file_name,$cashforwork_brgy_id);
+            $cashforwork_muni_idpass = $cashforwork_model->get_brgy_cashforwork_id($cashforwork_brgy_id);
+            $cashforworkmuni_id = $cashforwork_muni_idpass->cashforwork_muni_id;
+            $this->load->view('upload_success', $data);
+            $this->redirectIndexviewBrgy_muni($cashforworkmuni_id);
+        }
+    }
+    public function cashbene_edit($cashbene_id)
+    {
+        if ($cashbene_id != ""){
+            $cashforwork_model = new cashforwork_model();
+
+            $this->validateBeneAddForm();
+
+            if (!$this->form_validation->run()){
+                $form_message = '';
+                $this->load->view('cashforwork_beneEdit',array(
+                    'bene_details'=>$cashforwork_model->getbenebyid($cashbene_id)));
+            } else {
+//                $assistance_name = $this->input->post('assistance_name');
+                $myid = $this->input->post('myid');
+                $fullname = $this->input->post('bene_fullname');
+                $bene_idpass = $this->input->post('bene_idpass');
+                $cashforwork_idpass = $this->input->post('cashforwork_idpass');
+
+
+                $updateResult = $cashforwork_model->updateCashbene($bene_idpass, $fullname, $myid);
+                if ($updateResult){
+                    $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Success!</a>
+                    </div>';
+
+                    $this->redirectIndexviewCash_bene($cashforwork_idpass);
+                }
+            }
+        }
+    }
+
+    public function deleteBene($cashforwork_id,$cashbene_id)
+    {
+
+        $cashforwork_model = new cashforwork_model();
+        if ($cashbene_id > 0){
+            $deleteResult = $cashforwork_model->deleteCashBene($cashforwork_id,$cashbene_id);
+
+            $this->redirectIndexviewCash_bene($cashforwork_id);
+        }
+    }
+
+    protected function validateBeneAddForm()
     {
         $config = array(
 
@@ -666,6 +772,12 @@ class cashforwork extends CI_Controller
     public function redirectIndexviewBrgy_muni($cashforwork_muni_id)
     {
         $page = base_url('cashforwork/viewCash_brgy/'.$cashforwork_muni_id.'');
+
+        header("LOCATION: $page");
+    }
+    public function redirectIndexviewCash_bene($cashforwork_id)
+    {
+        $page = base_url('cashforwork/cash_addbene/'.$cashforwork_id.'');
 
         header("LOCATION: $page");
     }
