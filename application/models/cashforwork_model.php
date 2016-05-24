@@ -376,6 +376,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         }
         $this->db->close();
     }
+
     public function deleteCash_muni_and_brgy($cash_muni_id = 0)
     {
         $this->db->trans_begin();
