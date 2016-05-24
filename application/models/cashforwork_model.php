@@ -99,11 +99,13 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
         $this->db->query('UPDATE tbl_saro SET
                               saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded
+                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized
                               WHERE
                               saro_id = "'.$saro_id.'"
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_downloaded ="'.$total_cost.'" + funds_downloaded
+                              funds_utilized ="'.$total_cost.'" + funds_utilized
                               WHERE
                               region_code = "'.$regionsaro.'"
                               ');
@@ -160,13 +162,15 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     }
     public function get_bene_list($cashforwork_id)
     {
-        $sql = 'select a.bene_id,a.bene_fullname from tbl_cash_bene_list a
-        where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $sql = 'select a.cashforwork_brgy_id,a.bene_id,a.bene_fullname,a.cashforwork_id from tbl_cash_bene_list a
+        where a.deleted = 0 and a.cashforwork_brgy_id = "'.$cashforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
 
     }
+
+
     public function get_cashmuni_list($cashforwork_id)
     {
         $sql = 'SELECT a.cost_of_assistance_muni,a.no_of_bene_muni,a.cash_muni_id,a.cashforwork_id,b.city_name,a.daily_payment
@@ -181,7 +185,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     }
     public function get_project_title($cashforwork_id)
     {
-        $sql = 'select a.no_of_days,a.project_title,a.daily_payment from tbl_cashforwork a
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id from tbl_cashforwork a
                 where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -191,7 +195,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
     public function get_cashbrgy_list($cashforwork_id)
     {
-        $sql = 'SELECT a.cash_brgy_id,a.no_of_bene_brgy,a.cost_of_assistance_brgy,b.brgy_name FROM `tbl_cash_brgy` a
+        $sql = 'SELECT a.file_location,a.cash_brgy_id,a.no_of_bene_brgy,a.cost_of_assistance_brgy,b.brgy_name FROM `tbl_cash_brgy` a
                 inner join lib_brgy b
                 on a.brgy_code = b.brgy_code
                 where a.cashforwork_muni_id = "'.$cashforwork_id.'" and a.deleted = 0';
@@ -207,6 +211,15 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
                 inner join lib_provinces b
                 on a.prov_code = b.prov_code
                 where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
+    public function get_brgy_cashforwork_id($cashforworkbrgy_id)
+    {
+        $sql = 'SELECT cashforwork_id,cashforwork_muni_id FROM `tbl_cash_brgy`
+            where cash_brgy_id = "'.$cashforworkbrgy_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -265,6 +278,13 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
             return FALSE;
         }
         $this->db->close();
+    }
+    public function get_upload_filename($cashforwork_brgy)
+    {
+        $sql = 'select file_location from tbl_cash_brgy where cash_brgy_id = "'.$cashforwork_brgy.'" and deleted = 0' ;// for verification
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
     }
     public function insertProject($saro,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
@@ -330,6 +350,27 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
                           values
                           ("'.$cash_muni_id_pass.'","'.$cashforworkpass_id.'","'.$munilist.'","'.$brgylist.'",
                           "'.$number_bene.'","'.$cost_of_assistance_brgy.'",now(),"'.$myid.'","0")');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+    }
+    public function insertBene($cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass)
+    {
+
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_cash_bene_list(bene_fullname,cashforwork_id,cashforwork_brgy_id,date_created,created_by,deleted)
+                          values
+                          ("'.$bene_fullname.'","'.$cashforwork_idpass.'","'.$cashforwork_brgyidpass.'",now(),"'.$myid.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -528,6 +569,31 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
         $this->db->close();
     }
+    public function uploadBenefile($myid,$file_name,$cashforwork_brgy_id){
+
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_cash_brgy
+                        SET
+                        file_location = "'.$file_name.'",
+                        modified_by = "'.$myid.'",
+                        date_modified = now()
+                        WHERE
+                        cash_brgy_id = "'.$cashforwork_brgy_id.'"');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+
+        $this->db->close();
+    }
     public function get_work_nature()
     {
 
@@ -611,6 +677,65 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         ";
 
         return $this->db->query($get_brgy,$city_code)->result();
+    }
+    public function getbenebyid($cashbene_id)
+    {
+        $query = $this->db->get_where('tbl_cash_bene_list',array('bene_id'=>$cashbene_id));
+        if ($query->num_rows() > 0)
+        {
+            return $query->row();
+        }
+        else
+        {
+            return FALSE;
+        }
+        $this->db->close();
+    }
+    public function updateCashbene($bene_idpass, $fullname, $myid)
+    {
+        $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_cash_bene_list SET
+                              bene_fullname ="'.$fullname.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+
+                              WHERE
+                              bene_id = "'.$bene_idpass.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+    public function deleteCashBene($cashforwork_id,$cashbene_id)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_cash_bene_list SET
+                              deleted="1"
+                              WHERE
+                              bene_id = "'.$cashbene_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
     }
 
 }

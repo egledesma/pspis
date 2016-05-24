@@ -7,6 +7,7 @@ if (!$this->session->userdata('user_data')){
 $user_region = $this->session->userdata('uregion');
 error_reporting(0);
 ?>
+
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -20,7 +21,6 @@ error_reporting(0);
             <li class="active">Beneficiaries</li>
         </ol>
     </div>
-
     <div class="page-content"
     <div class="panel">
         <div class="panel">
@@ -32,6 +32,7 @@ error_reporting(0);
                     <button id="exampleTableAddBtn" class="btn btn-outline btn-primary"  data-target="#exampleFormModal" data-toggle="modal">
                         <i class="icon wb-plus" aria-hidden="true"></i> Add Record
                     </button>
+
                 </div><br>
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                     <thead>
@@ -45,21 +46,26 @@ error_reporting(0);
                     <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Type Of Assistance</th>
+                        <th>Beneficiaries</th>
 
                     </tr>
                     </tfoot>
                     <tbody>
+
+<!--                    <pre>-->
+<!--                    --><?php //print_r($cash_benelist)?>
+<!--                    </pre>-->
                     <?php foreach($cash_benelist as $cash_benedata): ?>  <!--pagination buttons -->
                         <tr>
                             <td><?php echo $cash_benedata->bene_id ?></td>
                             <td><?php echo $cash_benedata->bene_fullname; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"  href="<?php echo base_url('assistance/edit/' . $assistanceData->assistance_id . '') ?>" data-toggle="tooltip"
+                                    <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"
+                                       href="<?php echo base_url('cashforwork/cashbene_edit/' . $cash_benedata->bene_id . '') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"
-                                       href="<?php echo base_url('assistance/delete/' . $assistanceData->assistance_id . '') ?>" data-toggle="tooltip"
+                                       href="<?php echo base_url('cashforwork/deleteBene/' . $cash_benedata->cashforwork_id . '/' . $cash_benedata->bene_id .'') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Delete"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                 </div>
                             </td>
@@ -72,13 +78,13 @@ error_reporting(0);
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleFormModal1" aria-hidden="false" aria-labelledby="exampleFormModalLabel1"
+<div class="modal fade" id="exampleFormModal1" aria-hidden="false" aria-labelledby="exampleFormModalLabel1" data-keyboard="false"
      role="dialog" tabindex="-1">
     <div class="modal-dialog modal-center">
         <?php
-        $attributes = array("class" => "modal-content", "id" => "bene_edit", "name" => "bene_edit");
+        $attributes = array("class" => "modal-content", "id" => "bene_edit", "name" => "bene_edit" );
         //input here the next location when click insert1
-        echo form_open("assistance/edit", $attributes);?>
+        echo form_open("cashforwork/cashbene_edit/".$cash_benedata->bene_id, $attributes);?>
 
         <?php echo form_close(); ?>
         <?php echo $this->session->flashdata('msg'); ?>
@@ -90,9 +96,9 @@ error_reporting(0);
      role="dialog" tabindex="-1">
     <div class="modal-dialog modal-center">
         <?php
-        $attributes = array("class" => "modal-content", "id" => "bene_add", "name" => "bene_add");
+        $attributes = array("class" => "modal-content", "id" => "bene_add", "name" => "bene_add" , );
         //input here the next location when click insert1
-        echo form_open("assistance/index", $attributes);?>
+        echo form_open("cashforwork/cash_addbene/".$cashforwork_brgyidpass, $attributes);?>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
@@ -103,6 +109,8 @@ error_reporting(0);
             <div class="row">
                 <div class="col-lg-12 form-group">
                     <input type="text" class="form-control" name="bene_fullname" placeholder="Full Name" required>
+                    <input class="form-control"  type="text" name="cashforwork_idpass" value="<?php echo $cashforwork_idpass->cashforwork_id;?>">
+                    <input class="form-control"  type="text" name="cashforwork_brgyidpass" value="<?php echo $cashforwork_brgyidpass?>">
                 </div>
                 <div class="col-sm-12 pull-right">
                     <button class="btn btn-success btn-outline" type="submit" name="btn_add"><i class="icon wb-check" aria-hidden="true"></i>Save</button>
