@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database','form_validation','session','pagination','encrypt','upload');
+$autoload['libraries'] = array('database','form_validation','session','pagination','encrypt','upload','Excel');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Model_user','Model_form','assistance_model','sourcefund_model','communities_model','fundsallocation_model','implementation_model','dashboard_model','budget_model','cofunds_model','cashforwork_model','foodforwork_model','saro_model','user_model');
+$autoload['model'] = array('Model_user','Model_form','assistance_model','sourcefund_model','communities_model','fundsallocation_model','implementation_model','dashboard_model','budget_model','cofunds_model','cashforwork_model','foodforwork_model','saro_model','user_model','reports_model');
 
 
 /* End of file autoload.php */

@@ -3,39 +3,151 @@
 class reports extends CI_Controller {
 
 
-//    function __construct()
-//    {
-//        parent::__construct();
-//        $this->load->library("Pdf");
-//        $this->load->library("Excel");
-//    }
+
     public function index()
     {
         $this->init_rpmb_session();
-        $rpmb['regionlist'] = $this->reports_model->get_regions();
-
-        if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-            $rpmb['provlist'] = $this->reports_model->get_provinces($_SESSION['region']);
-        }
-        if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-            $rpmb['munilist'] = $this->reports_model->get_muni($_SESSION['province']);
-        }
-        if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-            $rpmb['brgylist'] = $this->reports_model->get_brgy($_SESSION['muni']);
-        }
-
-
+//        $rpmb['regionlist'] = $this->reports_model->get_regions();
+//
+//        if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
+//            $rpmb['provlist'] = $this->reports_model->get_provinces($_SESSION['region']);
+//        }
+//        if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
+//            $rpmb['munilist'] = $this->reports_model->get_muni($_SESSION['province']);
+//        }
+//        if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
+//            $rpmb['brgylist'] = $this->reports_model->get_brgy($_SESSION['muni']);
+//        }
 
 
         $form_message = '';
         $this->load->view('header');
-        $this->load->view('nav');
+        $this->load->view('navbar');
         $this->load->view('sidebar');
-        $this->load->view('reports_view',$rpmb);
+        $this->load->view('reports_view');//,$rpmb
         $this->load->view('footer');
 
     }
 
+    public function get_funds()
+    {
+        $funds_details = $this->reports_model->get_funds();
+
+// Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+// Add some data
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'Funds Monitoring');
+        //autosize column
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFill()->getStartColor()->setRGB('FF0000');
+//        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);a
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(20);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E2');
+
+        //Center text merge columns
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->applyFromArray(
+            array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $col = 'A';
+//        $row = 5;
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', 'Region');
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->setCellValue('B3', 'Fund Monitoring Report');
+        $objPHPExcel->getActiveSheet()->mergeCells('A3:A5');
+        $objPHPExcel->getActiveSheet()->mergeCells('B3:E3');
+        //Center text merge columns
+        $objPHPExcel->getActiveSheet()->getStyle('B3')->getAlignment()->applyFromArray(
+            array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getAlignment()->applyFromArray(
+            array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->mergeCells('B6:E6');
+        $objPHPExcel->getActiveSheet()->freezePane('B6');
+        //Header
+        $colheader = 'B';
+        for($headercount = 1;$headercount < 2; $headercount++)
+        {
+            $objPHPExcel->getActiveSheet()->setCellValue($colheader.'4', 'Funds Allocated');$colheader++;
+            $objPHPExcel->getActiveSheet()->setCellValue($colheader.'4', 'Funds Downloaded');$colheader++;
+            $objPHPExcel->getActiveSheet()->setCellValue($colheader.'4', 'Funds Utilized');$colheader++;
+            $objPHPExcel->getActiveSheet()->setCellValue($colheader.'4', '% Utilized');$colheader++;
+        }
+
+
+
+        $row2 = 7;
+        $col2 = 'A';
+        foreach ($funds_details as $fundsdata):
+
+            $region_name = $fundsdata->region_name;
+
+            $funds_allocated  = $fundsdata->funds_allocated;
+            $funds_downloaded  = $fundsdata->funds_downloaded;
+
+            $funds_utilized  = $fundsdata->funds_utilized;
+            $percent_util = ($funds_utilized /$funds_allocated );
+
+            $objPHPExcel->getActiveSheet()->setCellValue($col2. $row2 . '', $region_name);$col2++;
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col2)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col2. $row2)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->setCellValue($col2. $row2 . '', $funds_allocated);$col2++;
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col2)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col2. $row2)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->setCellValue($col2. $row2 . '', $funds_downloaded);$col2++;
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col2)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col2. $row2)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->setCellValue($col2. $row2 . '', $funds_utilized);$col2++;
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col2)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col2. $row2)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->setCellValue($col2. $row2 . '', $percent_util);
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col2)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col2.$row2)
+                ->getNumberFormat()->applyFromArray(
+                    array(
+                        'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00
+                    )
+                );
+            if($col2 == 'E'){$col2 = 'A';}
+            $row2++;
+        endforeach;
+
+
+
+
+        //border
+        $objPHPExcel->getActiveSheet()->getStyle(
+            'A1:' .
+            $objPHPExcel->getActiveSheet()->getHighestColumn() .
+            $objPHPExcel->getActiveSheet()->getHighestRow()
+        )->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+// Rename worksheet (worksheet, not filename)
+        $objPHPExcel->getActiveSheet()->setTitle('FundsMonitoring');
+
+// Set active sheet index to the first sheet, so Excel opens this as the first asheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+// Redirect output to a client’s web browser (Excel2007)
+//clean the output buffer
+        ob_end_clean();
+
+//this is the header given from PHPExcel examples. but the output seems somewhat corrupted in some cases.
+//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//so, we use this header instead.
+//        $regionName = $this->reports_model->getRegionName($region);
+        $filename = 'Fund-Monitoring.xlsx';
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename='.$filename);
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+    }
 
     //------------------------------------------------------------------------PSGC------------------------------------------------------------------------------------
     public function populate_prov() {
