@@ -25,12 +25,14 @@ class foodforwork_model extends CI_Model
         $this->db->trans_begin();
 
         $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded
+                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded,
+                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized
                               WHERE
                               saro_id = "'.$saro_id.'"
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_downloaded ="'.$total_cost.'" + funds_downloaded
+                              funds_downloaded ="'.$total_cost.'" + funds_downloaded,
+                              funds_utilized ="'.$total_cost.'" + funds_utilized
                               WHERE
                               region_code = "'.$regionsaro.'"
                               ');
@@ -46,7 +48,6 @@ class foodforwork_model extends CI_Model
             return TRUE;
         }
         $this->db->close();
-
     }
 
     public function get_project($region_code)

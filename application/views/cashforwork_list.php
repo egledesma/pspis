@@ -77,7 +77,7 @@
 
                         <a class="btn btn-info btn-outline" id="confirm"
                            href="<?php echo base_url('cashforwork/finalize_saro/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
-                           data-placement="top" data-original-title="Finalize"><i class="icon wb-thumb-up" aria-hidden="true"></i></a>
+                           data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
                     </div>
 
                 </td>
