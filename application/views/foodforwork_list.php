@@ -74,7 +74,7 @@
                                            data-placement="top" data-original-title="Add beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                         <a class="btn btn-info btn-outline" id="confirm"
                                            href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Finalize"><i class="icon wb-thumb-up" aria-hidden="true"></i></a>
+                                           data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
                                     </div>
 
                                 </td>

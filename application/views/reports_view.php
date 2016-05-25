@@ -24,10 +24,14 @@ error_reporting(0);
     <div class="panel">
         <div class="panel">
             <header class="panel-heading">
-                &nbsp;<?php echo $form_message; ?>
+                &nbsp;
+                <pre>
+                <?php print_r($crims); ?>
+                </pre>
             </header>
             <div class="panel-body">
                 <a class="btn btn-warning btn-rounded" href="<?php echo base_url('reports/get_funds') ?>">Funds Reporting Download Excel</a>
+<!--                <a class="btn btn-warning btn-rounded" href="--><?php //echo base_url('reports/crimstesting') ?><!--">testing</a>-->
 <!--                <a class="btn btn-warning btn-rounded" href="--><?php //echo base_url('reports/get_funds') ?><!--">Funds Reporting Download Excel</a>-->
 
             </div>

@@ -17,6 +17,17 @@ WHERE a.deleted = 0;';
         return $result;
 
     }
+    public function get_crims()
+    {
+        $admin_db= $this->load->database('ADMINDB', TRUE);
+        $sql = 'SELECT sum(AmountOfFinanceAssist),RegionAssist
+FROM `crimsmonitoringreports`
+GROUP BY RegionAssist';
+        $query = $admin_db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
 //-----------------------------------------------------------------------------------------------
     public function get_regions() {
         $get_regions = "
@@ -78,8 +89,6 @@ WHERE a.deleted = 0;';
 
         return $this->db->query($get_brgy,$id_municipality)->result();
     }
-
-
 
 
 }

@@ -54,7 +54,7 @@ $db['default']['password'] = '';
 $db['default']['database'] = 'db_pspis';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
-$db['default']['pconnect'] = TRUE;
+$db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = '';
@@ -64,6 +64,21 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
+$db['ADMINDB']['hostname'] = 'localhost';
+$db['ADMINDB']['username'] = 'root';
+$db['ADMINDB']['password'] = '';
+$db['ADMINDB']['database'] = 'crims_live_update_funds';
+$db['ADMINDB']['dbdriver'] = 'mysql';
+$db['ADMINDB']['dbprefix'] = '';
+$db['ADMINDB']['pconnect'] = FALSE;
+$db['ADMINDB']['db_debug'] = TRUE;
+$db['ADMINDB']['cache_on'] = FALSE;
+$db['ADMINDB']['cachedir'] = '';
+$db['ADMINDB']['char_set'] = 'utf8';
+$db['ADMINDB']['dbcollat'] = 'utf8_general_ci';
+$db['ADMINDB']['swap_pre'] = '';
+$db['ADMINDB']['autoinit'] = TRUE;
+$db['ADMINDB']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
