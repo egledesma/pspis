@@ -44,7 +44,7 @@ class users extends CI_Controller {
             $Model_user = new Model_user($username,$superkey,$fullname,$email,$regionlist);
             $regResult = $Model_user->registerUser();
             if ($regResult == 1){
-                $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password);
+                $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password); //ok
                 $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button><a class="alert-link" href="javascript:void(0)">'.$registerSendResult.'.</a>

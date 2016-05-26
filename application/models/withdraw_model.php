@@ -7,7 +7,7 @@
  */
 
 
-class saro_model extends CI_Model
+class withdraw_model extends CI_Model
 {
 
 
@@ -19,34 +19,6 @@ class saro_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
-    }
-
-    public function get_from_region($region_code) {
-        $get_regions1 = '
-        SELECT
-          region_code,
-          region_name
-        FROM
-          lib_region
-        WHERE
-          region_code ="'.$region_code.'"
-        ';
-
-        return $this->db->query($get_regions1)->result();
-    }
-
-    public function get_to_region($region_code) {
-        $get_regions1 = '
-        SELECT
-          region_code,
-          region_name
-        FROM
-          lib_region
-        WHERE
-          region_code !="'.$region_code.'"
-        ';
-
-        return $this->db->query($get_regions1)->result();
     }
 
 

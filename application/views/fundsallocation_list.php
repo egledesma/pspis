@@ -73,9 +73,11 @@
                             <td><?php echo $status; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('withdraw/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                       data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
+                                    <a class="btn btn-warning btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
-                                    <a class="btn btn-info btn-outline"  href="<?php echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
+                                    <a class="btn btn-primary btn-outline"  href="<?php echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"
                                        href="<?php echo base_url('fundsallocation/delete/') ?>" data-toggle="tooltip"

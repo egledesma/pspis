@@ -533,7 +533,6 @@ class communities_model extends CI_Model
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
-
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
