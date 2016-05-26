@@ -13,7 +13,7 @@ class withdraw extends CI_Controller
     public function index($region_code){
 
         $saro_model = new saro_model();
-        $getList['sarolist'] = $saro_model->get_saro_region($region_code);
+        $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
         $getList['from_region'] = $saro_model->get_from_region($region_code);
         $getList['to_region'] = $saro_model->get_to_region($region_code);
             $this->load->view('header');

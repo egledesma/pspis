@@ -34,7 +34,7 @@ class communities_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
-
+        $this->db->close();
     } //updated
 
 
@@ -83,7 +83,7 @@ class communities_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
-
+        $this->db->close();
     }
 
     public function get_lib_assistance()
@@ -102,6 +102,7 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_lib_assistance)->result();
+        $this->db->close();
 
     }
 
@@ -121,6 +122,7 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_project_status)->result();
+        $this->db->close();
 
     }
 
@@ -137,6 +139,7 @@ class communities_model extends CI_Model
           and deleted = 0
           and saro_balance != '0.00'
           and region_code = '".$region."'
+          and status = 0
         GROUP BY
          saro_id
         ORDER BY
@@ -144,6 +147,7 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_saro)->result();
+        $this->db->close();
 
     }
 
@@ -168,6 +172,7 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_work_nature,$assistance_id)->result();
+        $this->db->close();
 
     }
 
@@ -187,6 +192,7 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
+        $this->db->close();
     }
     public function get_fund_source()
     {
@@ -196,6 +202,7 @@ class communities_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
 
     }
     public function get_implementing_agency()
@@ -206,6 +213,7 @@ class communities_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
 
     }
 
@@ -217,6 +225,7 @@ class communities_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
 
     }
     public function insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
@@ -249,16 +258,17 @@ class communities_model extends CI_Model
 						  "'.$this->session->userdata('uid').'",
 						  0
                           )');
-        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'"
+        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = saro_funds_downloaded + "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'", status = 1
         where saro_number ="'.$saro_number.'"');
-        $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = "'.$project_amount.'"
+        $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = funds_downloaded + "'.$project_amount.'"
         where region_code ="'.$regionlist.'"');
 
-        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
+        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,saro_number,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
                           VALUES
                           (
                           "'.$insert_id.'",
                           "'.$regionlist.'",
+                          "'.$saro_number.'",
                           "'.$first_tranche.'",
                           0,
                           "'.$second_tranche.'",

@@ -21,6 +21,17 @@ class saro_model extends CI_Model
         return $result;
     }
 
+    public function get_saro_region1($region_code)
+    {
+        $sql = 'select * from tbl_saro
+                where region_code ="'.$region_code.'"
+                and status = 0
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+    }
+
     public function get_from_region($region_code) {
         $get_regions1 = '
         SELECT

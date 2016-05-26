@@ -21,6 +21,7 @@ class fundsallocation_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
     }
 
     public function get_lib_assistance()
@@ -39,6 +40,7 @@ class fundsallocation_model extends CI_Model
         ";
 
         return $this->db->query($get_lib_assistance)->result();
+        $this->db->close();
 
     }
     public function get_work_nature($assistance_id)
@@ -61,6 +63,7 @@ class fundsallocation_model extends CI_Model
         ";
 
         return $this->db->query($get_work_nature,$assistance_id)->result();
+        $this->db->close();
 
     }
     public function get_naturemaxmin($nature_id) {
@@ -78,6 +81,7 @@ class fundsallocation_model extends CI_Model
         ";
 
         return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
+        $this->db->close();
     }
     public function get_fund_source()
     {
@@ -87,6 +91,7 @@ class fundsallocation_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
 
     } public function get_lgu_counterpart()
     {
@@ -96,7 +101,7 @@ class fundsallocation_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
-
+        $this->db->close();
     }
     public function insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
     {
@@ -233,54 +238,8 @@ class fundsallocation_model extends CI_Model
         ";
 
         return $this->db->query($get_regions)->result();
+        $this->db->close();
     }
 
-    public function get_provinces($region_code) {
-        $get_prov = "
-        SELECT
-            prov_code,
-            prov_name
-        FROM
-          lib_provinces
-       WHERE
-          region_code = ?
-        ORDER BY
-          prov_name
-        ";
-
-        return $this->db->query($get_prov,$region_code)->result();
-    }
-
-    public function get_muni($prov_code) {
-        $get_cities = "
-        SELECT
-            city_code,
-            city_name
-        FROM
-          lib_municipality
-        WHERE
-          prov_code = ?
-        ORDER BY
-          city_name
-        ";
-
-        return $this->db->query($get_cities,$prov_code)->result();
-    }
-
-    public function get_brgy($city_code) {
-        $get_brgy = "
-        SELECT
-            brgy_code,
-            brgy_name
-        FROM
-          lib_brgy
-        WHERE
-          city_code = ?
-        ORDER BY
-          brgy_name
-        ";
-
-        return $this->db->query($get_brgy,$city_code)->result();
-    }
 
 }
