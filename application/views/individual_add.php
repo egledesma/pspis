@@ -22,12 +22,12 @@ error_reporting(0);
         <div class="panel">
             <div class="panel">
                 <header class="panel-heading">
-                    &nbsp;    <pre>
+                    &nbsp;
                 <?php     $attributes = array("class" => "form-horizontal", "id" => "AICSformadd", "name" => "AICSformadd");
                 //input here the next location when click insert
 
                 echo form_open("individual/addIndividual", $attributes);?>
-                </pre>
+
 
                 </header>
                 <div class="panel-body">
