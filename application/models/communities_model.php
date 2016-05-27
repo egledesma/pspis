@@ -480,7 +480,7 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
-    public function updateLiquidateTranche($first_liquidate,$myid,$remarks,$budget_id,$start_date)
+    public function updateLiquidateTranche($first_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date)
     {
         $this->db->trans_begin();
         $this->db->query('UPDATE tbl_project_budget SET
@@ -492,6 +492,21 @@ class communities_model extends CI_Model
 							  modified_by="'.$myid.'"
                               WHERE
                               budget_id = "'.$budget_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_utilized = saro_funds_utilized + "'.$first_liquidate.'",
+                              saro_balance = saro_balance - "'.$first_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              saro_number = "'.$saro_number.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_utilized = funds_utilized + "'.$first_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              region_code = "'.$this->session->userdata('uregion').'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -518,6 +533,7 @@ class communities_model extends CI_Model
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
+
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -555,7 +571,7 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
-    public function updateSecondLiquidateTranche($second_liquidate,$myid,$remarks,$budget_id,$start_date)
+    public function updateSecondLiquidateTranche($second_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date)
     {
         $this->db->trans_begin();
         $this->db->query('UPDATE tbl_project_budget SET
@@ -567,6 +583,21 @@ class communities_model extends CI_Model
 							  modified_by="'.$myid.'"
                               WHERE
                               budget_id = "'.$budget_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_utilized = saro_funds_utilized + "'.$second_liquidate.'",
+                              saro_balance = saro_balance - "'.$second_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              saro_number = "'.$saro_number.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_utilized = funds_utilized + "'.$second_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              region_code = "'.$this->session->userdata('uregion').'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -581,7 +612,7 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
-    public function updateThirdLiquidateTranche($third_liquidate,$myid,$remarks,$budget_id,$start_date)
+    public function updateThirdLiquidateTranche($third_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date,$project_idpass)
     {
         $this->db->trans_begin();
         $this->db->query('UPDATE tbl_project_budget SET
@@ -593,6 +624,26 @@ class communities_model extends CI_Model
 							  modified_by="'.$myid.'"
                               WHERE
                               budget_id = "'.$budget_id.'"
+                              ');
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_utilized = saro_funds_utilized + "'.$third_liquidate.'",
+                              saro_balance = saro_balance - "'.$third_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              saro_number = "'.$saro_number.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_utilized = funds_utilized + "'.$third_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              region_code = "'.$this->session->userdata('uregion').'"
+                              ');
+        $this->db->query('UPDATE tbl_projects SET
+                              status = 1
+                              WHERE
+                              project_id = "'.$project_idpass.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)

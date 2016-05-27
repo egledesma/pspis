@@ -10,19 +10,52 @@
 class withdraw_model extends CI_Model
 {
 
-
-    public function get_saro_region($region_code)
+    public function withdrawFunds($saro_number,$new_saro,$from_region,$to_region,$remarks)
     {
-        $sql = 'select * from tbl_saro
-                where region_code ="'.$region_code.'"
-               ';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
+
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_withdraw(
+                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
+                          values
+                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
+                          "'.$funds_identifier.'")');
+
+
+        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
+
+        if($result->num_rows() > 0) {
+            $this->db->query('Update tbl_funds_allocated set
+                  funds_allocated = "'.$funds_allocated.'" + funds_allocated,
+                  date_modified = now(),
+                  modified_by = "'.$myid.'"
+                  WHERE region_code = "'.$regionlist.'" ');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_funds_allocated(
+                          for_year,region_code,funds_allocated,date_created,created_by,status,funds_identifier)
+                          values
+                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
+                          now(),"'.$myid.'","'.$status.'",
+                          "'.$funds_identifier.'")');
+        }
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
     }
 
 
-    public function insertFunds1($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
+    public function withdrawFunds1($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
     {
 
         $this->db->trans_begin();

@@ -32,6 +32,18 @@ $region_code = $this->session->userdata('uregion');
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
 
                 <div class="form-group row">
+                    <div id="liqui_date" class="col-sm-6">
+                        <label for="liqui_date" class="control-label">Date:</label>
+                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                            <input id="liqui_date" name="liqui_date" placeholder="Date of Liquidation" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
                         <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
@@ -50,6 +62,14 @@ $region_code = $this->session->userdata('uregion');
                         </select>
                     </div>
 
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="new_saro">New Saro Number:</label>
+                        <input id="new_saro" name="new_saro" placeholder="New Saro Number" type="text"  class="form-control"  required/>
+                        <span class="text-danger"><?php echo form_error('new_saro'); ?></span>
+                    </div>
                 </div>
 
 
@@ -90,11 +110,16 @@ $region_code = $this->session->userdata('uregion');
                             </option>
                         <?php endforeach; ?>
                     </select>
-                        </div>
+                    </div>
                 </div>
 
-
-
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="remarks">Remarks:</label>
+                        <input id="remarks" name="remarks" placeholder="Remarks" type="text"  class="form-control"  required/>
+                        <span class="text-danger"><?php echo form_error('remarks'); ?></span>
+                    </div>
+                </div>
 
 
                 <div class="site-action">

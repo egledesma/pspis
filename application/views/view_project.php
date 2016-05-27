@@ -55,7 +55,7 @@
                     <div>
                         <ul class="list-group list-group-dividered list-group-full col-lg-3">
                             <h5><i class="icon fa-money" aria-hidden="true"></i><b>Project Cost:</b></h5>
-                            <li class="list-group-item"> SAro Number: <b><?php echo $projectdata->saro_number ?></b></li>
+                            <li class="list-group-item"> Saro Number: <b><?php echo $projectdata->saro_number ?></b></li>
                             <li class="list-group-item"> Funds Source: <b><?php echo $projectdata->fund_source ?></b></li>
                             <li class="list-group-item"> Amount Requested: <b><?php echo '₱ '. number_format($projectdata->project_amount,2);  ?></b></li>
                             <li class="list-group-item"> LGU Amount/s: <b><?php echo '₱ '. number_format($projectdata->lgu_amount,2);  ?></b></li>
@@ -348,6 +348,7 @@
                                         <div class="modal-body">
                                             <div class="form-group row">
                                             <div class="col-sm-8">
+                                                <input id="saro_number" name="saro_number" type="hidden" value="<?php echo $projectdata->saro_number ?>"/>
                                                 <label for="first_liquidate" class="control-label">Liquidate Amount:</label>
                                                 <input id="first_liquidate" name="first_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->first_tranche; ?>" max = "<?php echo $budgetdata->first_tranche; ?>" type="number"  class="form-control" />
                                                 <span class="text-danger"><?php echo form_error('first_liquidate'); ?></span>
@@ -413,6 +414,7 @@
                                         <div class="modal-body">
                                             <div class="form-group row">
                                                 <div class="col-sm-8">
+                                                    <input id="saro_number" name="saro_number" type="hidden" value="<?php echo $projectdata->saro_number ?>"/>
                                                     <label for="second_liquidate" class="control-label">Liquidate Amount:</label>
                                                     <input id="second_liquidate" name="second_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->second_tranche; ?>" max = "<?php echo $budgetdata->second_tranche; ?>" type="number"  class="form-control" />
                                                     <span class="text-danger"><?php echo form_error('second_liquidate'); ?></span>
@@ -478,6 +480,7 @@
                                         <div class="modal-body">
                                             <div class="form-group row">
                                                 <div class="col-sm-8">
+                                                    <input id="saro_number" name="saro_number" type="hidden" value="<?php echo $projectdata->saro_number ?>"/>
                                                     <label for="third_liquidate" class="control-label">Liquidate Amount:</label>
                                                     <input id="third_liquidate" name="third_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->third_tranche; ?>" max = "<?php echo $budgetdata->third_tranche; ?>" type="number"  class="form-control" />
                                                     <span class="text-danger"><?php echo form_error('third_liquidate'); ?></span>

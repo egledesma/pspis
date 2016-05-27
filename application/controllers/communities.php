@@ -93,13 +93,14 @@ class communities extends CI_Controller
 
         } else {
             $remarks = $this->input->post('remarks');
+            $saro_number =$this->input->post('saro_number');
             $first_liquidate = $this->input->post('first_liquidate');
             $budget_id = $this->input->post('budget_id');
             $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('liqui_date'))));
             $myid = $this->input->post('myid');
             $project_idpass = $this->input->post('project_idpass');
 
-            $firstliquidateupdate = $communities_model->updateLiquidateTranche($first_liquidate,$myid,$remarks,$budget_id,$start_date);
+            $firstliquidateupdate = $communities_model->updateLiquidateTranche($first_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date);
 
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
@@ -191,13 +192,14 @@ class communities extends CI_Controller
 
         } else {
             $remarks = $this->input->post('remarks');
+            $saro_number =$this->input->post('saro_number');
             $second_liquidate = $this->input->post('second_liquidate');
             $budget_id = $this->input->post('budget_id');
             $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('liqui_date'))));
             $myid = $this->input->post('myid');
             $project_idpass = $this->input->post('project_idpass');
 
-            $secondliquidateupdate = $communities_model->updateSecondLiquidateTranche($second_liquidate,$myid,$remarks,$budget_id,$start_date);
+            $secondliquidateupdate = $communities_model->updateSecondLiquidateTranche($second_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date);
 
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
@@ -289,13 +291,14 @@ class communities extends CI_Controller
 
         } else {
             $remarks = $this->input->post('remarks');
+            $saro_number =$this->input->post('saro_number');
             $third_liquidate = $this->input->post('third_liquidate');
             $budget_id = $this->input->post('budget_id');
             $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('liqui_date'))));
             $myid = $this->input->post('myid');
             $project_idpass = $this->input->post('project_idpass');
 
-            $thirdliquidateupdate = $communities_model->updateThirdLiquidateTranche($third_liquidate,$myid,$remarks,$budget_id,$start_date);
+            $thirdliquidateupdate = $communities_model->updateThirdLiquidateTranche($third_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date,$project_idpass);
 
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
             $getList['fundsourcelist'] = $communities_model->get_fund_source();
