@@ -1,5 +1,3 @@
-
-
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 if (!$this->session->userdata('user_data')){
@@ -20,7 +18,7 @@ error_reporting(0);
         </ol>
     </div>
 
-    <div class="page-content"
+    <div class="page-content">
     <div class="panel">
         <div class="panel">
             <header class="panel-heading">

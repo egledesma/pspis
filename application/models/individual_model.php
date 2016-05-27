@@ -20,7 +20,40 @@ GROUP BY a.RegionAssist';
         return $result;
 
     }
+    public function get_aics_details($regionsaro)
+    {
+        $sql = 'SELECT b.saro_number,a.amount,a.region_code,a.date_utilized
+FROM `tbl_aics_history` a
+inner join tbl_saro b
+on a.saro_number = b.saro_id
+                where a.deleted = 0 and a.region_code = "'.$regionsaro.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+        $this->db->close();
 
+    }
+    public function insertAics($sarolist,$regionlist,$utilize,$date_utilized,$myid)
+    {
+
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_aics_history(saro_number,region_code,amount,date_utilized,date_created,created_by,deleted)
+                          values
+                          ("'.$sarolist.'","'.$regionlist.'","'.$utilize.'","'.$date_utilized.'",now(),"'.$myid.'","0")');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+    }
     public function get_saro($region)
     {
         $get_saro = "
