@@ -25,9 +25,7 @@ error_reporting(0);
         <div class="panel">
             <header class="panel-heading">
                 &nbsp;
-                <pre>
-                <?php print_r($crims); ?>
-                </pre>
+
             </header>
             <div class="panel-body">
                 <a class="btn btn-warning btn-rounded" href="<?php echo base_url('reports/get_funds') ?>">Funds Reporting Download Excel</a>

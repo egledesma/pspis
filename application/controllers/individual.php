@@ -11,99 +11,69 @@ class individual extends CI_Controller
 {
 
     public function index(){
-        $communities_model = new communities_model();
+        $individual = new individual_model();
+        $regionsaro = $this->session->userdata('uregion');
+        $crims['crims'] = $individual->get_crims($regionsaro);
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-        $this->assistance_session();
-        $this->init_rpmb_session();
-        $getList['assistancelist'] = $communities_model->get_lib_assistance();
-        $getList['fundsourcelist'] = $communities_model->get_fund_source();
-        $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-        $getList['regionlist'] = $communities_model->get_regions();
 
-        if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-            $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
-        }
-        if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-            $getList['munilist'] = $communities_model->get_muni($_SESSION['province']);
-        }
-        if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-            $getList['brgylist'] = $communities_model->get_brgy($_SESSION['muni']);
-        }
 
-        if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-            $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
-        }
-
-        $this->load->view('individual',$getList);
+        $this->load->view('individual',$crims);
         $this->load->view('footer');
     }
 
-    public function addCommunities(){
-        $communities_model = new communities_model();
+    public function addIndividual(){
+        $individual = new individual_model();
+        $regionsaro = $this->session->userdata('uregion');
+        $getList['sarolist'] = $individual->get_saro($regionsaro);
+        $getList['crims'] = $individual->get_crims($regionsaro);
+        $this->init_rpmb_session();
 
+
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+
+        $this->load->view('individual_add', $getList);
+        $this->load->view('footer');
         $this->validateAddForm();
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->assistance_session();
-            $this->init_rpmb_session();
-            $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['lgucounterpartlist'] = $communities_model->get_lgu_counterpart();
-            $getList['regionlist'] = $communities_model->get_regions();
-
-            if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
-                $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
-            }
-            if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-                $getList['munilist'] = $communities_model->get_muni($_SESSION['province']);
-            }
-            if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-                $getList['brgylist'] = $communities_model->get_brgy($_SESSION['muni']);
-            }
-
-            if (isset($_SESSION['natureofwork']) or isset($_SESSION['assistance'])) {
-                $rpmb['natureofworklist'] = $communities_model->get_work_nature($_SESSION['assistance']);
-            }
-            $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
-
-            $this->load->view('communities_add', $getList);
-            $this->load->view('footer');
-        }
-        else
-        {
-
-            $assistancelist = $this->input->post('assistancelist');
-            $project_title = $this->input->post('project_title');
-            $regionlist = $this->input->post('regionlist');
-            $provlist = $this->input->post('provlist');
-            $munilist = $this->input->post('munilist');
-            $brgylist = $this->input->post('brgylist');
-            $natureofworklist = $this->input->post('natureofworklist');
-            $fundsourcelist = $this->input->post('fundsourcelist');
-            $project_amount = $this->input->post('project_amount');
-            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
-            $lgu_amount = $this->input->post('lgu_amount');
-            $lgu_fundsource = $this->input->post('lgu_fundsource');
-            $project_cost = $this->input->post('project_cost');
-            $implementing_agency = $this->input->post('implementing_agency');
-            $status = $this->input->post('status');
-            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
-            if ($addResult){
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-
-                $this->load->view('communities_list',array(
-                    'project' => $communities_model->get_project()
-                ));
-                $this->load->view('footer');
-            }
-            $this->redirectIndex();
-        }
+//        if ($this->form_validation->run() == FALSE) {
+//
+//
+//        }
+//        else
+//        {
+//
+//            $assistancelist = $this->input->post('assistancelist');
+//            $project_title = $this->input->post('project_title');
+//            $regionlist = $this->input->post('regionlist');
+//            $provlist = $this->input->post('provlist');
+//            $munilist = $this->input->post('munilist');
+//            $brgylist = $this->input->post('brgylist');
+//            $natureofworklist = $this->input->post('natureofworklist');
+//            $fundsourcelist = $this->input->post('fundsourcelist');
+//            $project_amount = $this->input->post('project_amount');
+//            $lgucounterpartlist = $this->input->post('lgucounterpartlist');
+//            $lgu_amount = $this->input->post('lgu_amount');
+//            $lgu_fundsource = $this->input->post('lgu_fundsource');
+//            $project_cost = $this->input->post('project_cost');
+//            $implementing_agency = $this->input->post('implementing_agency');
+//            $status = $this->input->post('status');
+//            $addResult = $communities_model->insertProject($project_title,$regionlist,$provlist,$munilist,$brgylist,$assistancelist,$natureofworklist,$fundsourcelist,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status);
+//            if ($addResult){
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//
+//                $this->load->view('communities_list',array(
+//                    'project' => $communities_model->get_project()
+//                ));
+//                $this->load->view('footer');
+//            }
+//            $this->redirectIndex();
+//        }
     }
     public function updateCommunities($project_id)
     {
@@ -303,7 +273,7 @@ class individual extends CI_Controller
     }
     public function redirectIndex()
     {
-        $page = base_url('communities/index');
+        $page = base_url('individual/index');
 
         header("LOCATION: $page");
     }

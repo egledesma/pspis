@@ -18,14 +18,12 @@ class reports extends CI_Controller {
 //        if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
 //            $rpmb['brgylist'] = $this->reports_model->get_brgy($_SESSION['muni']);
 //        }
-        $reports_model = new reports_model();
-        $crims['crims'] = $reports_model->get_crims();
 
         $form_message = '';
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-        $this->load->view('reports_view',$crims);//,$rpmb
+        $this->load->view('reports_view');//,$rpmb
         $this->load->view('footer');
 
     }
