@@ -22,7 +22,7 @@ GROUP BY a.RegionAssist';
     }
     public function get_aics_details($regionsaro)
     {
-        $sql = 'SELECT b.saro_number,a.amount,a.region_code,a.date_utilized
+        $sql = 'SELECT  a.aics_id,b.saro_number,a.amount,a.region_code,a.date_utilized
 FROM `tbl_aics_history` a
 inner join tbl_saro b
 on a.saro_number = b.saro_id
@@ -37,7 +37,7 @@ order by a.aics_id asc';
 
     public function get_last_utilized($regionsaro)
     {
-        $sql = 'SELECT * FROM `tbl_aics_history` where region_code = "'.$regionsaro.'" order by aics_id desc limit 1';
+        $sql = 'SELECT amount FROM `tbl_aics_history` where region_code = "'.$regionsaro.'" order by aics_id desc limit 1';
         $query = $this->db->query($sql);
         if($query->num_rows() > 0) {
 

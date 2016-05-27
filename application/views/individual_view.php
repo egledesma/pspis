@@ -11,7 +11,7 @@ error_reporting(0);
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">AICS</h1>
+        <h1 class="page-title">Utilization History AICS</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
             <li class="active">Aics</li>
@@ -23,20 +23,23 @@ error_reporting(0);
             <div class="panel">
                 <header class="panel-heading">
                     &nbsp;
+                    <div class = "panel-body">
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Saro Number</th>
                             <th>Amount</th>
-                            <th>Difference</th>
+                            <th>Amount added</th>
                             <th>Date</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
+                            <th>ID</th>
                             <th>Saro Number</th>
                             <th>Amount</th>
-                            <th>Difference</th>
+                            <th>Amount added</th>
                             <th>Date</th>
                         </tr>
                         </tfoot>
@@ -45,6 +48,7 @@ error_reporting(0);
                         <?php foreach($crims as $crimsData): ?>
                         <tr>
 
+                            <td><?php echo $crimsData->aics_id; ?></td>
                             <td><?php echo $crimsData->saro_number; ?></td>
                             <td><?php echo '₱ '. number_format($crimsData->amount,2); ?></td>
                             <?php $tempData1 = $crimsData->amount - $tempData;?>
@@ -56,6 +60,7 @@ error_reporting(0);
                         <?php endforeach ?>
                         </tbody>
                     </table>
+                    </div>
             </div>
         </div>
     </div>

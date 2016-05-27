@@ -46,9 +46,6 @@
                                        href="<?php echo base_url('individual/addIndividual/'.$crims->RegionAssist.'') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Utilize"><i class="icon wb-upload"" aria-hidden="true"></i></a>
                                     <a class="btn btn-info btn-outline" id="confirm"
-                                       href="<?php echo base_url('individual/updatefoodforwork/'.$crims->RegionAssist.'') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
-                                    <a class="btn btn-info btn-outline" id="confirm"
                                        href="<?php echo base_url('individual/view/'.$crims->RegionAssist.'') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="View Details"><i class="icon wb-search"" aria-hidden="true"></i> </a>
                                 </div>
