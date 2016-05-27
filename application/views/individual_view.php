@@ -26,17 +26,17 @@ error_reporting(0);
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead>
                         <tr>
-
                             <th>Saro Number</th>
                             <th>Amount</th>
+                            <th>Difference</th>
                             <th>Date</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-
                             <th>Saro Number</th>
                             <th>Amount</th>
+                            <th>Difference</th>
                             <th>Date</th>
                         </tr>
                         </tfoot>
@@ -44,8 +44,12 @@ error_reporting(0);
 
                         <?php foreach($crims as $crimsData): ?>
                         <tr>
+
                             <td><?php echo $crimsData->saro_number; ?></td>
                             <td><?php echo '₱ '. number_format($crimsData->amount,2); ?></td>
+                            <?php $tempData1 = $crimsData->amount - $tempData;?>
+                            <td><?php echo '₱ '. number_format($tempData1,2); ?></td>
+                            <?php $tempData = $crimsData->amount?>
                             <td><?php echo $crimsData->date_utilized; ?></td>
 
                         </tr>

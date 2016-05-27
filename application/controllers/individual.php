@@ -45,6 +45,7 @@ class individual extends CI_Controller
             $regionsaro = $this->session->userdata('uregion');
             $getList['sarolist'] = $individual->get_saro($regionsaro);
             $getList['crims'] = $individual->get_crims($regionsaro);
+            $getList['prev_util'] = $individual->get_last_utilized($regionsaro);
             $this->init_rpmb_session();
 
 
@@ -62,9 +63,11 @@ class individual extends CI_Controller
             $sarolist = $this->input->post('sarolist');
             $regionlist = $this->input->post('region_code');
             $utilize = $this->input->post('Utilize');
+            $prev_utilize = $this->input->post('Prev_Utilize');
+            $utilizeddifference = $utilize - $prev_utilize;
             $date_utilized = $this->input->post('date_utilize');
             $myid = $this->session->userdata('uid');
-            $addResult = $individual->insertAics($sarolist,$regionlist,$utilize,$date_utilized,$myid);
+            $addResult = $individual->insertAics($sarolist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid);
             if ($addResult){
                 $regionsaro = $this->session->userdata('uregion');
                 $crims['crims'] = $individual->get_crims($regionsaro);

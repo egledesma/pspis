@@ -26,20 +26,54 @@ GROUP BY a.RegionAssist';
 FROM `tbl_aics_history` a
 inner join tbl_saro b
 on a.saro_number = b.saro_id
-                where a.deleted = 0 and a.region_code = "'.$regionsaro.'"';
+where a.deleted = 0 and a.region_code = "'.$regionsaro.'" and b.status = 0
+order by a.aics_id asc';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
         $this->db->close();
 
     }
-    public function insertAics($sarolist,$regionlist,$utilize,$date_utilized,$myid)
+
+    public function get_last_utilized($regionsaro)
+    {
+        $sql = 'SELECT * FROM `tbl_aics_history` where region_code = "'.$regionsaro.'" order by aics_id desc limit 1';
+        $query = $this->db->query($sql);
+        if($query->num_rows() > 0) {
+
+            $result = $query->row();
+            return $result;
+        }
+        else
+        {
+            $result = 0;
+            return $result;
+
+        }
+
+        $this->db->close();
+
+    }
+    public function insertAics($sarolist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_aics_history(saro_number,region_code,amount,date_utilized,date_created,created_by,deleted)
                           values
                           ("'.$sarolist.'","'.$regionlist.'","'.$utilize.'","'.$date_utilized.'",now(),"'.$myid.'","0")');
+
+        $this->db->query('UPDATE tbl_saro SET
+                              saro_funds_downloaded = "'.$utilizeddifference.'" + saro_funds_downloaded,
+                              saro_funds_utilized = "'.$utilizeddifference.'" + saro_funds_utilized
+                              WHERE
+                              saro_id = "'.$sarolist.'"
+                              ');
+        $this->db->query('UPDATE tbl_funds_allocated SET
+                              funds_downloaded ="'.$utilizeddifference.'" + funds_downloaded,
+                              funds_utilized ="'.$utilizeddifference.'" + funds_utilized
+                              WHERE
+                              region_code = "'.$regionlist.'"
+                              ');
 
         if ($this->db->trans_status() === FALSE)
         {

@@ -25,7 +25,6 @@
                     <thead>
                     <tr>
                         <th>Action</th>
-<!--                        <th>Saro</th>-->
                         <th>Region</th>
                         <th>Utilize</th>
                     </tr>
@@ -33,7 +32,6 @@
                     <tfoot>
                     <tr>
                         <th>Action</th>
-<!--                        <th>Saro</th>-->
                         <th>Region</th>
                         <th>Utilize</th>
                     </tr>
@@ -56,8 +54,6 @@
                                 </div>
                             </td>
 
-
-                            <!--                            <td>Test</td>-->
                             <td><?php echo $crims->region_name; ?></td>
                             <td><?php echo '₱ '. number_format($crims->Utilize,2); ?></td>
 

@@ -27,8 +27,9 @@ error_reporting(0);
                 //input here the next location when click insert
 
                 echo form_open("individual/addIndividual", $attributes);?>
-
-
+<!---->
+<?php //echo $prev_util;?>
+<?php //print_r($prev_util);?>
                 </header>
                 <div class="panel-body">
                     <div class="col-sm-6">
@@ -59,11 +60,15 @@ error_reporting(0);
                                 <span class="text-danger"><?php echo form_error('region_name'); ?></span>
                             </div>
                             <div class="col-sm-12">
-                                <label for="Utilize" class="control-label">Utilize:</label>
-                                <input id="Utilize" name="Utilize" placeholder="Utilize" type="number" max = "<?php echo $crims->Utilize; ?>" class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
+                                <label for="Prev_Utilize" class="control-label">Previous Utilized:</label>
+                                <input id="Prev_Utilize" name="Prev_Utilize" placeholder="Previous Utilized" type="number" class="form-control"  value="<?php if($prev_util == 0) {echo $prev_util;} else{ echo $prev_util->amount;} ; ?>" required readonly/>
+                                <span class="text-danger"><?php echo form_error('Prev_Utilize'); ?></span>
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="Utilize" class="control-label">Utilized:</label>
+                                <input id="Utilize" name="Utilize" placeholder="Utilize" type="number" class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
                                 <span class="text-danger"><?php echo form_error('Utilize'); ?></span>
                             </div>
-
                             <div class="col-sm-12">
                                 <label for="date_utilize" class="control-label">Date Utilize:</label>
                                 <input id="date_utilize" name="date_utilize" placeholder="date_utilize" type="date"  class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
