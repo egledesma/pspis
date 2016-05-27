@@ -55,7 +55,7 @@ error_reporting(0);
                             <div class="col-sm-12">
                                 <label for="region_name" class="control-label">Region:</label>
                                 <input id="region_name" name="region_name" placeholder="Region" type="text"  class="form-control"  value= "<?php echo $crims->region_name; ?>" required autofocus/>
-                                <input id="region_name" name="region_code" placeholder="region_code" type="text"  class="form-control"  value= "<?php echo $crims->RegionAssist; ?>" required autofocus/>
+                                <input id="region_name" name="region_code" placeholder="region_code" type="hidden"  class="form-control"  value= "<?php echo $crims->RegionAssist; ?>" required autofocus/>
                                 <span class="text-danger"><?php echo form_error('region_name'); ?></span>
                             </div>
                             <div class="col-sm-12">
@@ -65,7 +65,7 @@ error_reporting(0);
                             </div>
 
                             <div class="col-sm-12">
-                                <label for="date_utilize" class="control-label">Utilize:</label>
+                                <label for="date_utilize" class="control-label">Date Utilize:</label>
                                 <input id="date_utilize" name="date_utilize" placeholder="date_utilize" type="date"  class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
                                 <span class="text-danger"><?php echo form_error('Utilize'); ?></span>
                             </div>
