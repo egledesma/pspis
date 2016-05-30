@@ -658,4 +658,7 @@ class communities_model extends CI_Model
         }
         $this->db->close();
     }
+
+
+
 }

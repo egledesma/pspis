@@ -9,6 +9,16 @@
 
 class withdraw_model extends CI_Model
 {
+    public function get_saro_amount($saro_id)
+    {
+        $sql = 'select saro_funds,saro_id from tbl_saro
+where saro_id = "'.$saro_id.'" and deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+        $this->db->close();
+    }
 
     public function withdrawFunds($withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$remarks)
     {

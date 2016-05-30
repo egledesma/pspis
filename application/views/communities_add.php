@@ -7,25 +7,25 @@ $region_code = $this->session->userdata('uregion');
         recalculateSum();
 
     }
-    $(document).ready(function() {
-        //this calculates values automatically
-        sum();
-        $("#lgu_amount_prov, #amount_requested").on("keydown keyup", function() {
-            sum();
-        });
-    });
-
-
-    function sum() {
-        var txt1 = document.getElementById('lgu_amount_prov').value;
-        var txt2 = document.getElementById('amount_requested').value;
-        var txt3 = document.getElementById('lgu_amount_muni').value;
-        var txt4 = document.getElementById('lgu_amount_brgy').value;
-        var result = parseInt(txt1) + parseInt(txt2);
-        if (!isNaN(result)) {
-            document.getElementById('project_cost').value = result;
-        }
-    }
+//    $(document).ready(function() {
+//        //this calculates values automatically
+//        sum();
+//        $("#lgu_amount_prov, #amount_requested").on("keydown keyup", function() {
+//            sum();
+//        });
+//    });
+//
+//
+//    function sum() {
+//        var txt1 = document.getElementById('lgu_amount_prov').value;
+//        var txt2 = document.getElementById('amount_requested').value;
+//        var txt3 = document.getElementById('lgu_amount_muni').value;
+//        var txt4 = document.getElementById('lgu_amount_brgy').value;
+//        var result = parseInt(txt1) + parseInt(txt2);
+//        if (!isNaN(result)) {
+//            document.getElementById('project_cost').value = result;
+//        }
+//    }
 
     function get_maxmin() {
         var nature_id1 = $('#natureofworklist').val();
@@ -146,22 +146,22 @@ $region_code = $this->session->userdata('uregion');
         }
     }
 
-    $(document).ready(function() {
-        //this calculates values automatically
-        sum();
-        $("#amount_requested, #maxmin_nature").on("keydown keyup", function() {
-            sum();
-        });
-    });
-
-    function sum() {
-        var amount_requested = document.getElementById('amount_requested').value;
-        var maxmin_nature = document.getElementById('maxmin_nature').value;
-        var result = parseInt(amount_requested) + parseInt(maxmin_nature);
-        if (!isNaN(result)) {
-            document.getElementById('total_amount').value = result;
-        }
-    }
+//    $(document).ready(function() {
+//        //this calculates values automatically
+//        sum();
+//        $("#amount_requested, #maxmin_nature").on("keydown keyup", function() {
+//            sum();
+//        });
+//    });
+//
+//    function sum() {
+//        var amount_requested = document.getElementById('amount_requested').value;
+//        var maxmin_nature = document.getElementById('maxmin_nature').value;
+//        var result = parseInt(amount_requested) + parseInt(maxmin_nature);
+//        if (!isNaN(result)) {
+//            document.getElementById('total_amount').value = result;
+//        }
+//    }
 
     function recalculateSum()
     {

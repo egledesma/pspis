@@ -1,8 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $region_code = $this->session->userdata('uregion');
 ?>
+<script type="text/javascript">
 
+function get_saro_amount()
+{
 
+    var saro_id = $('#sarolist').val();
+
+    if(saro_id > 0){
+        alert(saro_id);
+        $.ajax({
+            url: "<?php echo base_url('withdraw/populate_saro_amount'); ?>",
+            async: false,
+            type: "POST",
+            data: "saro_id="+saro_id,
+            dataType: "html",
+            success: function(data,data1) {
+
+                $('#saro_number_amount').html(data);
+                $('#saro_number_id').html(data1);
+            }
+        });
+    }
+    }
+</script>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -46,10 +68,10 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_amount();" autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
-                                <option value="<?php echo $saroselect->saro_number; ?>"
+                                <option value="<?php echo $saroselect->saro_id; ?>"
                                     <?php if(isset($saro_id)) {
                                         if($saroselect->saro_id == $saro_id) {
                                             echo " selected";
@@ -61,7 +83,15 @@ $region_code = $this->session->userdata('uregion');
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="col-sm-6">
 
+
+                        <div id = "saro_number_amount" name = "saro_number_amount">
+                            <!--                            <label for="saro_amount" class="control-label">Amount Requested:</label>-->
+<!--                                                        <input type = "number" id="saro_amount"  name ="saro_amount" value="0" class = "form-control">-->
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="form-group row">

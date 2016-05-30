@@ -90,6 +90,44 @@ class withdraw extends CI_Controller
     }
 
 
+    public function populate_saro_amount()
+    {
 
+        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+        {
+            $saro_id = $_POST['saro_id'];
+            $sarodata = $this->withdraw_model->get_saro_amount($saro_id);
+            $label = array(
+            'for'          => 'saro_amount',
+            'class'        => 'control-label'
+                );
+            echo form_label('SARO AMOUNT', '', $label);
+
+            $data1 = array(
+                'type'        => 'number',
+                'id'          => 'saro_amount',
+                'name'       =>  'saro_amount',
+                'max'   => $sarodata->saro_funds,
+                'min'   => '0',
+                'value'   =>  $sarodata->saro_funds,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data1);
+
+            $data2 = array(
+                'type'        => 'number',
+                'id'          => 'saro_id',
+                'name'       =>  'saro_id',
+                'max'   => $sarodata->saro_id,
+                'min'   => '0',
+                'value'   =>  $sarodata->saro_id,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data2);
+
+        }
+    }
 
 }
