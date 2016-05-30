@@ -10,12 +10,12 @@
 class withdraw_model extends CI_Model
 {
 
-    public function withdrawFunds($saro_number,$new_saro,$from_region,$to_region,$remarks)
+    public function withdrawFunds($withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$remarks)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_withdraw(
-                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
+                          date,old_saro_number,saro_number,from_office,to_office,amount,remarks,created_by,status,funds_identifier)
                           values
                           ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');

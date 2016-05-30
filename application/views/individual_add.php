@@ -69,11 +69,16 @@ error_reporting(0);
                                 <input id="Utilize" name="Utilize" placeholder="Utilize" type="number" class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
                                 <span class="text-danger"><?php echo form_error('Utilize'); ?></span>
                             </div>
-                            <div class="col-sm-12">
-                                <label for="date_utilize" class="control-label">Date Utilize:</label>
-                                <input id="date_utilize" name="date_utilize" placeholder="date_utilize" type="date"  class="form-control"  value="<?php echo $crims->Utilize; ?>" required autofocus/>
-                                <span class="text-danger"><?php echo form_error('Utilize'); ?></span>
-                            </div>
+
+                                <div id="date_utilize" class="col-sm-12">
+                                    <label for="date_utilize" class="control-label">Date:</label>
+                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                              <i class="icon wb-calendar" aria-hidden="true"></i>
+                                            </span>
+                                        <input id="date_utilize" name="date_utilize" placeholder="Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('date_utilize'); ?></span>
+                                    </div>
+                                </div>
                         </div>
                         <div class="site-action">
                             <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"

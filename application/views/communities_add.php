@@ -43,6 +43,7 @@ $region_code = $this->session->userdata('uregion');
             });
         }
     }
+
     function get_brgy_name() {
         var brgy_code =  $('#brgylist').val();
         if(brgy_code > 0) {

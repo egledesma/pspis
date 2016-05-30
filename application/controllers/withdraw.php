@@ -31,13 +31,13 @@ class withdraw extends CI_Controller
 
         } else
         {
-
-            $saro_number = $this->input->post('saro_number');
+            $withdraw_date = $this->input->post('withdraw_date');
+            $sarolist = $this->input->post('sarolist');
             $new_saro = $this->input->post('new_saro');
             $from_region = $this->input->post('from_region');
             $to_region = $this->input->post('to_region');
             $remarks = $this->input->post('remarks');
-            $addResult = $withdraw_model->withdrawFunds($saro_number,$new_saro,$from_region,$to_region,$remarks);
+            $addResult = $withdraw_model->withdrawFunds($withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$remarks);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');

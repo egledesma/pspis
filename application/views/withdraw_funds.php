@@ -38,7 +38,7 @@ $region_code = $this->session->userdata('uregion');
                                             <span class="input-group-addon">
                                               <i class="icon wb-calendar" aria-hidden="true"></i>
                                             </span>
-                            <input id="liqui_date" name="liqui_date" placeholder="Date of Liquidation" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                            <input id="withdraw_date" name="withdraw_date" placeholder="Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
                         </div>
                     </div>
                 </div>
