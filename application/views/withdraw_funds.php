@@ -9,7 +9,7 @@ function get_saro_amount()
     var saro_id = $('#sarolist').val();
 
     if(saro_id > 0){
-        alert(saro_id);
+
         $.ajax({
             url: "<?php echo base_url('withdraw/populate_saro_amount'); ?>",
             async: false,

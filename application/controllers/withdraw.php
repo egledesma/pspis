@@ -93,7 +93,7 @@ class withdraw extends CI_Controller
             'for'          => 'saro_amount',
             'class'        => 'control-label'
                 );
-            echo form_label('SARO AMOUNT', '', $label);
+            echo form_label('Saro Amount', '', $label);
 
             $data1 = array(
                 'type'        => 'number',
