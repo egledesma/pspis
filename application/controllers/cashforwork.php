@@ -572,8 +572,10 @@ class cashforwork extends CI_Controller
         if ( ! $this->upload->do_upload())
         {
             $error = array('error' => $this->upload->display_errors());
-
-            $this->load->view('cashforwork_beneAdd', $error);
+            $cashforwork_muni_idpass = $cashforwork_model->get_brgy_cashforwork_id($cashforwork_brgy_id);
+            $cashforworkmuni_id = $cashforwork_muni_idpass->cashforwork_muni_id;
+            $this->load->view('upload_bene', $error);
+            $this->redirectIndexviewBrgy_muni($cashforworkmuni_id);
         }
         else
         {
