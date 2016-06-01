@@ -43,53 +43,17 @@ class cofunds_model extends CI_Model
         $this->db->close();
 
     }
-    public function updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
-        ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
 
-        $this->db->trans_begin();
-
-        $this->db->query('UPDATE tbl_projects
-                        SET
-                        project_title = "'.$project_title.'",
-                        region_code = "'.$regionlist.'",
-                        prov_code = "'.$provlist.'",
-                        city_code = "'.$munilist.'",
-                        brgy_code = "'.$brgylist.'",
-                        no_of_bene = "'.$number_bene.'",
-                        assistance_id = "'.$assistancelist.'",
-                        nature_id = "'.$natureofworklist.'",
-                        fundsource_id = "'.$fundsourcelist.'",
-                        lgucounterpart_id = "'.$lgucounterpartlist.'",
-                        lgu_fundsource = "'.$lgu_fundsource.'",
-                        lgu_amount = "'.$lgu_amount.'",
-                        project_cost = "'.$project_cost.'",
-                        project_amount = "'.$project_amount.'",
-                        implementing_agency = "'.$implementing_agency.'",
-                        `status` = "'.$status.'"
-                        WHERE
-                        project_id = "'.$project_id.'"');
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-
-        $this->db->close();
-    }
-    public function deleteProject($project_id = 0)
+    public function updateCofunds($cfid, $co_funds)
     {
         $this->db->trans_begin();
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds="'.$co_funds.'",
+							  date_modified=now(),
+							  modified_by="'.$this->session->userdata('uid').'"
 
-        $this->db->query('UPDATE tbl_projects SET
-                              deleted ="1"
                               WHERE
-                              project_id = "'.$project_id.'"
+                              co_funds_id = "'.$cfid.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -104,16 +68,21 @@ class cofunds_model extends CI_Model
         }
         $this->db->close();
     }
-    public function get_project_byid($project_id = 0)
+
+    public function getcofundsid($aid = 0)
     {
-        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
-        if ($query->num_rows() > 0){
+        $query = $this->db->get_where('tbl_co_funds',array('co_funds_id'=>$aid));
+        if ($query->num_rows() > 0)
+        {
             return $query->row();
-        } else {
+        }
+        else
+        {
             return FALSE;
         }
         $this->db->close();
     }
+
     public function get_regions() {
         $get_regions = "
         SELECT

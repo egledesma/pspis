@@ -56,75 +56,40 @@ class cofunds extends CI_Controller
         }
     }
 
-    public function edit($aid = "")
+    public function edit($aid)
     {
-        if ($aid != ""){
-            $assistance_model = new assistance_model();
+
+            $cofunds_model = new cofunds_model();
 
             $this->validateEditForm();
 
-            if (!$this->form_validation->run()){
-                $form_message = '';
-                $this->load->view('assistance_edit',array(
-                    'assistance_details'=>$assistance_model->getassistanceid($aid)));
-            } else {
-                $assistance_name = $this->input->post('assistance_name');
-                $myid = $this->input->post('myid');
-                $aid = $this->input->post('aid');
+            if ($this->form_validation->run() == FALSE){
 
-                $updateResult = $assistance_model->updateAssistance($aid, $assistance_name, $myid);
+                $this->load->view('cofunds_edit',array(
+                    'cofunds_details'=>$cofunds_model->getcofundsid($aid)));
+            } else {
+                $co_funds = $this->input->post('co_funds');
+                $cfid = $this->input->post('cfid');
+
+                $updateResult = $cofunds_model->updateCofunds($cfid, $co_funds);
                 if ($updateResult){
-                    $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
-                      Success!</a>
-                    </div>';
+                   // $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                   //   <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                   //     <span aria-hidden="true">&times;</span>
+                   //   </button>
+                   //   <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                   //   Success!</a>
+                   // </div>';
 
                     $this->load->view('header');
                     $this->load->view('navbar');
                     $this->load->view('sidebar');
-                    $this->load->view('assistance',array(
-                        'assistancedetails' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
+                    $this->load->view('cofunds_list',array(
+                        'cofundsdetails' => $cofunds_model->get_cofunds()/*'form_message'=>$form_message*/));
                     $this->load->view('footer');
+                    $this->redirectIndex();
                 }
             }
-        } else {
-            $assistance_model = new assistance_model();
-
-            $this->validateEditForm();
-
-            if (!$this->form_validation->run()){
-                $form_message = '';
-                $this->load->view('header');
-                $this->load->view('assistance_edit',array(
-                    'assistance_details'=>$assistance_model->getassistanceid($aid)));
-                $this->load->view('footer');
-            } else {
-                $assistance_name = $this->input->post('assistance_name');
-                $myid = $this->input->post('myid');
-                $aid = $this->input->post('aid');
-
-                $updateResult = $assistance_model->updateAssistance($aid, $assistance_name, $myid);
-                if ($updateResult){
-                    $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
-                       <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
-                         <span aria-hidden="true">&times;</span>
-                       </button>
-                       <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
-                       Success!</a>
-                     </div>';
-                    $this->load->view('header');
-                    $this->load->view('navbar');
-                    $this->load->view('sidebar');
-                    $this->load->view('assistance',array(
-                        'assistancedetails' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
-                    $this->load->view('footer');
-                }
-            }
-        }
-
     }
 
     public function delete($aid = 0)
@@ -173,13 +138,19 @@ class cofunds extends CI_Controller
     {
         $config = array(
             array(
-                'field'   => 'assistance_name',
-                'label'   => 'Type of Assistance',
+                'field'   => 'co_funds',
+                'label'   => 'co_funds',
                 'rules'   => 'required'
             )
 
         );
         return $this->form_validation->set_rules($config);
+    }
+    public function redirectIndex()
+    {
+        $page = base_url('cofunds/index');
+
+        header("LOCATION: $page");
     }
 
 

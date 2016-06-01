@@ -23,6 +23,7 @@ class withdraw extends CI_Controller
             $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
             $getList['from_region'] = $saro_model->get_from_region($region_code);
             $getList['to_region'] = $saro_model->get_to_region($region_code);
+            $getList['region_list'] = $withdraw_model->get_regions();
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
@@ -31,21 +32,25 @@ class withdraw extends CI_Controller
 
         } else
         {
-            $withdraw_date = $this->input->post('withdraw_date');
-            $sarolist = $this->input->post('sarolist');
+            $withdraw_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('withdraw_date'))));
+            $year = $this->input->post('year');
+            $sarolist = $this->input->post('saro_number');
             $new_saro = $this->input->post('new_saro');
             $from_region = $this->input->post('from_region');
             $to_region = $this->input->post('to_region');
             $remarks = $this->input->post('remarks');
-            $addResult = $withdraw_model->withdrawFunds($withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$remarks);
+            $saro_id = $this->input->post('saro_id');
+            $funds_identifier = $year.$to_region;
+            $saro_amount = $this->input->post('saro_amount');
+            $addResult = $withdraw_model->withdrawFunds($saro_id,$withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$saro_amount,$remarks,$funds_identifier,$year);
             if ($addResult){
+                $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
+                $getList['from_region'] = $saro_model->get_from_region($region_code);
+                $getList['to_region'] = $saro_model->get_to_region($region_code);
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
-
-                $this->load->view('fundsallocation_list',array(
-                    'fundsdetails' => $fundsallocation_model->get_funds()
-                ));
+                $this->load->view('withdraw_funds', $getList);
                 $this->load->view('footer');
             }
             $this->redirectIndex();
@@ -60,25 +65,12 @@ class withdraw extends CI_Controller
         $config = array(
 
             array(
-                'field'   => 'funds_allocated',
-                'label'   => 'Funds Allocated',
+                'field'   => 'sarolist',
+                'label'   => 'sarolist',
                 'rules'   => 'required'
             ),
         );
 
-        return $this->form_validation->set_rules($config);
-    }
-
-    protected function validateEditForm()
-    {
-        $config = array(
-            array(
-                'field'   => 'assistance_name',
-                'label'   => 'Type of Assistance',
-                'rules'   => 'required'
-            )
-
-        );
         return $this->form_validation->set_rules($config);
     }
 
@@ -126,6 +118,17 @@ class withdraw extends CI_Controller
             );
 
             echo form_input($data2);
+            $data3 = array(
+                'type'        => 'text',
+                'id'          => 'saro_number',
+                'name'       =>  'saro_number',
+                'max'   => $sarodata->saro_number,
+                'min'   => '0',
+                'value'   =>  $sarodata->saro_number,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data3);
 
         }
     }

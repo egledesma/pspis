@@ -72,7 +72,7 @@
                                 <div class="btn-group">
                                     <a class="btn btn-dark btn-outline"  href="<?php echo base_url('fundsallocation/add/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Download funds to FO"><i class="icon wb-download" aria-hidden="true" ></i> </a>
-                                    <a class="btn btn-info btn-outline"  href="<?php echo base_url('cofunds/edit/') ?>" data-toggle="tooltip"
+                                    <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"  href="<?php echo base_url('cofunds/edit/' . $cofundsData->co_funds_id . '') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"
                                        href="<?php echo base_url('cofunds/delete/') ?>" data-toggle="tooltip"
@@ -83,6 +83,19 @@
                     <?php endforeach ?>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="modal fade" id="exampleFormModal1" aria-hidden="false" aria-labelledby="exampleFormModalLabel1"
+                 role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-center">
+                    <?php
+                    $attributes = array("class" => "modal-content", "id" => "cofunds_edit", "name" => "cofunds_edit");
+                    //input here the next location when click insert1
+                    echo form_open("cofunds/edit", $attributes);?>
+
+                    <?php echo form_close(); ?>
+                    <?php echo $this->session->flashdata('msg'); ?>
+                </div>
             </div>
 
         </div>

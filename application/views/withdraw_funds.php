@@ -16,10 +16,11 @@ function get_saro_amount()
             type: "POST",
             data: "saro_id="+saro_id,
             dataType: "html",
-            success: function(data,data1) {
+            success: function(data,data1,data2) {
 
                 $('#saro_number_amount').html(data);
                 $('#saro_number_id').html(data1);
+                $('#saro_number').html(data2);
             }
         });
     }
@@ -50,7 +51,7 @@ function get_saro_amount()
                 $attributes = array("class" => "form-horizontal", "id" => "projectformadd", "name" => "projectformadd");
                 //input here the next location when click insert
 
-                echo form_open("communities/addCommunities", $attributes);?>
+                echo form_open("", $attributes);?>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
 
                 <div class="form-group row">
@@ -101,18 +102,20 @@ function get_saro_amount()
                         <span class="text-danger"><?php echo form_error('new_saro'); ?></span>
                     </div>
                 </div>
+                <input id="year" name="year"  type="hidden" value="<?php echo date('Y');?>"  class="form-control"/>
 
 
-                <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
                 <div class="form-group row">
+
                     <div id="regionID" class="col-sm-5">
+                        <label class="sr-only" for="region">Region</label>
                         <label for="regionlist" class="control-label">From Region :</label>
-                        <select  name="regionlist" id="regionlist" class="form-control" onChange="get_prov();"  disabled >
+                        <select name="regionlist" id="regionlist" class="form-control" disabled>
                             <option value="">Choose Region</option>
-                            <?php foreach($from_region as $regionselect): ?>
-                                <option value="<?php echo $regionselect->region_code; ?>"
-                                    <?php if(isset($region_code)) {
-                                        if($regionselect->region_code == $region_code) {
+                            <?php foreach($region_list as $regionselect): ?>
+                                <option value="<?php echo $regionselect->region_code;  ?>"
+                                    <?php if(isset($from_region->region_code)) {
+                                        if($regionselect->region_code == $from_region->region_code) {
                                             echo " selected";
                                         }
                                     } ?>
@@ -121,12 +124,13 @@ function get_saro_amount()
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <input value="<?php echo $from_region->region_code;?>" type="hidden" name="from_region" id="from_region" />
                     </div>
 
                     <div id="regionID" class="col-sm-5">
                     <label class="sr-only" for="region">Region</label>
-                        <label for="regionlist" class="control-label">To Region :</label>
-                    <select name="regionlist" id="regionlist" class="form-control" required>
+                        <label for="to_region" class="control-label">To Region :</label>
+                    <select name="to_region" id="to_region" class="form-control" required>
                         <option value="">Choose Region</option>
                         <?php foreach($to_region as $regionselect): ?>
                             <option value="<?php echo $regionselect->region_code; ?>"

@@ -43,7 +43,7 @@ class saro_model extends CI_Model
           region_code ="'.$region_code.'"
         ';
 
-        return $this->db->query($get_regions1)->result();
+        return $this->db->query($get_regions1)->row();
     }
 
     public function get_to_region($region_code) {

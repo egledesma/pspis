@@ -11,7 +11,7 @@ class withdraw_model extends CI_Model
 {
     public function get_saro_amount($saro_id)
     {
-        $sql = 'select saro_funds,saro_id from tbl_saro
+        $sql = 'select saro_funds,saro_id,saro_number from tbl_saro
 where saro_id = "'.$saro_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -20,35 +20,82 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         $this->db->close();
     }
 
-    public function withdrawFunds($withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$remarks)
+    public function withdrawFunds($saro_id,$withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$saro_amount,$remarks,$funds_identifier,$year)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_withdraw(
-                          date,old_saro_number,saro_number,from_office,to_office,amount,remarks,created_by,status,funds_identifier)
+                          saro_id,date,old_saro_number,saro_number,from_office,to_office,amount,remarks,created_by,date_created)
                           values
-                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$saro_id.'","'.$withdraw_date.'","'.$sarolist.'","'.$new_saro.'","'.$from_region.'","'.$to_region.'","'.$saro_amount.'","'.$remarks.'","'.$this->session->userdata('uid').'",now())');
+
+        $from_value = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$from_region.'" ');
+        $from_value1 = $from_value->row();
+        $from_old_value = $from_value1->funds_allocated;
+        $from_new_value = $from_value1->funds_allocated - $saro_amount;
+
+        $to_value = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$to_region.'" ');
+        $to_value1 = $to_value->row();
+        $to_old_value = $to_value1->funds_allocated;
+        $to_new_value = $to_value1->funds_allocated + $saro_amount;
+
+        //insert_tbl_saro
+        $this->db->query('insert into tbl_saro(
+                          for_year,saro_number,region_code,saro_funds,saro_balance,remarks,date_created,created_by,status,funds_identifier)
+                          values
+                          ("'.$year.'","'.$new_saro.'","'.$to_region.'","'.$saro_amount.'","'.$saro_amount.'","Transferred",now(),"'.$this->session->userdata('uid').'","0",
                           "'.$funds_identifier.'")');
 
+        //update tbl_Saro
+        $this->db->query('update tbl_saro set
+                          remarks = "Transferred",
+                          date_modified = now(),
+                          modified_by = "'.$this->session->userdata('uid').'",
+                          status = 1
+                          where saro_number ="'.$sarolist.'"');
 
-        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
+        //select
+        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$to_region.'" ');
 
+        //tbl_funds_allocated
         if($result->num_rows() > 0) {
             $this->db->query('Update tbl_funds_allocated set
-                  funds_allocated = "'.$funds_allocated.'" + funds_allocated,
+                  funds_allocated = "'.$saro_amount.'" + funds_allocated,
                   date_modified = now(),
-                  modified_by = "'.$myid.'"
-                  WHERE region_code = "'.$regionlist.'" ');
+                  modified_by = "'.$this->session->userdata('uid').'"
+                  WHERE region_code = "'.$to_region.'" ');
         }
         else
         {
             $this->db->query('insert into tbl_funds_allocated(
                           for_year,region_code,funds_allocated,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
-                          now(),"'.$myid.'","'.$status.'",
+                          ("'.$year.'","'.$to_region.'","'.$saro_amount.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
                           "'.$funds_identifier.'")');
         }
+
+
+
+
+        $this->db->query('Update tbl_funds_allocated set
+                  funds_allocated = "'.$saro_amount.'" - funds_allocated,
+                  date_modified = now(),
+                  modified_by = "'.$this->session->userdata('uid').'"
+                  WHERE region_code = "'.$from_region.'" ');
+
+
+
+
+
+
+        //tbl history
+        $this->db->query('insert into tbl_funds_history(
+                          saro_id,from_region,to_region,transfer_amount,from_old_value,from_new_value,to_old_value,to_new_value,created_by,date_created)
+                          values
+                          ("'.$saro_id.'","'.$from_region.'","'.$to_region.'","'.$saro_amount.'","'.$from_old_value.'","'.$from_new_value.'","'.$to_old_value.'","'.$to_new_value.'","'.$this->session->userdata('uid').'",now()
+                          )');
+
 
         if ($this->db->trans_status() === FALSE)
         {
