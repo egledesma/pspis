@@ -108,7 +108,7 @@ class withdraw extends CI_Controller
             echo form_input($data1);
 
             $data2 = array(
-                'type'        => 'number',
+                'type'        => 'hidden',
                 'id'          => 'saro_id',
                 'name'       =>  'saro_id',
                 'max'   => $sarodata->saro_id,
@@ -119,7 +119,7 @@ class withdraw extends CI_Controller
 
             echo form_input($data2);
             $data3 = array(
-                'type'        => 'text',
+                'type'        => 'hidden',
                 'id'          => 'saro_number',
                 'name'       =>  'saro_number',
                 'max'   => $sarodata->saro_number,
