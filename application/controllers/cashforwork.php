@@ -319,13 +319,13 @@ class cashforwork extends CI_Controller
 //            $assistancelist = 2;
             $myid = $this->input->post('myid');
             $provlist = $this->input->post('prov_pass');
-            $saro_id = $this->input->post('saro_id');
+//            $saro_id = $this->input->post('saro_id');
             $cashforworkpass_id = $this->input->post('cashforworkpass_id');
             $munilist = $this->input->post('munilist');
             $daily_payment = $this->input->post('daily_payment');
             $number_bene = $this->input->post('number_bene');
             $cost_of_assistance = $this->input->post('cost_of_assistance');
-            $addResult = $cashforwork_model->insertCashmuni($saro_id,$myid,$cashforworkpass_id,$provlist,$munilist
+            $addResult = $cashforwork_model->insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
                 ,$daily_payment,$number_bene,$cost_of_assistance);
             if ($addResult){
                 $getList['cashforworkpass_id'] = $cashforwork_id;

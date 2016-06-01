@@ -120,7 +120,7 @@
                         </tr>
                         </tfoot>
                         <tbody  data-plugin="scrollable" data-direction="horizontal">
-
+<?php //print_r($cashmuni_list)?>
                         <?php foreach($cashmuni_list as $cashmuni_listData): ?>
                             <tr>
                                 <td>

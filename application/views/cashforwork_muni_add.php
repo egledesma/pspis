@@ -74,7 +74,7 @@ $region_code = $this->session->userdata('uregion');
 
 
                 <input class="form-control" id = "prov_pass" name ="prov_pass" type = "hidden" value = "<?php echo $proj_prov->prov_code;?>" >
-                <input class="form-control" id = "saro_id" name ="saro_id" type = "hidden" value = "<?php echo $title->saro_id;?>" >
+<!--                <input class="form-control" id = "saro_id" name ="saro_id" type = "hidden" value = "--><?php //echo $title->saro_id;?><!--" >-->
                 <input class="form-control" id = "cashforworkpass_id" name ="cashforworkpass_id" type = "hidden" value = "<?php echo $cashforworkpass_id;?>" >
 <!--                <input class="form-control" id = "region_pass" name ="region_pass" type = "hidden" value = "--><?php //echo $region_pass;?><!--" >-->
                 <div class="form-group row">
