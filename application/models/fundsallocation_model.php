@@ -119,6 +119,7 @@ class fundsallocation_model extends CI_Model
         if($result->num_rows() > 0) {
             $this->db->query('Update tbl_funds_allocated set
                   funds_allocated = "'.$funds_allocated.'" + funds_allocated,
+                  remaining_budget = "'.$funds_allocated.'" + remaining_budget,
                   date_modified = now(),
                   modified_by = "'.$myid.'"
                   WHERE region_code = "'.$regionlist.'" ');
@@ -126,9 +127,9 @@ class fundsallocation_model extends CI_Model
         else
         {
             $this->db->query('insert into tbl_funds_allocated(
-                          for_year,region_code,funds_allocated,date_created,created_by,status,funds_identifier)
+                          for_year,region_code,funds_allocated,remaining_budget,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
+                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",
                           now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
         }

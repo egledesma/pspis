@@ -258,7 +258,7 @@ class communities_model extends CI_Model
 						  "'.$this->session->userdata('uid').'",
 						  0
                           )');
-        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = saro_funds_downloaded + "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'", status = 1
+        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = saro_funds_downloaded + "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'"
         where saro_number ="'.$saro_number.'"');
         $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = funds_downloaded + "'.$project_amount.'"
         where region_code ="'.$regionlist.'"');
@@ -503,10 +503,19 @@ class communities_model extends CI_Model
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_utilized = funds_utilized + "'.$first_liquidate.'",
+                              remaining_balance = remaining_balance - "'.$first_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
                               region_code = "'.$this->session->userdata('uregion').'"
+                              ');
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = co_funds_utilized + "'.$first_liquidate.'",
+                              co_funds_remaining = co_funds_remaining - "'.$first_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              where for_year ="'.$date.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -584,6 +593,7 @@ class communities_model extends CI_Model
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
+
         $this->db->query('UPDATE tbl_saro SET
                               saro_funds_utilized = saro_funds_utilized + "'.$second_liquidate.'",
                               saro_balance = saro_balance - "'.$second_liquidate.'",
@@ -592,12 +602,23 @@ class communities_model extends CI_Model
                               WHERE
                               saro_number = "'.$saro_number.'"
                               ');
+
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_utilized = funds_utilized + "'.$second_liquidate.'",
+                              remaining_balance = remaining_balance - "'.$second_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
                               region_code = "'.$this->session->userdata('uregion').'"
+                              ');
+
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = co_funds_utilized + "'.$second_liquidate.'",
+                              co_funds_remaining = co_funds_remaining - "'.$second_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+                              WHERE
+                              where for_year ="'.$date.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -615,6 +636,7 @@ class communities_model extends CI_Model
     public function updateThirdLiquidateTranche($third_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date,$project_idpass)
     {
         $this->db->trans_begin();
+        $date = date('Y');
         $this->db->query('UPDATE tbl_project_budget SET
                               third_liquidate ="'.$third_liquidate.'",
                               third_liquidate_remarks ="'.$remarks.'",
@@ -635,6 +657,7 @@ class communities_model extends CI_Model
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_utilized = funds_utilized + "'.$third_liquidate.'",
+                              remaining_balance = remaining_balance - "'.$third_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
@@ -644,6 +667,13 @@ class communities_model extends CI_Model
                               status = 1
                               WHERE
                               project_id = "'.$project_idpass.'"
+                              ');
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = co_funds_utilized + "'.$third_liquidate.'",
+                              co_funds_remaining = co_funds_remaining - "'.$third_liquidate.'",
+							  date_modified=now(),
+							  modified_by="'.$myid.'"
+							  where for_year ="'.$date.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)

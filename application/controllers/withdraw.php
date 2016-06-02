@@ -21,7 +21,7 @@ class withdraw extends CI_Controller
 
 
             $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
-            $getList['from_region'] = $saro_model->get_from_region($region_code);
+            $getList['from_region'] = $withdraw_model->get_from_region($region_code);
             $getList['to_region'] = $saro_model->get_to_region($region_code);
             $getList['region_list'] = $withdraw_model->get_regions();
             $this->load->view('header');

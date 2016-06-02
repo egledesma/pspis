@@ -26,9 +26,9 @@ class cofunds_model extends CI_Model
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_co_funds(
-                          for_year,co_funds,date_created,created_by,status,funds_identifier)
+                          for_year,co_funds,co_funds_remaining,date_created,created_by,status,funds_identifier)
                           values
-                          ("'.$year.'","'.$funds_amount.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$year.'","'.$funds_amount.'","'.$funds_amount.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
         if ($this->db->trans_status() === FALSE)
         {
