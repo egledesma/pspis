@@ -44,7 +44,7 @@ class foodforwork_model extends CI_Model
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
                               co_funds_remaining = co_funds_remaining - "'.$total_cost.'",
-                              modified_by = "'.$this->session->userdata('uid').'",
+                              modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
                               for_year = "'.$date.'"
                               ');
