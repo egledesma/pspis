@@ -130,6 +130,63 @@ class foodforwork extends CI_Controller
 
         return $this->form_validation->set_rules($config);
     }
+    function upload_bene($foodforwork_id)
+    {
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $foodforwork['foodforwork_id'] = $foodforwork_id;
+        $this->load->view('upload_benefood',$foodforwork);
+        $this->load->view('footer');
+    }
+    function download_bene($foodforwork_id)
+    {
+        $foodforwork_model = new foodforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+
+        $cashforwork_brgy_data = $foodforwork_model->get_upload_filename($foodforwork_id);
+        $name = $cashforwork_brgy_data->file_location;
+        $data = file_get_contents("./uploads/foodforwork/".$name); // Read the file's contents
+
+
+        force_download($name, $data);
+        $this->load->view('footer');
+    }
+    function do_upload($foodforwork_id)
+    {
+        $config['upload_path'] = './uploads/foodforwork';
+        $config['allowed_types'] = 'pdf|jpg|doc|docx';
+        $config['max_size']	= '25000';
+        $config['max_width']  = '1024';
+        $config['max_height']  = '1024';
+        $foodforwork_model = new foodforwork_model();
+        $this->upload->initialize($config);
+
+        if ( ! $this->upload->do_upload())
+        {
+            $error = array('error' => $this->upload->display_errors());
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('upload_benefood', $error);
+            $this->load->view('footer');
+            $this->redirectIndex();
+        }
+        else
+        {
+
+            $data['upload_data'] = $this->upload->data();
+            $myid = $this->session->userdata('uid');
+//            $data['userfile'] =  $this->input->post('userfile');
+            $file_name =  $this->upload->data()['file_name'];
+            $updateUpload = $foodforwork_model->uploadBenefile($myid,$file_name,$foodforwork_id);
+            $this->load->view('upload_benefood', $data);
+            $this->redirectIndex();
+        }
+    }
+
     public function index(){
         $foodforwork_model = new foodforwork_model();
         $this->load->view('header');

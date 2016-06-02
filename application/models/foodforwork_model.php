@@ -52,7 +52,7 @@ class foodforwork_model extends CI_Model
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT f.prov_name,e.city_name,d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
+        $sql = 'SELECT a.file_location,f.prov_name,e.city_name,d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
 FROM `tbl_foodforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
@@ -70,6 +70,38 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         $result = $query->result();
         return $result;
 
+    }
+    public function uploadBenefile($myid,$file_name,$foodforwork_id){
+
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_foodforwork
+                        SET
+                        file_location = "'.$file_name.'",
+                        modified_by = "'.$myid.'",
+                        date_modified = now()
+                        WHERE
+                        foodforwork_id = "'.$foodforwork_id.'"');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+
+        $this->db->close();
+    }
+    public function get_upload_filename($foodforwork_id)
+    {
+        $sql = 'select file_location from tbl_foodforwork where foodforwork_id = "'.$foodforwork_id.'" and deleted = 0' ;// for verification
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
     }
     public function deleteFoodBene($food_bene_id)
     {

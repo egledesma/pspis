@@ -590,7 +590,7 @@ class cashforwork extends CI_Controller
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('upload_bene', $error);
+            $this->load->view('upload_benefood', $error);
             $this->load->view('footer');
             $this->redirectIndexviewBrgy_muni($cashforworkmuni_id);
         }

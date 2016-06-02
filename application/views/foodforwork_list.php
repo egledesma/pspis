@@ -75,6 +75,15 @@
                                         <a class="btn btn-info btn-outline" id="confirm"
                                            href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
+                                        <?php if($projectData->file_location == '') {?>
+                                            <a class="btn btn-info btn-outline" id="confirm"
+                                               href="<?php echo base_url('foodforwork/upload_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                                               data-placement="top" data-original-title="Upload Beneficiaries "><i class="icon wb-upload" aria-hidden="true"></i></a>
+                                        <?php } else {?>
+                                            <a class="btn btn-info btn-outline" id="confirm"
+                                               href="<?php echo base_url('foodforwork/download_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                                               data-placement="top" data-original-title="Download Beneficiaries "><i class="icon wb-download" aria-hidden="true"></i></a>
+                                        <?php }?>
                                     </div>
 
                                 </td>
