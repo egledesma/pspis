@@ -99,16 +99,29 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
         $this->db->query('UPDATE tbl_saro SET
                               saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded,
-                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized
+                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized,
+                              saro_balance = saro_balance - "'.$total_cost.'",
+                              modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
                               saro_id = "'.$saro_id.'"
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_downloaded ="'.$total_cost.'" + funds_downloaded,
-                              funds_utilized ="'.$total_cost.'" + funds_utilized
+                              funds_utilized ="'.$total_cost.'" + funds_utilized,
+                              remaining_budget  = remaining_budget - "'.$total_cost.'",
+                              modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
                               region_code = "'.$regionsaro.'"
                               ');
+        $date = date('Y');
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
+                              co_funds_remaining = co_funds_remaining - "'.$total_cost.'",
+                              modified_by = "'.$this->session->userdata('uid').'"
+                              WHERE
+                              for_year = "'.$date.'"
+                              ');
+
 
         if ($this->db->trans_status() === FALSE)
         {
