@@ -51,7 +51,6 @@
                        $fundsallocate = $fundsData->funds_allocated;
                        $fundsdownload = $fundsData->funds_downloaded;
                        $fundsutilize = $fundsData->funds_utilized;
-                       $budget =($fundsallocate - $fundsdownload);
                         if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
 
                             $status = number_format( $percent * 100, 2 ) . '%';
@@ -69,7 +68,7 @@
                             <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
                             <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
                             <td><?php echo '₱ '. number_format($fundsutilize,2); ?></td>
-                            <td><?php echo '₱ '. number_format($budget,2); ?></td>
+                            <td><?php echo '₱ '. number_format($fundsData->remaining_budget,2); ?></td>
                             <td><?php echo $status; ?></td>
                             <td>
                                 <div class="btn-group">

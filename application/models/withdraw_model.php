@@ -242,6 +242,20 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         return $this->db->query($get_regions)->result();
     }
 
+    public function get_from_region($region_code) {
+        $get_regions1 = '
+        SELECT
+          region_code,
+          region_name
+        FROM
+          lib_region
+        WHERE
+          region_code ="'.$region_code.'"
+        ';
+
+        return $this->db->query($get_regions1)->row();
+    }
+
     public function get_provinces($region_code) {
         $get_prov = "
         SELECT
