@@ -52,12 +52,16 @@ class foodforwork_model extends CI_Model
 
     public function get_project($region_code)
     {
-        $sql = 'SELECT d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
+        $sql = 'SELECT f.prov_name,e.city_name,d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
 FROM `tbl_foodforwork` a
 INNER JOIN lib_region b
 on a.region_code = b.region_code
 INNER JOIN lib_work_nature c
 on a.nature_id = c.nature_id
+inner join lib_provinces f
+on f.prov_code = a.prov_code
+inner join lib_municipality e
+on e.city_code = a.city_code
 inner join tbl_saro d
 on d.saro_id = a.saro_id
 where a.deleted = 0 and a.region_code = "'.$region_code.'"
@@ -67,9 +71,86 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         return $result;
 
     }
+    public function deleteFoodBene($food_bene_id)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE tbl_food_bene_list SET
+                              deleted="1"
+                              WHERE
+                              food_bene_id = "'.$food_bene_id.'"
+                              ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+    public function getbenebyid($foodbene_id)
+    {
+        $query = $this->db->get_where('tbl_food_bene_list',array('food_bene_id'=>$foodbene_id));
+        if ($query->num_rows() > 0)
+        {
+            return $query->row();
+        }
+        else
+        {
+            return FALSE;
+        }
+        $this->db->close();
+    }
+    public function insertBene($foodforwork_idpass,$bene_fullname,$myid)
+    {
+
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_food_bene_list(bene_fullname,foodforwork_id,date_created,created_by,deleted)
+                          values
+                          ("'.$bene_fullname.'","'.$foodforwork_idpass.'",now(),"'.$myid.'","0")');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+
+    }
+    public function get_project_view($region_code)
+    {
+        $sql = 'SELECT f.prov_name,e.city_name,d.saro_number,a.foodforwork_id,a.project_title,b.region_name,c.work_nature,a.no_of_bene,a.no_of_days,a.cost_of_assistance
+FROM `tbl_foodforwork` a
+INNER JOIN lib_region b
+on a.region_code = b.region_code
+INNER JOIN lib_work_nature c
+on a.nature_id = c.nature_id
+inner join lib_provinces f
+on f.prov_code = a.prov_code
+inner join lib_municipality e
+on e.city_code = a.city_code
+inner join tbl_saro d
+on d.saro_id = a.saro_id
+where a.deleted = 0 and a.region_code = "'.$region_code.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+    }
     public function get_bene_list($foodforwork_id)
     {
-        $sql = 'select a.bene_id,a.bene_fullname from tbl_cash_bene_list a
+        $sql = 'select a.foodforwork_id,a.food_bene_id,a.bene_fullname from tbl_food_bene_list a
         where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();

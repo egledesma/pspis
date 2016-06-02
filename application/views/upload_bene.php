@@ -23,11 +23,12 @@ error_reporting(0);
         <div class="panel">
 
 
-            <?php //echo $name;?>
+            <?php echo $error;?>
             <?php //echo $file_name->file_location; ?>
             <?php echo form_open_multipart('cashforwork/do_upload/'.$cashforwork_brgy_id);?>
 
             <input type="file" name="userfile" id = "userfile" size="20" />
+            <label>File types PDF,JPG,DOC and DOCX - 25kb allowable size</label>
 
             <br /><br />
 

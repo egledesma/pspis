@@ -70,7 +70,7 @@
                                            href="<?php echo base_url('foodforwork/deletefoodforwork/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-success btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/cash_addbene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('foodforwork/food_benelist/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                         <a class="btn btn-info btn-outline" id="confirm"
                                            href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"

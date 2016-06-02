@@ -10,6 +10,126 @@ z*/
 class foodforwork extends CI_Controller
 {
 
+    public function food_benelist($foodforwork_id)
+    {
+        $foodforwork = new foodforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('foodforwork_beneAdd',array(
+            'food_benelist' => $foodforwork->get_bene_list($foodforwork_id),
+            'foodforwork_idpass' => $foodforwork_id));
+        $this->load->view('footer');
+    }
+    public function deleteBene($food_bene_id,$foodforwork_id)
+    {
+
+        $foodforwork = new foodforwork_model();
+        if ($food_bene_id > 0){
+            $deleteResult = $foodforwork->deleteFoodBene($food_bene_id);
+
+            $this->redirectIndexbene($foodforwork_id);
+        }
+    }
+    public function foodbene_edit($cashbene_id)
+    {
+        if ($cashbene_id != ""){
+            $foodforwork = new foodforwork_model();
+
+            $this->validateBeneAddForm();
+
+            if (!$this->form_validation->run()){
+                $form_message = '';
+                $this->load->view('foodforwork_beneEdit',array(
+                    'bene_details'=>$foodforwork->getbenebyid($cashbene_id)));
+            } else {
+//                $assistance_name = $this->input->post('assistance_name');
+                $myid = $this->input->post('myid');
+                $fullname = $this->input->post('bene_fullname');
+                $bene_idpass = $this->input->post('bene_idpass');
+                $foodforwork_idpass = $this->input->post('foodforwork_idpass');
+
+
+                $updateResult = $foodforwork->updateCashbene($bene_idpass, $fullname, $myid);
+                if ($updateResult){
+                    $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Success!</a>
+                    </div>';
+
+                    $this->redirectIndexbene($foodforwork_idpass);
+                }
+            }
+        }
+    }
+    public function food_addbene($foodforwork_id)
+    {
+
+        $foodforwork = new foodforwork_model();
+        $this->validateBeneAddForm();
+
+        if (!$this->form_validation->run()){
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('foodforwork_beneAdd',array(
+                'food_benelist' => $foodforwork->get_bene_list($foodforwork_id),
+                'foodforwork_idpass' => $foodforwork_id));
+            $this->load->view('footer');
+
+
+        } else {
+            $bene_fullname = $this->input->post('bene_fullname');
+            $myid = $this->session->userdata('uid');
+            $foodforwork_idpass = $this->input->post('foodforwork_idpass');
+
+
+
+            $foodbeneResult = $foodforwork->insertBene($foodforwork_idpass,$bene_fullname,$myid);
+            if ($foodbeneResult == 1){
+                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=window.location.href">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=window.location.href">
+                  Success!</a>
+                </div>';
+              $this->redirectIndexbene($foodforwork_idpass);
+            } else {
+                $form_message = '<div class="alert alert-danger alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <i class="icon wb-close" aria-hidden="true"></i>
+                  Fail!
+                </div>';
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+                $this->load->view('foodforwork_beneAdd',array(
+                    'food_benelist' => $foodforwork->get_bene_list($foodforwork_id),
+                    'foodforwork_idpass' => $foodforwork_id));
+                $this->load->view('footer');
+            }
+        }
+
+    }
+    protected function validateBeneAddForm()
+    {
+        $config = array(
+
+            array(
+                'field'   => 'bene_fullname',
+                'label'   => 'Beneficiary Full name',
+                'rules'   => 'required'
+            )
+        );
+
+        return $this->form_validation->set_rules($config);
+    }
     public function index(){
         $foodforwork_model = new foodforwork_model();
         $this->load->view('header');
@@ -20,15 +140,15 @@ class foodforwork extends CI_Controller
             'project' => $foodforwork_model->get_project($region_code)));
         $this->load->view('footer');
     }
-    public function masterview_project()
+    public function view()
     {
         $foodforwork_model = new foodforwork_model();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $region_code = $this->session->userdata('uregion');
-        $this->load->view('foodforwork_list',array(
-            'project' => $foodforwork_model->get_project($region_code)));
+        $this->load->view('foodforwork_view',array(
+            'project' => $foodforwork_model->get_project_view($region_code)));
         $this->load->view('footer');
     }
     public function finalize_saro($foodforwork_id)
@@ -199,61 +319,61 @@ class foodforwork extends CI_Controller
     }
 
 
-    public function cash_addbene($foodforwork_id)
-    {
-
-        $foodforwork_model = new foodforwork_model();
-        $this->validateAddTypeAssistanceForm();
-
-        if (!$this->form_validation->run()){
-            $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
-            $this->load->view('foodforwork_beneAdd',array(
-                'cash_benelist' => $foodforwork_model->get_bene_list($foodforwork_id),
-                'title' => $foodforwork_model->get_project_title($foodforwork_id)
-                /*'form_message'=>$form_message*/));
-            $this->load->view('footer');
-
-
-        } else {
-            $assistance_name = $this->input->post('assistance_name');
-
-
-            $assistance_model = new assistance_model();
-            $assistanceResult = $assistance_model->InsertAssistance($assistance_name);
-            if ($assistanceResult == 1){
-                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=window.location.href">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=window.location.href">
-                  Success!</a>
-                </div>';
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-                $this->load->view('assistance',array(
-                    'assistancedetails' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
-                $this->load->view('footer');
-            } else {
-                $form_message = '<div class="alert alert-danger alert-dismissible" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <i class="icon wb-close" aria-hidden="true"></i>
-                  Fail!
-                </div>';
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-                $this->load->view('foodforwork_beneAdd',array(
-                    'cash_benelist' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
-                $this->load->view('footer');
-            }
-        }
-
-    }
+//    public function cash_addbene($foodforwork_id)
+//    {
+//
+//        $foodforwork_model = new foodforwork_model();
+//        $this->validateAddTypeAssistanceForm();
+//
+//        if (!$this->form_validation->run()){
+//            $this->load->view('header');
+//            $this->load->view('navbar');
+//            $this->load->view('sidebar');
+//            $this->load->view('foodforwork_beneAdd',array(
+//                'cash_benelist' => $foodforwork_model->get_bene_list($foodforwork_id),
+//                'title' => $foodforwork_model->get_project_title($foodforwork_id)
+//                /*'form_message'=>$form_message*/));
+//            $this->load->view('footer');
+//
+//
+//        } else {
+//            $assistance_name = $this->input->post('assistance_name');
+//
+//
+//            $assistance_model = new assistance_model();
+//            $assistanceResult = $assistance_model->InsertAssistance($assistance_name);
+//            if ($assistanceResult == 1){
+//                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+//                  <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=window.location.href">
+//                    <span aria-hidden="true">&times;</span>
+//                  </button>
+//                  <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=window.location.href">
+//                  Success!</a>
+//                </div>';
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//                $this->load->view('assistance',array(
+//                    'assistancedetails' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
+//                $this->load->view('footer');
+//            } else {
+//                $form_message = '<div class="alert alert-danger alert-dismissible" role="alert">
+//                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+//                    <span aria-hidden="true">&times;</span>
+//                  </button>
+//                  <i class="icon wb-close" aria-hidden="true"></i>
+//                  Fail!
+//                </div>';
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//                $this->load->view('foodforwork_beneAdd',array(
+//                    'cash_benelist' => $assistance_model->get_assistance_type(),'form_message'=>$form_message));
+//                $this->load->view('footer');
+//            }
+//        }
+//
+//    }
 
     protected function validateAddTypeAssistanceForm()
     {
@@ -352,5 +472,10 @@ class foodforwork extends CI_Controller
 
         header("LOCATION: $page");
     }
+    public function redirectIndexbene($foodforwork_id)
+    {
+        $page = base_url('foodforwork/food_benelist/'.$foodforwork_id.'');
 
+        header("LOCATION: $page");
+    }
 }

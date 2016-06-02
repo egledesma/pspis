@@ -17,7 +17,7 @@ error_reporting(0);
         <h1 class="page-title">Beneficiaries</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-<!--            <li><a href="--><?php //echo base_url('libraries/index') ?><!--">Libraries</a></li>-->
+            <!--            <li><a href="--><?php //echo base_url('libraries/index') ?><!--">Libraries</a></li>-->
             <li class="active">Beneficiaries</li>
         </ol>
     </div>
@@ -25,7 +25,7 @@ error_reporting(0);
     <div class="panel">
         <div class="panel">
             <header class="panel-heading">
-<!--                &nbsp;--><?php //echo $form_message; ?>
+                <!--                &nbsp;--><?php //echo $form_message; ?>
             </header>
             <div class="panel-body">
                 <div id="exampleTableAddToolbar">
@@ -39,6 +39,7 @@ error_reporting(0);
                     <tr>
                         <th>ID</th>
                         <th>Beneficiaries</th>
+                        <th>Action</th>
 
 
                     </tr>
@@ -47,25 +48,26 @@ error_reporting(0);
                     <tr>
                         <th>ID</th>
                         <th>Beneficiaries</th>
+                        <th>Action</th>
 
                     </tr>
                     </tfoot>
                     <tbody>
 
-<!--                    <pre>-->
-<!--                    --><?php //print_r($cash_benelist)?>
-<!--                    </pre>-->
-                    <?php foreach($cash_benelist as $cash_benedata): ?>  <!--pagination buttons -->
+                    <!--                    <pre>-->
+<!--                                        --><?php //print_r($foodforwork_idpass)?>
+                    <!--                    </pre>-->
+                    <?php foreach($food_benelist as $food_benedata): ?>  <!--pagination buttons -->
                         <tr>
-                            <td><?php echo $cash_benedata->bene_id ?></td>
-                            <td><?php echo $cash_benedata->bene_fullname; ?></td>
+                            <td><?php echo $food_benedata->food_bene_id ?></td>
+                            <td><?php echo $food_benedata->bene_fullname; ?></td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info btn-outline" data-target="#exampleFormModal1" data-toggle="modal"
-                                       href="<?php echo base_url('cashforwork/cashbene_edit/' . $cash_benedata->bene_id . '') ?>" data-toggle="tooltip"
+                                       href="<?php echo base_url('foodforwork/foodbene_edit/' . $food_benedata->food_bene_id . '') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                     <a class="confirmation btn btn-danger btn-outline" id="confirm"
-                                       href="<?php echo base_url('cashforwork/deleteBene/' . $cash_benedata->cashforwork_brgy_id . '/' . $cash_benedata->bene_id .'') ?>" data-toggle="tooltip"
+                                       href="<?php echo base_url('foodforwork/deleteBene/' . $food_benedata->food_bene_id . '/' . $food_benedata->foodforwork_id .'') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Delete"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                 </div>
                             </td>
@@ -84,7 +86,7 @@ error_reporting(0);
         <?php
         $attributes = array("class" => "modal-content", "id" => "bene_edit", "name" => "bene_edit" );
         //input here the next location when click insert1
-        echo form_open("cashforwork/cashbene_edit/".$cash_benedata->bene_id, $attributes);?>
+        echo form_open("foodforwork/foodbene_edit/".$cash_benedata->bene_id, $attributes);?>
 
         <?php echo form_close(); ?>
         <?php echo $this->session->flashdata('msg'); ?>
@@ -92,23 +94,25 @@ error_reporting(0);
 </div>
 
 
-<div class="modal fade" id="exampleFormModal" aria-hidden="false" aria-labelledby="exampleFormModalLabel" data-backdrop="static" data-keyboard="false"
+<div class="modal fade" id="exampleFormModal" aria-hidden="false" aria-labelledby="exampleFormModalLabel" data-keyboard="false" data-backdrop="static"
      role="dialog" tabindex="-1">
     <div class="modal-dialog modal-center">
         <?php
         $attributes = array("class" => "modal-content", "id" => "bene_add", "name" => "bene_add" , );
         //input here the next location when click insert1
-        echo form_open("cashforwork/cash_addbene/".$cashforwork_brgyidpass, $attributes);?>
+        echo form_open("foodforwork/food_addbene/".$foodforwork_idpass, $attributes);?>
         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
+            </button>
             <h3 class="modal-title" id="exampleFormModalLabel"><i class="icon wb-plus"></i>Add New</h3>
         </div>
         <div class="modal-body">
             <div class="row">
                 <div class="col-lg-12 form-group">
                     <input type="text" class="form-control" name="bene_fullname" placeholder="Full Name" required>
-                    <input class="form-control"  type="hidden" name="cashforwork_idpass" value="<?php echo $cashforwork_idpass->cashforwork_id;?>">
-                    <input class="form-control"  type="hidden" name="cashforwork_brgyidpass" value="<?php echo $cashforwork_brgyidpass?>">
+                    <input class="form-control"  type="hidden" name="foodforwork_idpass" value="<?php echo $foodforwork_idpass;?>">
+<!--                    <input class="form-control"  type="text" name="cashforwork_brgyidpass" value="--><?php //echo $cashforwork_brgyidpass?><!--">-->
                 </div>
                 <div class="col-sm-12 pull-right">
                     <button class="btn btn-success btn-outline" type="submit" name="btn_add"><i class="icon wb-check" aria-hidden="true"></i>Save</button>

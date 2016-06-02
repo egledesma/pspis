@@ -7,10 +7,11 @@
 </div>
 <div class="modal-body" >
     <div class="row">
+<!--        --><?php //print_r($bene_details)?>
         <div class="col-lg-12 form-group">
             <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
-            <input class="form-control"  type="hidden" name="bene_idpass" value="<?php echo $bene_details->bene_id ?>">
-            <input class="form-control"  type="hidden" name="cashforwork_idpass" value="<?php echo $bene_details->cashforwork_id ?>">
+            <input class="form-control"  type="hidden" name="bene_idpass" value="<?php echo $bene_details->food_bene_id ?>">
+            <input class="form-control"  type="hidden" name="cashforwork_idpass" value="<?php echo $bene_details->foodforwork_id ?>">
             <input type="text" class="form-control" name="bene_fullname" placeholder="Full Name" value="<?php echo $bene_details->bene_fullname ?>" required>
         </div>
         <div class="col-sm-12 pull-right">
