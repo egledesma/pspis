@@ -473,7 +473,18 @@ class cashforwork extends CI_Controller
         }
     }
 
-
+    public function cash_benelist($cashforworkbrgy_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('cashforwork_beneAdd',array(
+            'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
+            'cashforwork_brgyidpass' => $cashforworkbrgy_id,
+            'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
+        $this->load->view('footer');
+    }
     public function cash_addbene($cashforworkbrgy_id)
     {
 
@@ -507,14 +518,15 @@ class cashforwork extends CI_Controller
                   <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=window.location.href">
                   Success!</a>
                 </div>';
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-                $this->load->view('cashforwork_beneAdd',array(
-                    'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
-                    'cashforwork_brgyidpass' => $cashforworkbrgy_id,
-                    'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
-                $this->load->view('footer');
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//                $this->load->view('cashforwork_beneAdd',array(
+//                    'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
+//                    'cashforwork_brgyidpass' => $cashforworkbrgy_id,
+//                    'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
+//                $this->load->view('footer');
+                $this->redirectIndexbene($cashforwork_brgyidpass);
             } else {
                 $form_message = '<div class="alert alert-danger alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -553,7 +565,7 @@ class cashforwork extends CI_Controller
 
         $cashforwork_brgy_data = $cashforwork_model->get_upload_filename($cashforwork_brgy);
         $name = $cashforwork_brgy_data->file_location;
-        $data = file_get_contents("./uploads/".$name); // Read the file's contents
+        $data = file_get_contents("./uploads/cashforwork/".$name); // Read the file's contents
 
 
         force_download($name, $data);
@@ -561,8 +573,8 @@ class cashforwork extends CI_Controller
     }
     function do_upload($cashforwork_brgy_id)
     {
-        $config['upload_path'] = './uploads';
-        $config['allowed_types'] = 'pdf|jpg|png|docx';
+        $config['upload_path'] = './uploads/cashforwork';
+        $config['allowed_types'] = 'pdf|jpg|doc|docx';
         $config['max_size']	= '25000';
         $config['max_width']  = '1024';
         $config['max_height']  = '1024';
@@ -573,8 +585,13 @@ class cashforwork extends CI_Controller
         {
             $error = array('error' => $this->upload->display_errors());
             $cashforwork_muni_idpass = $cashforwork_model->get_brgy_cashforwork_id($cashforwork_brgy_id);
+
             $cashforworkmuni_id = $cashforwork_muni_idpass->cashforwork_muni_id;
-            $this->load->view('upload_bene', $error);
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+            $this->load->view('upload_benefood', $error);
+            $this->load->view('footer');
             $this->redirectIndexviewBrgy_muni($cashforworkmuni_id);
         }
         else
@@ -591,6 +608,7 @@ class cashforwork extends CI_Controller
             $this->redirectIndexviewBrgy_muni($cashforworkmuni_id);
         }
     }
+
     public function cashbene_edit($cashbene_id)
     {
         if ($cashbene_id != ""){
@@ -762,6 +780,12 @@ class cashforwork extends CI_Controller
     public function redirectIndex()
     {
         $page = base_url('cashforwork/index');
+
+        header("LOCATION: $page");
+    }
+    public function redirectIndexbene($cashforwork_brgyidpass)
+    {
+        $page = base_url('cashforwork/cash_benelist/'.$cashforwork_brgyidpass.'');
 
         header("LOCATION: $page");
     }

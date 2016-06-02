@@ -137,7 +137,7 @@
                                            href="<?php echo base_url('cashforwork/deleteCashforwork_brgy/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-success btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/cash_addbene/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/cash_benelist/'.$cashbrgy_listData->cash_brgy_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add Beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                         <?php if($cashbrgy_listData->file_location == '') {?>
                                         <a class="btn btn-info btn-outline" id="confirm"
