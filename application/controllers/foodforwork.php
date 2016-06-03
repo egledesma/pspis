@@ -31,6 +31,33 @@ class foodforwork extends CI_Controller
             $this->redirectIndexbene($foodforwork_id);
         }
     }
+    public function populate_saro_amount()
+    {
+
+        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+        {
+        $saro_id = $_POST['saro_id'];
+        $sarodata = $this->foodforwork_model->get_saro_balance($saro_id);
+        $label = array(
+            'for'          => 'saro_amount',
+            'class'        => 'control-label'
+        );
+        echo form_label('Saro Balance', '', $label);
+
+        $data1 = array(
+            'type'        => 'text',
+            'id'          => 'saro_amount',
+            'name'       =>  'saro_amount',
+            'max'   =>  $sarodata->saro_balance,
+            'min'   => '0',
+            'value'   =>  $sarodata->saro_balance,
+            'class'        => 'form-control'
+        );
+
+        echo form_input($data1);
+
+        }
+    }
     public function foodbene_edit($cashbene_id)
     {
         if ($cashbene_id != ""){

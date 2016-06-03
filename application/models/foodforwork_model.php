@@ -20,6 +20,16 @@ class foodforwork_model extends CI_Model
         return $result;
 
     }
+    public function get_saro_balance($saro_id)
+    {
+        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
+where saro_id = "'.$saro_id.'" and deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+        $this->db->close();
+    }
     public function finalize_update($total_cost,$saro_id,$regionsaro)
     {
         $this->db->trans_begin();
