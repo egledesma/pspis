@@ -11,6 +11,7 @@ class communities extends CI_Controller
 {
 
     public function index(){
+
        $communities_model = new communities_model();
         $this->load->view('header');
         $this->load->view('navbar');
@@ -336,7 +337,18 @@ class communities extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function addCommunities(){
+    public function addCommunities($function){
+        if($function == 1){
+            $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                 <a class="alert-link" href="javascript:void(0)"> Insucfficient funds, Please select other SARO.</a>
+                </div>';
+        } else{
+            $form_message = '';
+        }
+
         $communities_model = new communities_model();
 
         $this->validateAddForm();
@@ -351,6 +363,7 @@ class communities extends CI_Controller
             $getList['projectstatuslist'] = $communities_model->get_project_status();
             $getList['implementingagency'] = $communities_model->get_implementing_agency();
             $getList['regionlist'] = $communities_model->get_regions();
+            $getList['form_message'] = $form_message;
 
             if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
                 $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
@@ -427,7 +440,7 @@ class communities extends CI_Controller
 
             }
             else {
-                echo $check_balance->saro_balance;
+                $this->redirectAdd(1);
                 }
 
         }
@@ -543,12 +556,16 @@ class communities extends CI_Controller
 
         }
     }
+
     public function populate_naturemaxmin()
     {
         if($_POST['nature_id'] > 0 and isset($_POST) and isset($_POST['nature_id']))
         {
         $nature_id = $_POST['nature_id'];
         $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
+
+
+
 
             $data1 = array(
                 'type'        => 'number',
@@ -678,14 +695,14 @@ class communities extends CI_Controller
             );
 //        print_r($sarodata);
             echo form_label('Saro Balance', '', $label);
-
+        $saro_bal = "$sarodata->saro_balance";
             $data1 = array(
                 'type'        => 'text',
                 'id'          => 'saro_amount',
                 'name'       =>  'saro_amount',
-                'max'   =>  $sarodata->saro_balance,
+                'max'   =>  $saro_bal,
                 'min'   => '0',
-                'value'   =>  $sarodata->saro_balance,
+                'value'   =>  $saro_bal,
                 'class'        => 'form-control'
             );
 
@@ -715,11 +732,6 @@ class communities extends CI_Controller
                 'field' => 'project_title',
                 'label' => 'Project Title',
                 'rules' => 'required'
-            ),
-            array(
-                'field' => 'amount_requested',
-                'label' => 'amount_requested',
-                'rules' => 'required'
             )
         );
         return $this->form_validation->set_rules($config);
@@ -740,6 +752,12 @@ class communities extends CI_Controller
     public function redirectIndex()
     {
         $page = base_url('communities/index');
+
+        header("LOCATION: $page");
+    }
+    public function redirectAdd($function)
+    {
+        $page = base_url('communities/addCommunities/'.$function);
 
         header("LOCATION: $page");
     }

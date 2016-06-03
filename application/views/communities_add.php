@@ -7,18 +7,6 @@ $region_code = $this->session->userdata('uregion');
         recalculateSum();
 
     }
-
-    function checkValidate(){
-
-        var saroBal = parseInt($('#saro_amount').val());
-        var amountReq = parseInt($('#amount_requested').val());
-
-//        var saro = parseInt(saroBal);
-        if(saroBal < amountReq){
-            alert('not enough mana')
-        }
-        return false;
-    }
 //    $(document).ready(function() {
 //        //this calculates values automatically
 //        sum();
@@ -226,6 +214,7 @@ alert(saro_id);
                 </div>
             </header>
             <div class="panel-body">
+                <?php echo $form_message; ?>
 
                 <?php
                 $attributes = array("class" => "form-horizontal", "id" => "projectformadd", "name" => "projectformadd");
@@ -237,7 +226,7 @@ alert(saro_id);
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange ="get_saro_balance();" autofocus required>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange ="get_saro_balance();" autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
                                 <option value="<?php echo $saroselect->saro_number; ?>"
@@ -280,7 +269,7 @@ alert(saro_id);
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                     <label for="project_title" class="control-label">Project Title:</label>
-                    <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" />
+                    <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo $_POST['fg'];  ?>" required/>
                     <span class="text-danger"><?php echo form_error('project_title'); ?></span>
                     </div>
 
@@ -431,7 +420,7 @@ alert(saro_id);
                         <div id = "nature_maxmin">
                             <div id = "amount_requested">
                                 <label for="amount_requested" class="control-label">Amount Requested:</label>
-                                <input type = "number" id="amount_requested"  name ="amount_requested" class = "form-control" required>
+                                <input type = "number" id="amount_requested"  name ="amount_requested" class = "form-control">
                             </div>
 
                             </div>
@@ -591,7 +580,7 @@ alert(saro_id);
 
 
                 <div class="site-action">
-                   <button  type="submit" onclick = "return checkValidate();" id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                   <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                             data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>

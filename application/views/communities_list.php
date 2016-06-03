@@ -20,7 +20,7 @@ $region_code = $this->session->userdata('uregion');
                 </header>
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('communities/addCommunities') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
+                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('communities/addCommunities/0') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
                     </div><br>
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                 <thead>
