@@ -79,7 +79,7 @@ function get_saro_amount()
                                         }
                                     } ?>
                                 >
-                                    <?php echo $saroselect->saro_number; ?>
+                                    <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

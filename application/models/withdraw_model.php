@@ -11,7 +11,7 @@ class withdraw_model extends CI_Model
 {
     public function get_saro_amount($saro_id)
     {
-        $sql = 'select saro_funds,saro_id,saro_number from tbl_saro
+        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
 where saro_id = "'.$saro_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();

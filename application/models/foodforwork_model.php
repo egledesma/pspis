@@ -310,7 +310,8 @@ where a.deleted = 0 and a.region_code = "'.$region_code.'"
         $get_saro = "
         SELECT
           saro_id,
-          saro_number
+          saro_number,
+          saro_balance
         FROM
           tbl_saro
         WHERE

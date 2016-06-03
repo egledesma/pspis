@@ -112,7 +112,7 @@ $region_code = $this->session->userdata('uregion');
                                         }
                                     } ?>
                                 >
-                                    <?php echo $saroselect->saro_number; ?>
+                                    <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

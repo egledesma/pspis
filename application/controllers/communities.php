@@ -403,22 +403,33 @@ class communities extends CI_Controller
             $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
             $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
             $status = $this->input->post('projectstatuslist');
-            $addResult = $communities_model->insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,
-                $assistancelist,$natureofworklist,$fundsourcelist,$project_amount,$lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,
-                $lgucounterpart_brgy,$lgu_amount_brgy,$lgu_remarks_brgy,
-                $project_cost,$project_amount,$implementing_agency,$start_date,$target_date,
-                $status,$first_tranche,$second_tranche,$third_tranche);
-            if ($addResult){
-            $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
-                $region_code = $this->session->userdata('uregion');
-            $this->load->view('communities_list',array(
-                    'project' => $communities_model->get_project($region_code)
-                ));
-            $this->load->view('footer');
+
+            $check_balance = $communities_model->get_balance($saro_number);
+            $balance = $check_balance->saro_balance;
+            if($balance >= $project_amount )
+           {
+               $addResult = $communities_model->insertProject($myid, $saro_number, $project_title, $regionlist, $provlist, $munilist, $brgylist, $number_bene,
+                   $assistancelist, $natureofworklist, $fundsourcelist, $project_amount, $lgucounterpart_prov, $lgu_amount_prov, $lgu_remarks_prov, $lgucounterpart_muni, $lgu_amount_muni, $lgu_remarks_muni,
+                   $lgucounterpart_brgy, $lgu_amount_brgy, $lgu_remarks_brgy,
+                   $project_cost, $project_amount, $implementing_agency, $start_date, $target_date,
+                   $status, $first_tranche, $second_tranche, $third_tranche);
+               if ($addResult) {
+                   $this->load->view('header');
+                   $this->load->view('navbar');
+                   $this->load->view('sidebar');
+                   $region_code = $this->session->userdata('uregion');
+                   $this->load->view('communities_list', array(
+                       'project' => $communities_model->get_project($region_code)
+                   ));
+                   $this->load->view('footer');
+               }
+               $this->redirectIndex();
+
             }
-            $this->redirectIndex();
+            else {
+                echo $check_balance->saro_balance;
+                }
+
         }
     }
 

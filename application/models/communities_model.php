@@ -131,7 +131,8 @@ class communities_model extends CI_Model
         $get_saro = "
         SELECT
           saro_id,
-          saro_number
+          saro_number,
+          saro_balance
         FROM
           tbl_saro
         WHERE
@@ -228,6 +229,19 @@ class communities_model extends CI_Model
         $this->db->close();
 
     }
+
+    public function get_balance($saro_number)
+    {
+        $sql = 'select saro_id, saro_balance
+                from tbl_saro
+                where saro_number = "'.$saro_number.'"';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+
+    }
+
     public function insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
                                   $lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,$lgucounterpart_brgy,
                                   $lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status,$first_tranche,$second_tranche,$third_tranche)
