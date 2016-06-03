@@ -550,9 +550,6 @@ class communities extends CI_Controller
         $nature_id = $_POST['nature_id'];
         $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
 
-
-
-
             $data1 = array(
                 'type'        => 'number',
                 'id'          => 'amount_requested',
@@ -681,14 +678,14 @@ class communities extends CI_Controller
             );
 //        print_r($sarodata);
             echo form_label('Saro Balance', '', $label);
-        $saro_bal = "  (₱  ".number_format($sarodata->saro_balance).")";
+
             $data1 = array(
                 'type'        => 'text',
                 'id'          => 'saro_amount',
                 'name'       =>  'saro_amount',
-                'max'   =>  $saro_bal,
+                'max'   =>  $sarodata->saro_balance,
                 'min'   => '0',
-                'value'   =>  $saro_bal,
+                'value'   =>  $sarodata->saro_balance,
                 'class'        => 'form-control'
             );
 
@@ -717,6 +714,11 @@ class communities extends CI_Controller
             array(
                 'field' => 'project_title',
                 'label' => 'Project Title',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'amount_requested',
+                'label' => 'amount_requested',
                 'rules' => 'required'
             )
         );
