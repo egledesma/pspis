@@ -253,7 +253,6 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
                 on d.region_code = e.region_code
                 INNER JOIN lib_work_nature f
                 ON d.nature_id = f.nature_id
-
                 where a.cash_muni_id = "'.$cashforwork_muni_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();

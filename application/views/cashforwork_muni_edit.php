@@ -48,8 +48,8 @@ $region_code = $this->session->userdata('uregion');
         <h1 class="page-title">Add </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('cashforwork/view') ?>">Add City/Municipality</a></li>
-            <li class="active">Add</li>
+            <li><a href="<?php echo base_url('cashforwork/viewCash_muni/'.$cashforworkpass_id.'') ?>">City/Municipality</a></li>
+            <li class="active">Add Municipality</li>
         </ol>
     </div>
 

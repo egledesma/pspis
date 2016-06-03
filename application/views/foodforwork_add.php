@@ -74,10 +74,10 @@ $region_code = $this->session->userdata('uregion');
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Add </h1>
+        <h1 class="page-title">Add Project</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('foodforwork/index') ?>">Food for work</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
