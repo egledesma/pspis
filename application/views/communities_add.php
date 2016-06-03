@@ -43,7 +43,25 @@ $region_code = $this->session->userdata('uregion');
             });
         }
     }
+    function get_saro_balance()
+    {
 
+        var saro_id = $('#sarolist').val();
+
+//        if(saro_id > 0){
+alert(saro_id);
+            $.ajax({
+                url: "<?php echo base_url('communities/populate_saro_amount'); ?>",
+                async: false,
+                type: "POST",
+                data: "saro_id="+saro_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#saronumber').html(data);
+                }
+            });
+//        }
+    }
     function get_brgy_name() {
         var brgy_code =  $('#brgylist').val();
         if(brgy_code > 0) {
@@ -207,7 +225,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange ="get_saro_balance();" autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
                                 <option value="<?php echo $saroselect->saro_number; ?>"
@@ -222,9 +240,10 @@ $region_code = $this->session->userdata('uregion');
                             <?php endforeach; ?>
                         </select>
                     </div>
+                </div>
+                <div name = "saronumber" id = "saronumber">
 
                 </div>
-
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="assistancelist">Type of Assistance:</label>

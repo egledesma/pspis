@@ -468,6 +468,16 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_brgy_name,$brgy_code)->row();
     }
+    public function get_saro_balance($saro_id)
+    {
+        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
+where saro_number = "'.$saro_id.'" and deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+        $this->db->close();
+    }
 
     public function updateFirstTranche($myid,$remarks,$budget_id,$start_date)
     {

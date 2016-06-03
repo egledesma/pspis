@@ -668,6 +668,34 @@ class communities extends CI_Controller
         }
 
     }
+    public function populate_saro_amount()
+    {
+
+//        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+//        {
+            $saro_id = $_POST['saro_id'];
+            $sarodata = $this->communities_model->get_saro_balance($saro_id);
+            $label = array(
+                'for'          => 'saro_amount',
+                'class'        => 'control-label'
+            );
+//        print_r($sarodata);
+            echo form_label('Saro Balance', '', $label);
+        $saro_bal = "  (₱  ".number_format($sarodata->saro_balance).")";
+            $data1 = array(
+                'type'        => 'text',
+                'id'          => 'saro_amount',
+                'name'       =>  'saro_amount',
+                'max'   =>  $saro_bal,
+                'min'   => '0',
+                'value'   =>  $saro_bal,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data1);
+
+//        }
+    }
     public function init_rpmb_session() {
         if(isset($_POST['regionlist']) and $_POST['regionlist'] > 0) {
             $_SESSION['region'] = $_POST['regionlist'];
