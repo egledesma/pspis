@@ -676,7 +676,6 @@ class communities extends CI_Controller
                 'for'          => 'saro_amount',
                 'class'        => 'control-label'
             );
-//        print_r($sarodata);
             echo form_label('Saro Balance', '', $label);
 
             $data1 = array(
