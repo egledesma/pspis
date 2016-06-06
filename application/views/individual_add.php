@@ -45,7 +45,7 @@ error_reporting(0);
                                             }
                                         } ?>
                                     >
-                                        <?php echo $saroselect->saro_number; ?>
+                                        <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

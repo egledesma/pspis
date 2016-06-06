@@ -64,15 +64,25 @@ order by a.aics_id asc';
 
         $this->db->query('UPDATE tbl_saro SET
                               saro_funds_downloaded = "'.$utilizeddifference.'" + saro_funds_downloaded,
-                              saro_funds_utilized = "'.$utilizeddifference.'" + saro_funds_utilized
+                              saro_funds_utilized = "'.$utilizeddifference.'" + saro_funds_utilized,
+                              saro_balance = saro_balance - "'.$utilizeddifference.'"
                               WHERE
                               saro_id = "'.$sarolist.'"
                               ');
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_downloaded ="'.$utilizeddifference.'" + funds_downloaded,
-                              funds_utilized ="'.$utilizeddifference.'" + funds_utilized
+                              funds_utilized ="'.$utilizeddifference.'" + funds_utilized,
+                              remaining_budget  = remaining_budget - "'.$utilizeddifference.'",
                               WHERE
                               region_code = "'.$regionlist.'"
+                              ');
+        $date = date('Y');
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = "'.$utilizeddifference.'" + co_funds_utilized,
+                              co_funds_remaining = co_funds_remaining - "'.$utilizeddifference.'",
+                              modified_by = "'.$this->session->userdata('uid').'"
+                              WHERE
+                              for_year = "'.$date.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)
@@ -93,7 +103,8 @@ order by a.aics_id asc';
         $get_saro = "
         SELECT
           saro_id,
-          saro_number
+          saro_number,
+          saro_balance
         FROM
           tbl_saro
         WHERE

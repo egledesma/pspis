@@ -13,8 +13,8 @@ $region_code = $this->session->userdata('uregion');
         var saroBal = parseInt($('#saro_amount').val());
         var amountReq = parseInt($('#amount_requested').val());
         if(saroBal < amountReq){
-        <button type="button" class="btn btn-outline btn-default" id="exampleBasic" data-plugin="sweetalert"
-            data-title="Here's a message!">Basic</button>
+//        <button type="button" class="btn btn-outline btn-default" id="exampleBasic" data-plugin="sweetalert"
+//            data-title="Here's a message!">Basic</button>
             return false;
         }
     }

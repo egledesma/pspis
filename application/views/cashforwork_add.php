@@ -1,22 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $region_code = $this->session->userdata('uregion');
-
 ?>
 <script type="text/javascript">
-
     document.onreadystatechange=function(){
         get_prov();
-
     }
     function checkValidate(){
-
         var saroBal = parseInt($('#saro_amount').val());
         var amountReq = parseInt($('#cost_of_assistance').val());
         if(saroBal < amountReq){
             alert('not enough mana')
             return false;
         }
-
     }
     function get_saro_balance()
     {
@@ -229,18 +224,13 @@ $region_code = $this->session->userdata('uregion');
                                             <?php echo $natureofworkselect->work_nature; ?></option>
                                         <?php
                                     }
-
                                     ?>
-
-
                             </select>
                         </div>
                     </div>
                     </div>
 
                     <div class="form-group row">
-
-
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
                             <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>" onblur="recalculateMultiply()" required autofocus/>
@@ -256,7 +246,6 @@ $region_code = $this->session->userdata('uregion');
                             <input id="number_of_bene" name="number_of_bene" placeholder="Number of Beneficiaries" type="number"  min="0"  class="form-control"  value="<?php echo set_value('number_of_bene'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('number_of_bene'); ?></span>
                         </div>
-
                         <div class="col-sm-4">
                             <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
                             <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"   required autofocus/>
@@ -264,24 +253,16 @@ $region_code = $this->session->userdata('uregion');
                             <label>(number of days x number of beneficiaries x daily payment)</label>
                         </div>
                     </div>
-
-
                 <div class="site-action">
                     <button  type="submit"  onclick = "return checkValidate();" id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                              data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>
-
                 </div>
                 <?php echo form_close(); ?>
-
             </div>
         </div>
     </div>
-
-
-
-
         <div class="page-content">
             <div class="panel">
                 <header class="panel-heading">
@@ -290,7 +271,6 @@ $region_code = $this->session->userdata('uregion');
                     </div>
                 </header>
                 <div class="panel-body">
-
             <div id="exampleTableAddToolbar" >
                 <a class= "btn btn-outline btn-danger" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
             </div><br>
@@ -314,14 +294,11 @@ $region_code = $this->session->userdata('uregion');
                     <th>Number of Beneficiaries</th>
                     <th>Number of Days</th>
                     <th>Cost of Assistance</th>
-
                 </tr>
                 </tfoot>
                 <tbody  data-plugin="scrollable" data-direction="horizontal">
-
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
