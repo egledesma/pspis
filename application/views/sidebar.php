@@ -15,11 +15,11 @@ $region_code = $this->session->userdata('uregion');
 						</a>
 					</li>
 
-					<!------------------------ MAIN MENU ------------------------>
+					<!------------------------ FUNDS ------------------------>
 					<li class="site-menu-item has-sub">
 						<a href="javascript:void(0)" data-slug="layout">
-							<i class="site-menu-icon wb-layout" aria-hidden="true"></i>
-							<span class="site-menu-title">Main Menu</span>
+							<i class="site-menu-icon fa-money" aria-hidden="true"></i>
+							<span class="site-menu-title">Funds</span>
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
@@ -36,11 +36,22 @@ $region_code = $this->session->userdata('uregion');
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('fundswithdrawal/index') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('saro/index/'.$region_code.'') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
-									<span class="site-menu-title">Funds Withdrawal</span>
+									<span class="site-menu-title">SARO</span>
 								</a>
 							</li>
+						</ul>
+					</li>
+
+					<!------------------------ PROJECTS ------------------------>
+					<li class="site-menu-item has-sub">
+						<a href="javascript:void(0)" data-slug="layout">
+							<i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+							<span class="site-menu-title">Projects</span>
+							<span class="site-menu-arrow"></span>
+						</a>
+						<ul class="site-menu-sub">
 							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('individual/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>

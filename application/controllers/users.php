@@ -47,7 +47,7 @@ class users extends CI_Controller {
                 $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password); //ok
                 $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                  </button><a class="alert-link" href="javascript:void(0)">'.$registerSendResult.'.</a>
+                  </button><a class="alert-link" href="javascript:void(0)">Registration succeeded. An email has been sent to your email address.!.</a>
                 </div>';
                 $this->load->view('header');
                 $this->load->view('register',array($rpmb,'form_message'=>$form_message));

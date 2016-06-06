@@ -155,6 +155,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         $this->db->close();
 
     }
+
     public function updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
         ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
 

@@ -337,17 +337,7 @@ class communities extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function addCommunities($function){
-        if($function == 1){
-            $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                 <a class="alert-link" href="javascript:void(0)"> Insucfficient funds, Please select other SARO.</a>
-                </div>';
-        } else{
-            $form_message = '';
-        }
+    public function addCommunities(){
 
         $communities_model = new communities_model();
 
@@ -363,7 +353,6 @@ class communities extends CI_Controller
             $getList['projectstatuslist'] = $communities_model->get_project_status();
             $getList['implementingagency'] = $communities_model->get_implementing_agency();
             $getList['regionlist'] = $communities_model->get_regions();
-            $getList['form_message'] = $form_message;
 
             if(isset($_SESSION['province']) or isset($_SESSION['region'])) {
                 $getList['provlist'] = $communities_model->get_provinces($_SESSION['region']);
@@ -417,10 +406,6 @@ class communities extends CI_Controller
             $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
             $status = $this->input->post('projectstatuslist');
 
-            $check_balance = $communities_model->get_balance($saro_number);
-            $balance = $check_balance->saro_balance;
-            if($balance >= $project_amount )
-           {
                $addResult = $communities_model->insertProject($myid, $saro_number, $project_title, $regionlist, $provlist, $munilist, $brgylist, $number_bene,
                    $assistancelist, $natureofworklist, $fundsourcelist, $project_amount, $lgucounterpart_prov, $lgu_amount_prov, $lgu_remarks_prov, $lgucounterpart_muni, $lgu_amount_muni, $lgu_remarks_muni,
                    $lgucounterpart_brgy, $lgu_amount_brgy, $lgu_remarks_brgy,
@@ -438,10 +423,6 @@ class communities extends CI_Controller
                }
                $this->redirectIndex();
 
-            }
-            else {
-                $this->redirectAdd(1);
-                }
 
         }
     }
@@ -689,14 +670,9 @@ class communities extends CI_Controller
 //        {
             $saro_id = $_POST['saro_id'];
             $sarodata = $this->communities_model->get_saro_balance($saro_id);
-            $label = array(
-                'for'          => 'saro_amount',
-                'class'        => 'control-label'
-            );
-            echo form_label('Saro Balance', '', $label);
         $saro_bal = "$sarodata->saro_balance";
             $data1 = array(
-                'type'        => 'text',
+                'type'        => 'hidden',
                 'id'          => 'saro_amount',
                 'name'       =>  'saro_amount',
                 'max'   =>  $saro_bal,
@@ -754,9 +730,9 @@ class communities extends CI_Controller
 
         header("LOCATION: $page");
     }
-    public function redirectAdd($function)
+    public function redirectAdd()
     {
-        $page = base_url('communities/addCommunities/'.$function);
+        $page = base_url('communities/addCommunities');
 
         header("LOCATION: $page");
     }

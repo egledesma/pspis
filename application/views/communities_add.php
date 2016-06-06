@@ -13,10 +13,10 @@ $region_code = $this->session->userdata('uregion');
         var saroBal = parseInt($('#saro_amount').val());
         var amountReq = parseInt($('#amount_requested').val());
         if(saroBal < amountReq){
-            alert('not enough mana')
+        <button type="button" class="btn btn-outline btn-default" id="exampleBasic" data-plugin="sweetalert"
+            data-title="Here's a message!">Basic</button>
             return false;
         }
-
     }
 //    $(document).ready(function() {
 //        //this calculates values automatically
@@ -60,7 +60,6 @@ $region_code = $this->session->userdata('uregion');
         var saro_id = $('#sarolist').val();
 
 //        if(saro_id > 0){
-alert(saro_id);
             $.ajax({
                 url: "<?php echo base_url('communities/populate_saro_amount'); ?>",
                 async: false,
