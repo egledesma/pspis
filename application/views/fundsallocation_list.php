@@ -51,6 +51,7 @@
                        $fundsallocate = $fundsData->funds_allocated;
                        $fundsdownload = $fundsData->funds_downloaded;
                        $fundsutilize = $fundsData->funds_utilized;
+                       $fundsbudget = $fundsData->remaining_budget;
                         if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
 
                             $status = number_format( $percent * 100, 2 ) . '%';
@@ -72,14 +73,14 @@
                             <td><?php echo $status; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <?php if($fundsutilize == $fundsdownload){?>
+                                    <?php if($fundsbudget == '0'){?>
                                         <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
                                     <?php }else { ?>
-                                        <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
                                         <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+                                        <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                           data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
 
                                     <?php } ?>
 
