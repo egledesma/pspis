@@ -42,10 +42,10 @@ class foodforwork extends CI_Controller
             'for'          => 'saro_amount',
             'class'        => 'control-label'
         );
-        echo form_label('Saro Balance', '', $label);
+//        echo form_label('Saro Balance', '', $label);
 
         $data1 = array(
-            'type'        => 'text',
+            'type'        => 'hidden',
             'id'          => 'saro_amount',
             'name'       =>  'saro_amount',
             'max'   =>  $sarodata->saro_balance,

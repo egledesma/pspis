@@ -24,7 +24,7 @@ error_reporting(0);
     {
         var saro_id = $('#sarolist').val();
         if(saro_id > 0){
-            alert(saro_id);
+//            alert(saro_id);
             $.ajax({
                 url: "<?php echo base_url('individual/populate_saro_amount'); ?>",
                 async: false,

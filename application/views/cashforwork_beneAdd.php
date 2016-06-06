@@ -17,7 +17,7 @@ error_reporting(0);
         <h1 class="page-title">Beneficiaries</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-<!--            <li><a href="--><?php //echo base_url('libraries/index') ?><!--">Libraries</a></li>-->
+            <li><a href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashforwork_idpass->cashforwork_muni_id.'') ?>">Barangay</a></li>
             <li class="active">Beneficiaries</li>
         </ol>
     </div>
@@ -109,6 +109,7 @@ error_reporting(0);
                     <input type="text" class="form-control" name="bene_fullname" placeholder="Full Name" required>
                     <input class="form-control"  type="hidden" name="cashforwork_idpass" value="<?php echo $cashforwork_idpass->cashforwork_id;?>">
                     <input class="form-control"  type="hidden" name="cashforwork_brgyidpass" value="<?php echo $cashforwork_brgyidpass?>">
+                    <input class="form-control"  type="hidden" name="cashforwork_muniidpass" value="<?php echo $cashforwork_idpass->cashforwork_muni_id?>">
                 </div>
                 <div class="col-sm-12 pull-right">
                     <button class="btn btn-success btn-outline" type="submit" name="btn_add"><i class="icon wb-check" aria-hidden="true"></i>Save</button>

@@ -238,12 +238,12 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
     }
 
-    public function get_cashbrgy_list($cashforwork_id)
+    public function get_cashbrgy_list($cashforwork_muni_id)
     {
-        $sql = 'SELECT a.file_location,a.cash_brgy_id,a.no_of_bene_brgy,a.cost_of_assistance_brgy,b.brgy_name FROM `tbl_cash_brgy` a
+        $sql = 'SELECT a.cashforwork_muni_id,a.file_location,a.cash_brgy_id,a.no_of_bene_brgy,a.cost_of_assistance_brgy,b.brgy_name FROM `tbl_cash_brgy` a
                 inner join lib_brgy b
                 on a.brgy_code = b.brgy_code
-                where a.cashforwork_muni_id = "'.$cashforwork_id.'" and a.deleted = 0';
+                where a.cashforwork_muni_id = "'.$cashforwork_muni_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
@@ -450,13 +450,13 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         $this->db->close();
 
     }
-    public function insertBene($cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass)
+    public function insertBene($cashforwork_muni_idpass,$cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_cash_bene_list(bene_fullname,cashforwork_id,cashforwork_brgy_id,date_created,created_by,deleted)
+        $this->db->query('insert into tbl_cash_bene_list(bene_fullname,cashforwork_id,cashforwork_brgy_id,cashforwork_muni_id,date_created,created_by,deleted)
                           values
-                          ("'.$bene_fullname.'","'.$cashforwork_idpass.'","'.$cashforwork_brgyidpass.'",now(),"'.$myid.'","0")');
+                          ("'.$bene_fullname.'","'.$cashforwork_idpass.'","'.$cashforwork_brgyidpass.'","'.$cashforwork_muni_idpass.'",now(),"'.$myid.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {

@@ -19,7 +19,7 @@ $region_code = $this->session->userdata('uregion');
         var saro_id = $('#sarolist').val();
 
         if(saro_id > 0){
-            alert(saro_id);
+//            alert(saro_id);
             $.ajax({
                 url: "<?php echo base_url('cashforwork/populate_saro_amount'); ?>",
                 async: false,

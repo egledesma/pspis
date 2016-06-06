@@ -82,7 +82,7 @@ $region_code = $this->session->userdata('uregion');
                 data: "brgy_code="+brgy_code,
                 dataType: "html",
                 success: function(data1) {
-                    $('#brgyID').html(data1);
+                    $('#counter_brgy').html(data1);
                     var brgy_name = $('#lgucounterpart_brgy_name').val();
                     $('#lgucounterpart_brgy_code').val(brgy_code);
                     $('#lgucounterpart_brgy').val(brgy_name);
@@ -343,7 +343,7 @@ $region_code = $this->session->userdata('uregion');
                                     foreach ($munilist as $muniselect) { ?>
                                         <option value="<?php echo $muniselect->city_code; ?>"
                                             <?php
-                                            if (isset($_SESSION['muni']) and $muniselect->city_code== $_SESSION['muni']) {
+                                            if (isset($_SESSION['muni']) and $muniselect->city_code == $_SESSION['muni']) {
                                                 echo " selected";
                                             } ?>
                                         >
@@ -499,7 +499,6 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
 
                     <div name = "counter_brgy" id = "counter_brgy" class="col-sm-4">
-
                         <label for="lgucounterpart_brgy" class="control-label">Barangay:</label>
                         <input id="lgucounterpart_brgy_code" name="lgucounterpart_brgy_code" placeholder="LGU counterpart Barangay" type="hidden"  class="form-control"  value="<?php echo set_value('lgucounterpart_brgy_code'); ?>" required autofocus/>
                         <input id="lgucounterpart_brgy" name="lgucounterpart_brgy" placeholder="LGU counterpart Barangay" type="text"  class="form-control"  value="<?php echo set_value('lgucounterpart_brgy'); ?>" disabled/>
@@ -518,9 +517,6 @@ $region_code = $this->session->userdata('uregion');
                         <input id="remarks_brgy" name="remarks_brgy" placeholder="Remarks" type="text"  class="form-control"  value="<?php echo set_value('remarks_brgy'); ?>" />
                         <span class="text-danger"><?php echo form_error('remarks_brgy'); ?></span>
                     </div>
-
-
-
                 </div>
 
                 <div class="form-group row">

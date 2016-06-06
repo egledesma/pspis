@@ -507,9 +507,10 @@ class cashforwork extends CI_Controller
             $myid = $this->session->userdata('uid');
             $cashforwork_idpass = $this->input->post('cashforwork_idpass');
             $cashforwork_brgyidpass = $this->input->post('cashforwork_brgyidpass');
+            $cashforwork_muni_idpass = $this->input->post('cashforwork_muniidpass');
 
 
-            $cashbeneResult = $cashforwork_model->insertBene($cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass);
+            $cashbeneResult = $cashforwork_model->insertBene($cashforwork_muni_idpass,$cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass);
             if ($cashbeneResult == 1){
                 $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=window.location.href">
@@ -665,10 +666,10 @@ class cashforwork extends CI_Controller
                 'for'          => 'saro_amount',
                 'class'        => 'control-label'
             );
-            echo form_label('Saro Balance', '', $label);
+//            echo form_label('Saro Balance', '', $label);
 
             $data1 = array(
-                'type'        => 'text',
+                'type'        => 'hidden',
                 'id'          => 'saro_amount',
                 'name'       =>  'saro_amount',
                 'max'   =>  $sarodata->saro_balance,

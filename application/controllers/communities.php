@@ -545,9 +545,6 @@ class communities extends CI_Controller
         $nature_id = $_POST['nature_id'];
         $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
 
-
-
-
             $data1 = array(
                 'type'        => 'number',
                 'id'          => 'amount_requested',
@@ -648,6 +645,7 @@ class communities extends CI_Controller
         if($_POST['brgy_code'] > 0 and isset($_POST) and isset($_POST['brgy_code'])) {
             $brgy_code = $_POST['brgy_code'];
             $brgy_name = $this->communities_model->get_brgy_name($brgy_code);
+            echo form_label('Barangay:','');
 
             $data1 = array(
                 'type'        => 'text',
@@ -658,7 +656,6 @@ class communities extends CI_Controller
                 'disabled' => true
             );
             echo form_input($data1);
-
 
         }
 
