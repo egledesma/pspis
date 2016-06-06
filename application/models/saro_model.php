@@ -32,6 +32,19 @@ class saro_model extends CI_Model
         return $result;
     }
 
+    public function get_saro_history($saro_id) {
+        $get_sarohistory = '
+        SELECT
+          *
+        FROM
+          tbl_funds_history
+        WHERE
+          saro_id ="'.$saro_id.'"
+        ';
+
+        return $this->db->query($get_sarohistory)->result();
+    }
+
     public function get_from_region($region_code) {
         $get_regions1 = '
         SELECT

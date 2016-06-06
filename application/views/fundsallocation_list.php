@@ -61,7 +61,7 @@
 
 
                         ?>  <!--pagination buttons -->
-                        <?php if($fundsbudget == '0'){
+                        <?php if($fundsbudget == '0' && $fundsdownload != '0'){
                         $td = '<td class="success">'; } else {
                         $td = '<td>'; } ?>
                          <tr>
