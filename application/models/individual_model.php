@@ -54,6 +54,16 @@ order by a.aics_id asc';
         $this->db->close();
 
     }
+    public function get_saro_balance($saro_id)
+    {
+        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
+where saro_id = "'.$saro_id.'" and deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+
+        $this->db->close();
+    }
     public function insertAics($sarolist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid)
     {
 
@@ -72,7 +82,7 @@ order by a.aics_id asc';
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_downloaded ="'.$utilizeddifference.'" + funds_downloaded,
                               funds_utilized ="'.$utilizeddifference.'" + funds_utilized,
-                              remaining_budget  = remaining_budget - "'.$utilizeddifference.'",
+                              remaining_budget  = remaining_budget - "'.$utilizeddifference.'"
                               WHERE
                               region_code = "'.$regionlist.'"
                               ');

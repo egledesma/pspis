@@ -9,7 +9,7 @@ $region_code = $this->session->userdata('uregion');
         var saroBal = parseInt($('#saro_amount').val());
         var amountReq = parseInt($('#cost_of_assistance').val());
         if(saroBal < amountReq){
-            alert('not enough mana')
+            alert('Insufficient Funds')
             return false;
         }
     }

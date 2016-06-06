@@ -7,6 +7,37 @@ if (!$this->session->userdata('user_data')){
 $user_region = $this->session->userdata('uregion');
 error_reporting(0);
 ?>
+<script type="text/javascript">
+    function checkValidate(){
+
+        var prevUtil = parseInt($('#Prev_Utilize').val());
+        var util = parseInt($('#Utilize').val());
+        var saroBal = parseInt($('#saro_amount').val());
+        var amountReq = util - prevUtil;
+        alert(amountReq);
+        if(saroBal < amountReq){
+            alert('Insufficient Funds')
+            return false;
+        }
+    }
+    function get_saro_balance()
+    {
+        var saro_id = $('#sarolist').val();
+        if(saro_id > 0){
+            alert(saro_id);
+            $.ajax({
+                url: "<?php echo base_url('individual/populate_saro_amount'); ?>",
+                async: false,
+                type: "POST",
+                data: "saro_id="+saro_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#saronumber').html(data);
+                }
+            });
+        }
+    }
+</script>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -35,7 +66,7 @@ error_reporting(0);
                     <div class="col-sm-6">
                         <div>
                             <label class="control-label" for="sarolist">Saro Number:</label>
-                            <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                            <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange = "get_saro_balance();" autofocus>
                                 <option value="">Choose Saro Number</option>
                                 <?php foreach($sarolist as $saroselect): ?>
                                     <option value="<?php echo $saroselect->saro_id; ?>"
@@ -50,7 +81,9 @@ error_reporting(0);
                                 <?php endforeach; ?>
                             </select>
                         </div>
+                        <div name = "saronumber" id = "saronumber">
 
+                        </div>
                         <div class="form-group row">
 
                             <div class="col-sm-12">
@@ -81,7 +114,7 @@ error_reporting(0);
                                 </div>
                         </div>
                         <div class="site-action">
-                            <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                            <button  type="submit" onclick = "return checkValidate();"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                                      data-placement="top" data-original-title="Save">
                                 <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                             </button>
