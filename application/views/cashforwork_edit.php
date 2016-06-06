@@ -4,6 +4,7 @@
 <script type="text/javascript">
 
     document.onreadystatechange=function(){
+        recalculateMultiply();
         get_prov();
         get_muni();
         get_brgy();
@@ -50,6 +51,14 @@
         } else {
             $('#provlist option:gt(0)').remove().end();
         }
+    }
+    function recalculateMultiply()
+    {
+        var num1 = parseInt(document.getElementById("number_of_bene").value);
+        var num2 = parseInt(document.getElementById("number_days").value);
+        var num3 = parseInt(document.getElementById("daily_payment").value);
+        document.getElementById("cost_of_assistance").value = num1 * num2 * num3 ;
+
     }
 //    function get_muni() {
 //        var prov_code = $('#provlist').val();
@@ -294,13 +303,25 @@
 
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
-                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $cashforworkdata->no_of_days ?>" required autofocus/>
+                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $cashforworkdata->no_of_days ?>" onblur="" = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                         </div>
                         <div class="col-sm-4">
                             <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
                             <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  min="0"  class="form-control"  value="<?php echo $cashforworkdata->daily_payment ?>"   onblur = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="number_of_bene" class="control-label">Number of Beneficiaries:</label>
+                            <input id="number_of_bene" name="number_of_bene" placeholder="Number of Beneficiaries" type="number"  min="0"  class="form-control"  value="<?php echo $cashforworkdata->number_of_bene ?>"  onblur = "recalculateMultiply();" required autofocus/>
+                            <span class="text-danger"><?php echo form_error('number_of_bene'); ?></span>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
+                            <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"   required autofocus/>
+                            <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
+                            <label>(number of days x number of beneficiaries x daily payment)</label>
                         </div>
                     </div>
 

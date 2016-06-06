@@ -8,8 +8,35 @@ $region_code = $this->session->userdata('uregion');
         get_prov();
 
     }
+    function checkValidate(){
 
+        var saroBal = parseInt($('#saro_amount').val());
+        var amountReq = parseInt($('#cost_of_assistance').val());
+        if(saroBal < amountReq){
+            alert('not enough mana')
+            return false;
+        }
 
+    }
+    function get_saro_balance()
+    {
+
+        var saro_id = $('#sarolist').val();
+
+        if(saro_id > 0){
+        alert(saro_id);
+        $.ajax({
+            url: "<?php echo base_url('foodforwork/populate_saro_amount'); ?>",
+            async: false,
+            type: "POST",
+            data: "saro_id="+saro_id,
+            dataType: "html",
+            success: function(data) {
+                $('#saronumber').html(data);
+            }
+        });
+        }
+    }
     function get_prov() {
         var region_code = $('#regionlist').val();
 
@@ -74,10 +101,10 @@ $region_code = $this->session->userdata('uregion');
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Add </h1>
+        <h1 class="page-title">Add Project</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('foodforwork/index') ?>">Food for work</a></li>
             <li class="active">Add</li>
         </ol>
     </div>
@@ -102,7 +129,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange ="get_saro_balance();"  autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
                                 <option value="<?php echo $saroselect->saro_id; ?>"
@@ -117,6 +144,9 @@ $region_code = $this->session->userdata('uregion');
                             <?php endforeach; ?>
                         </select>
                     </div>
+                </div>
+                <div name = "saronumber" id = "saronumber">
+
                 </div>
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
@@ -277,7 +307,7 @@ $region_code = $this->session->userdata('uregion');
 
 
                     <div class="site-action">
-                        <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                        <button  type="submit"  onclick = "return checkValidate();" id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                                  data-placement="top" data-original-title="Save">
                             <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                         </button>

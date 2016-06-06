@@ -25,7 +25,8 @@
         <h1 class="page-title">Cash for work (<?php echo $proj_prov->project_title;?>)</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li class="active">Cash for work</li>
+            <li><a href="<?php echo base_url('cashforwork/viewCash_muni/'.$proj_prov->cashforwork_id.'') ?>">City/Municipality</a></li>
+            <li class="active">Barangay</li>
         </ol>
     </div>
 
@@ -65,7 +66,7 @@
                             </div>
 
                             <div id="munilist" class="col-sm-4">
-                                <label for="munilist" class="control-label">City/Municipality::</label>
+                                <label for="munilist" class="control-label">City/Municipality:</label>
                                 <input id="munilist" name="munilist" placeholder="City/Municipality:" type="text"  class="form-control"   value="<?php echo $proj_prov->city_name ?>" readonly/>
                                 <span class="text-danger"><?php echo form_error('munilist'); ?></span>
                             </div>
