@@ -59,8 +59,8 @@
                             <td><?php echo $saroData->remarks; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$saroData->region_code.'') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-original-title="View Projects"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/history/'.$saroData->saro_id.'') ?>" data-toggle="tooltip"
+                                       data-placement="top" data-original-title="View History"><i class="icon wb-search" aria-hidden="true" ></i> </a>
                                     <a class="btn btn-info btn-outline"  href="<?php echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                  <!--   <a class="confirmation btn btn-danger btn-outline" id="confirm"

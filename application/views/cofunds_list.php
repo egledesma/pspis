@@ -103,11 +103,11 @@
 
         <div class="panel">
             <div class="panel">
-                <header class="panel-heading">
-                    &nbsp;<?php //echo $form_message; ?>
-                </header>
                 <div class="panel-body">
-                    <table class="table table-hover table-bordered dataTable table-striped width-full" data-plugin="dataTable">
+                    <div id="exampleTableAddToolbar">
+                        <h3>Funds History</h3>
+                    </div><br>
+                    <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch1">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -172,7 +172,6 @@
                         </tbody>
                     </table>
                 </div>
-
 
             </div>
         </div>

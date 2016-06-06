@@ -22,6 +22,18 @@ class saro extends CI_Controller
 
     }
 
+    public function history($saro_id){
+
+        $saro_model = new saro_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saro_history',array(
+            'sarodetails' => $saro_model->get_saro_history($saro_id)/*'form_message'=>$form_message*/));
+        $this->load->view('footer');
+
+    }
+
     public function add(){
         $fundsallocation_model = new fundsallocation_model();
 
