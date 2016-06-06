@@ -46,10 +46,9 @@
                     </tfoot>
                     <tbody>
                     <?php foreach($sarodetails as $saroData):
-
+                       $saroStatus = $saroData->status;
 
                         ?>  <!--pagination buttons -->
-
                         <tr>
                             <td><?php echo $saroData->saro_id ?></td>
                             <td><?php echo $saroData->saro_number; ?></td>

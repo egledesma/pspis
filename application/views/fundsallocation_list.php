@@ -61,16 +61,18 @@
 
 
                         ?>  <!--pagination buttons -->
-
-                        <tr>
-                            <td><?php echo $fundsData->funds_id ?></td>
-                            <td><?php echo $fundsData->for_year; ?></td>
-                            <td><?php echo $fundsData->region_name; ?></td>
-                            <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsutilize,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsData->remaining_budget,2); ?></td>
-                            <td><?php echo $status; ?></td>
+                        <?php if($fundsbudget == '0'){
+                        $td = '<td class="success">'; } else {
+                        $td = '<td>'; } ?>
+                         <tr>
+                            <?php echo $td.$fundsData->funds_id ?></td>
+                            <?php echo $td.$fundsData->for_year; ?></td>
+                            <?php echo $td.$fundsData->region_name; ?></td>
+                            <?php echo $td."₱ ". number_format($fundsallocate,2); ?></td>
+                            <?php echo $td."₱ ". number_format($fundsdownload,2); ?></td>
+                            <?php echo $td."₱ ". number_format($fundsutilize,2); ?></td>
+                            <?php echo $td."₱ ". number_format($fundsData->remaining_budget,2); ?></td>
+                            <?php echo $td.$status; ?></td>
                             <td>
                                 <div class="btn-group">
                                     <?php if($fundsbudget == '0'){?>
