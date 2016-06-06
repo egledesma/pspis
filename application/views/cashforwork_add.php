@@ -8,7 +8,35 @@ $region_code = $this->session->userdata('uregion');
         get_prov();
 
     }
+    function checkValidate(){
 
+        var saroBal = parseInt($('#saro_amount').val());
+        var amountReq = parseInt($('#cost_of_assistance').val());
+        if(saroBal < amountReq){
+            alert('not enough mana')
+            return false;
+        }
+
+    }
+    function get_saro_balance()
+    {
+
+        var saro_id = $('#sarolist').val();
+
+        if(saro_id > 0){
+            alert(saro_id);
+            $.ajax({
+                url: "<?php echo base_url('cashforwork/populate_saro_amount'); ?>",
+                async: false,
+                type: "POST",
+                data: "saro_id="+saro_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#saronumber').html(data);
+                }
+            });
+        }
+    }
     function get_prov() {
         var region_code = $('#regionlist').val();
 
@@ -64,7 +92,14 @@ $region_code = $this->session->userdata('uregion');
             $('#brgylist option:gt(0)').remove().end();
         }
     }
+    function recalculateMultiply()
+    {
+        var num1 = parseInt(document.getElementById("number_of_bene").value);
+        var num2 = parseInt(document.getElementById("number_days").value);
+        var num3 = parseInt(document.getElementById("daily_payment").value);
+        document.getElementById("cost_of_assistance").value = num1 * num2 * num3 ;
 
+    }
 
 </script>
 
@@ -100,7 +135,7 @@ $region_code = $this->session->userdata('uregion');
 <!--</pre>-->  <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" autofocus>
+                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus>
                             <option value="">Choose Saro Number</option>
                             <?php foreach($sarolist as $saroselect): ?>
                                 <option value="<?php echo $saroselect->saro_id; ?>"
@@ -116,7 +151,9 @@ $region_code = $this->session->userdata('uregion');
                         </select>
                     </div>
                 </div>
+                <div name = "saronumber" id = "saronumber">
 
+                </div>
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                         <label for="project_title" class="control-label">Project Title:</label>
@@ -206,7 +243,7 @@ $region_code = $this->session->userdata('uregion');
 
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
-                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>" required autofocus/>
+                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>" onblur="recalculateMultiply()" required autofocus/>
                             <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                         </div>
                         <div class="col-sm-4">
@@ -214,12 +251,23 @@ $region_code = $this->session->userdata('uregion');
                             <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
                         </div>
+                        <div class="col-sm-4">
+                            <label for="number_of_bene" class="control-label">Number of Beneficiaries:</label>
+                            <input id="number_of_bene" name="number_of_bene" placeholder="Number of Beneficiaries" type="number"  min="0"  class="form-control"  value="<?php echo set_value('number_of_bene'); ?>"  onblur = "recalculateMultiply();" required autofocus/>
+                            <span class="text-danger"><?php echo form_error('number_of_bene'); ?></span>
+                        </div>
 
+                        <div class="col-sm-4">
+                            <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
+                            <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"   required autofocus/>
+                            <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
+                            <label>(number of days x number of beneficiaries x daily payment)</label>
+                        </div>
                     </div>
 
 
                 <div class="site-action">
-                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                    <button  type="submit"  onclick = "return checkValidate();" id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                              data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>

@@ -80,14 +80,26 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         return $this->db->query($get_saro)->result();
 
     }
-
+//  Auto Compute
+//    public function finalize($cashforwork_id)
+//    {
+//
+//        $sql = 'select a.saro_id,sum(b.cost_of_assistance_muni) total_cost
+//                                    from tbl_cashforwork a
+//                                    inner join tbl_cash_muni b
+//                                    on a.cashforwork_id = b.cashforwork_id
+//                                    where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+//        $query = $this->db->query($sql);
+//        $result = $query->row();
+//        return $result;
+//
+//    }
+// Manual Input of Total Cost
     public function finalize($cashforwork_id)
     {
 
-        $sql = 'select a.saro_id,sum(b.cost_of_assistance_muni) total_cost
+        $sql = 'select a.saro_id,cost_of_assistance total_cost
                                     from tbl_cashforwork a
-                                    inner join tbl_cash_muni b
-                                    on a.cashforwork_id = b.cashforwork_id
                                     where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -137,20 +149,18 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $this->db->close();
 
     }
-
+    // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,sum(d.no_of_bene_muni) as total_bene, sum(d.cost_of_assistance_muni) as total_cost
+        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost
                 FROM `tbl_cashforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
                 INNER JOIN lib_work_nature c
                 on a.nature_id = c.nature_id
-                inner join tbl_cash_muni d
-                on d.cashforwork_id = a.cashforwork_id
                 inner join tbl_saro g
                 on a.saro_id = g.saro_id
-                where a.deleted = 0 and d.deleted = 0 and a.region_code = '.$region_code.'
+                where a.deleted = 0 and a.region_code = '.$region_code.'
                 GROUP BY a.cashforwork_id
                ';
         $query = $this->db->query($sql);
@@ -158,6 +168,27 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         return $result;
 
     }
+// Auto Compute
+//    public function get_project($region_code)
+//    {
+//        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,sum(d.no_of_bene_muni) as total_bene, sum(d.cost_of_assistance_muni) as total_cost
+//                FROM `tbl_cashforwork` a
+//                INNER JOIN lib_region b
+//                on a.region_code = b.region_code
+//                INNER JOIN lib_work_nature c
+//                on a.nature_id = c.nature_id
+//                inner join tbl_cash_muni d
+//                on d.cashforwork_id = a.cashforwork_id
+//                inner join tbl_saro g
+//                on a.saro_id = g.saro_id
+//                where a.deleted = 0 and d.deleted = 0 and a.region_code = '.$region_code.'
+//                GROUP BY a.cashforwork_id
+//               ';
+//        $query = $this->db->query($sql);
+//        $result = $query->result();
+//        return $result;
+//
+//    }
 
     public function get_cashforworkDetails($cashforwork_id)
     {
@@ -258,7 +289,16 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $result = $query->row();
         return $result;
     }
+    public function get_saro_balance($saro_id)
+    {
+        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
+where saro_id = "'.$saro_id.'" and deleted = 0';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
 
+        $this->db->close();
+    }
     public function get_project_muni_brgy($cashforwork_brgy_id)
     {
         $sql = 'select c.city_name,b.daily_payment,b.no_of_days,a.cash_brgy_id,a.city_code,a.cashforwork_muni_id,a.brgy_code,a.no_of_bene_brgy
@@ -299,18 +339,51 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $result = $query->row();
         return $result;
     }
-    public function insertProject($saro,$myid,$project_title,$regionlist,$provlist
+// auto compute
+//    public function insertProject($saro,$myid,$project_title,$regionlist,$provlist
+//        ,$natureofworklist,$daily_payment,$number_days)
+//    {
+//
+//        $this->db->trans_begin();
+//        $this->db->query('insert into tbl_cashforwork(assistance_id,saro_id,
+//                          project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,date_created,created_by,deleted)
+//                          values
+//                          ("2","'.$saro.'","'.$project_title.'","'.$regionlist.'",
+//                          "'.$provlist.'","'.$natureofworklist.'",
+//                          "'.$daily_payment.'",
+//                          "'.$number_days.'",now(),"'.$myid.'","0")');
+//
+//        if ($this->db->trans_status() === FALSE)
+//        {
+//            $this->db->trans_rollback();
+//            return FALSE;
+//        }
+//        else
+//
+//        {   $insert_id = $this->db->insert_id();
+//            $this->db->trans_commit();
+//
+//            //return TRUE;
+//            return $insert_id;
+//        }
+//        $this->db->close();
+//
+//    }
+// manual input
+    public function insertProject($number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
         $this->db->query('insert into tbl_cashforwork(assistance_id,saro_id,
-                          project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,date_created,created_by,deleted)
+                          project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,number_of_bene,cost_of_assistance,date_created,created_by,deleted)
                           values
                           ("2","'.$saro.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
-                          "'.$number_days.'",now(),"'.$myid.'","0")');
+                          "'.$number_days.'",
+                          "'.$number_of_bene.'",
+                          "'.$cost_of_assistance.'",now(),"'.$myid.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -482,7 +555,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     }
 
     public function updateCashforwork($sarolist,$cashforwork_id1,$myid,$project_title,$regionlist,$provlist
-        ,$natureofworklist,$number_days,$daily_payment){
+        ,$natureofworklist,$number_days,$daily_payment,$number_of_bene,$cost_of_assistance){
 
         $this->db->trans_begin();
 
@@ -495,6 +568,8 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
                         no_of_days = "'.$number_days.'",
                         nature_id = "'.$natureofworklist.'",
                         daily_payment = "'.$daily_payment.'",
+                        number_of_bene = "'.$number_of_bene.'",
+                        cost_of_assistance = "'.$cost_of_assistance.'",
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE

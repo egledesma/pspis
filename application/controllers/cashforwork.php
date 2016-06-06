@@ -93,11 +93,11 @@ class cashforwork extends CI_Controller
             $provlist = $this->input->post('provlist');
             $natureofworklist = $this->input->post('natureofworklist');
             $daily_payment = $this->input->post('daily_payment');
-
+            $number_of_bene = $this->input->post('number_of_bene');
+            $cost_of_assistance = $this->input->post('cost_of_assistance');
             $number_days = $this->input->post('number_days');
-
             $updateResult = $cashforwork_model->updateCashforwork($sarolist,$cashforwork_id1,$myid,$project_title,$regionlist,$provlist
-                ,$natureofworklist,$number_days,$daily_payment);
+                ,$natureofworklist,$number_days,$daily_payment,$number_of_bene,$cost_of_assistance);
             if ($updateResult) {
 
                 $this->load->view('header');
@@ -248,11 +248,11 @@ class cashforwork extends CI_Controller
             $provlist = $this->input->post('provlist');
             $natureofworklist = $this->input->post('natureofworklist');
             $daily_payment = $this->input->post('daily_payment');
-//
+            $number_of_bene = $this->input->post('number_of_bene');
+            $cost_of_assistance = $this->input->post('cost_of_assistance');
             $number_days = $this->input->post('number_days');
-//            $costofassistance = $this->input->post('cost_of_assistance');
 
-            $addResult = $cashforwork_model->insertProject($saro,$myid,$project_title,$regionlist,$provlist
+            $addResult = $cashforwork_model->insertProject($number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
                 ,$natureofworklist,$daily_payment,$number_days);
             if ($addResult){
                 $this->load->view('header');
@@ -654,7 +654,33 @@ class cashforwork extends CI_Controller
             $this->redirectIndexviewCash_bene($cashforwork_id);
         }
     }
+    public function populate_saro_amount()
+    {
 
+        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+        {
+            $saro_id = $_POST['saro_id'];
+            $sarodata = $this->cashforwork_model->get_saro_balance($saro_id);
+            $label = array(
+                'for'          => 'saro_amount',
+                'class'        => 'control-label'
+            );
+            echo form_label('Saro Balance', '', $label);
+
+            $data1 = array(
+                'type'        => 'text',
+                'id'          => 'saro_amount',
+                'name'       =>  'saro_amount',
+                'max'   =>  $sarodata->saro_balance,
+                'min'   => '0',
+                'value'   =>  $sarodata->saro_balance,
+                'class'        => 'form-control'
+            );
+
+            echo form_input($data1);
+
+        }
+    }
     protected function validateBeneAddForm()
     {
         $config = array(
