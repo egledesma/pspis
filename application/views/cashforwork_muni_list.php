@@ -2,23 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: mblejano
- * Date: 5/5/2016
- * Time: 9:28 AM
- */
-
-
-?>
-
-<?php
-/**
- * Created by PhpStorm.
- * User: mblejano
  * Date: 4/29/2016
  * Time: 9:41 AM
  */$region_code = $this->session->userdata('uregion');
 ?>
-
-<div class="page ">
+<script type = "text/javascript">
+    function callAddform()
+    {
+        document.getElementById("testing").style.display = "block";
+        document.getElementById("confirm").disabled = true;
+    }
+</script>
+    <div class="page ">
 
     <div class="page-header page-header-bordered">
 
@@ -31,78 +26,66 @@
 
     <div class="page-content">
         <div class="panel">
-            <div class="panel">
-                <header class="panel-heading">
-                    &nbsp;<?php //echo $form_message; ?>
-                </header>
+            <?php foreach ($cashforworkinfo as $cashforworkdata): ?>
 
-
-                <div class="panel-body">
-                    <?php foreach ($cashforworkinfo as $cashforworkdata): ?>
-                    <div class="form-group row">
-                        <div id="project_title" class="col-sm-6">
-                            <label for="project_title" class="control-label">Project Title:</label>
-                            <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"   value="<?php echo $cashforworkdata->project_title ?>" readonly/>
-                            <span class="text-danger"><?php echo form_error('project_title'); ?></span>
-                        </div>
-                    </div>
-
-                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
-                    <label  class="control-label">Project Location:</label>
-                    <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
-                    <div class="form-group row">
-                        <div id="regionlist" class="col-sm-4">
-                            <label for="regionlist" class="control-label">Region:</label>
-                            <input id="regionlist" name="regionlist" placeholder="Region" type="text"  class="form-control"   value="<?php echo $cashforworkdata->region_name ?>" readonly/>
-                            <span class="text-danger"><?php echo form_error('regionlist'); ?></span>
-                        </div>
-
-                            <div id="provlist" class="col-sm-4">
-                                <label for="provlist" class="control-label">Province:</label>
-                                <input id="provlist" name="provlist" placeholder="Province" type="text"  class="form-control"   value="<?php echo $proj_prov->prov_name ?>" readonly/>
-                                <span class="text-danger"><?php echo form_error('provlist'); ?></span>
-                            </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div >
-                            <div id="natureofworklist" class="col-sm-4">
-                                <label for="natureofworklist" class="control-label">Nature of Work:</label>
-                                <input id="natureofworklist" name="natureofworklist" placeholder="Nature of Work" type="text"  class="form-control"   value="<?php echo $cashforworkdata->work_nature ?>" readonly/>
-                                <span class="text-danger"><?php echo form_error('natureofworklist'); ?></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="number_days" class="control-label">Number of Days:</label>
-                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"   value="<?php echo $cashforworkdata->no_of_days ?>" readonly>
-                            <span class="text-danger"><?php echo form_error('number_days'); ?></span>
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
-                            <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  class="form-control"  value="<?php echo $cashforworkdata->daily_payment ?>" readonly/>
-                            <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
-                        </div>
-                    </div>
-
-                    <?php endforeach ?>
+                <div class="panel-heading">
+                    <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; <?php echo $cashforworkdata->project_title ?> &nbsp;&nbsp;&nbsp;</mark>&nbsp;&nbsp;&nbsp;</h1>
 
                 </div>
-
+                <div class="panel-body">
+                    <table  class="table">
+                        <tr>
+                            <td>
+                                <div>
+                                    <ul class="list-group list-group-dividered list-group-full col-lg-6">
+                                        <h5><i class="icon wb-globe" aria-hidden="true"></i><b>Project Location:</b></h5>
+                                        <li class="list-group-item"> Region:  <b><?php echo $cashforworkdata->region_name ?></b></li>
+                                        <li class="list-group-item"> Province:  <b><?php echo $proj_prov->prov_name ?></b></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <ul class="list-group list-group-dividered list-group-full col-lg-6">
+                                        <h5><i class="icon wb-pencil" aria-hidden="true"></i><b>Project Information:</b></h5>
+                                        <li class="list-group-item"> Nature of Work: <b><?php echo $cashforworkdata->work_nature ?></b></li>
+                                        <li class="list-group-item"> Number of Beneficiaries: <b><?php echo $cashforworkdata->number_of_bene ?></b></li>
+                                        <li class="list-group-item"> Number of Days: <b><?php echo $cashforworkdata->no_of_days ?></b></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <ul class="list-group list-group-dividered list-group-full col-lg-6">
+                                        <h5><i class="icon fa-money" aria-hidden="true"></i><b>Project Cost:</b></h5>
+                                        <li class="list-group-item"> Daily payment amount: <b><?php echo '₱ '. number_format($cashforworkdata->daily_payment,2);  ?></b></li>
+                                        <li class="list-group-item"> Cost of Assistance: <b><?php echo '₱ '. number_format($cashforworkdata->cost_of_assistance,2);  ?></b></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        <tr>
+                    </table>
+                    <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                    <input id = "region_pass" name ="region_pass" type = "hidden" value = "<?php echo $region_code;?>">
+                </div>
+                    <?php endforeach ?>
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('cashforwork/addCash_muni/'.$cashforworkpass_id.'') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
-                    </div><br>
+                        <a class= "btn btn-outline btn-primary" onclick = "callAddform();" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
+
+<!--                        href="--><?php //echo base_url('cashforwork/addCash_muni/'.$cashforworkpass_id.'') ?><!--"-->
+                    </div>
+                    <br>
+                        <div id = "testing" style = "display:none">
+                            <?php $this->view('cashforwork_muni_add'); ?>
+                            <a class= "btn btn-outline btn-danger" onclick = "sample();" ><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>
+                        </div>
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead><h2> <?php echo $proj_prov->prov_name;?></h2>
                         <tr>
                             <th>Action</th>
                             <th>City/Municipality</th>
-                            <th>Daily Payment</th>
                             <th>Number of Beneficiaries</th>
-                            <th>Number of Days</th>
                             <th>Cost of Assistance</th>
                             <!-- <th>Status</th> -->
                         </tr>
@@ -111,16 +94,12 @@
                         <tr>
                             <th>Action</th>
                             <th>City/Municipality</th>
-                            <th>Daily Payment</th>
                             <th>Number of Beneficiaries</th>
-
-                            <th>Number of Days</th>
                             <th>Cost of Assistance</th>
 
                         </tr>
                         </tfoot>
                         <tbody  data-plugin="scrollable" data-direction="horizontal">
-<?php //print_r($cashmuni_list)?>
                         <?php foreach($cashmuni_list as $cashmuni_listData): ?>
                             <tr>
                                 <td>
@@ -129,7 +108,8 @@
 <!--                                           href="--><?php //echo base_url('cashforwork/view/'.$cashmuni_listData->cash_muni_id.'') ?><!--" data-toggle="tooltip"-->
 <!--                                           data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>-->
                                         <a class="btn btn-info btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>"
+                                           data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-danger btn-outline" id="confirm"
                                            href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
@@ -141,9 +121,7 @@
 
                                 </td>
                                 <td><?php echo $cashmuni_listData->city_name; ?></td>
-                                <td><?php echo '₱ '. number_format($cashmuni_listData->daily_payment,2); ?></td>
                                 <td><?php echo  $cashmuni_listData->no_of_bene_muni; ?></td>
-                                <td><?php echo $title->no_of_days; ?></td>
                                 <td><?php echo '₱ '. number_format($cashmuni_listData->cost_of_assistance_muni,2); ?></td>
 
                                 <!-- <td><?php // echo $projectData->status; ?></td> -->
@@ -154,6 +132,5 @@
                     </table>
                 </div>
             </div>
-        </div>
 
     </div>

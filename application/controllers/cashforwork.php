@@ -278,6 +278,8 @@ class cashforwork extends CI_Controller
         $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
         $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
         $getList['cashforworkinfo'] = $cashforwork_model->get_cashforworkDetails($cashforwork_id);
+
+        $getList['countBene'] = $cashforwork_model->get_countbene_muni($cashforwork_id);
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
@@ -718,10 +720,11 @@ class cashforwork extends CI_Controller
         }
     }
 
-    public function populate_muni() {
+    public function populate_muni($cashforwork_id) {
+
         if($_POST['prov_code'] > 0 and isset($_POST) and isset($_POST['prov_code'])) {
             $prov_code = $_POST['prov_code'];
-            $munilist = $this->cashforwork_model->get_muni($prov_code);
+            $munilist = $this->cashforwork_model->get_muni($prov_code,$cashforwork_id);
 
             $muni_list[''] = "Choose Municipality";
             foreach($munilist as $tempmuni) {
@@ -730,6 +733,7 @@ class cashforwork extends CI_Controller
 
             $munilist_prop = 'required="required" required  id="munilist" name="munilist" onchange="get_brgy();" class="form-control" autofocus';
             echo form_dropdown('munilist', $muni_list,'',$munilist_prop);
+
         }
     }
     public function populate_brgy() {

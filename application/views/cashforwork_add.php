@@ -182,7 +182,7 @@ $region_code = $this->session->userdata('uregion');
                     <div class="col-sm-3">
                         <label for="provlist" class="control-label">Province :</label>
                         <div id="provinceID">
-                            <select id="provlist" name="provlist" class="form-control" onChange="get_muni();" required>
+                            <select id="provlist" name="provlist" class="form-control"  required>
                                 <?php if(isset($_SESSION['province']) or isset($user_region)) {
                                     ?>
                                     <option value="">Choose Province</option>
