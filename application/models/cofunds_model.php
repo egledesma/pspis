@@ -13,23 +13,70 @@ class cofunds_model extends CI_Model
 
     public function get_cofunds()
     {
-        $sql = 'select * from tbl_co_funds
-                where deleted ="0"
+        $sql = 'select a.*, b.fund_source from tbl_co_funds a inner join lib_fund_source b on a.fundsource_id = b.fundsource_id
+                where a.deleted ="0"
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
     }
 
-    public function insertFunds($year,$funds_amount,$myid, $status, $funds_identifier)
+    public function get_consofunds_history($fund_source) {
+        $get_consohistory = '
+        SELECT
+          *
+        FROM
+          tbl_consofunds_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+        ORDER BY
+        consolidated_id DESC
+        ';
+
+        return $this->db->query($get_consohistory)->result();
+    }
+
+    public function insertFunds($fundsourcelist,$funds_amount2,$myid, $status, $funds_identifier)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_co_funds(
-                          for_year,co_funds,co_funds_remaining,date_created,created_by,status,funds_identifier)
+
+        $result = $this->db->query('SELECT * FROM tbl_co_funds WHERE fundsource_id ="'.$fundsourcelist.'" ');
+
+        if($result->num_rows() > 0) {
+            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fundsourcelist.'" ORDER BY fundsource_id limit 1 ');
+            $from_value1 = $from_value->row();
+            $conso_old_value = $from_value1->consolidated_new_value;
+            $conso_new_value = $from_value1->consolidated_new_value + $funds_amount2 ;
+
+
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created)
                           values
-                          ("'.$year.'","'.$funds_amount.'","'.$funds_amount.'",now(),"'.$myid.'","'.$status.'",
+                          ("'.$fundsourcelist.'","'.$conso_old_value.'","'.$funds_amount2.'","'.$conso_new_value.'","UPDATE FUNDS","'.$myid.'",now())');
+
+            $this->db->query('Update tbl_co_funds set
+                  co_funds = co_funds + "'.$funds_amount2.'",
+                  co_funds_remaining = co_funds_remaining + "'.$funds_amount2.'",
+                  date_modified = now(),
+                  modified_by = "'.$myid.'"
+                  WHERE fundsource_id = "'.$fundsourcelist.'" ');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_co_funds(
+                          fundsource_id,co_funds,co_funds_remaining,date_created,created_by,status,funds_identifier)
+                          values
+                          ("'.$fundsourcelist.'","'.$funds_amount2.'","'.$funds_amount2.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
+
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created)
+                          values
+                          ("'.$fundsourcelist.'","0","'.$funds_amount2.'","'.$funds_amount2.'","ADD NEW FUNDS","'.$myid.'",now())');
+        }
+
+
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -40,6 +87,19 @@ class cofunds_model extends CI_Model
             $this->db->trans_commit();
             return TRUE;
         }
+        $this->db->close();
+
+    }
+
+    public function get_fund_source()
+    {
+        $sql = 'select fundsource_id,fund_source
+                from lib_fund_source
+                where deleted = 0
+                and status = 0';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
         $this->db->close();
 
     }
@@ -80,6 +140,17 @@ class cofunds_model extends CI_Model
         {
             return FALSE;
         }
+        $this->db->close();
+    }
+
+    public function view_consofundsbyid($fund_source = 0)
+    {
+        $sql = 'select fund_source from lib_fund_source
+                where fundsource_id ="'.$fund_source.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
         $this->db->close();
     }
 

@@ -10,20 +10,41 @@
 class cofunds extends CI_Controller
 {
 
-    public function index(){
+    public function index($function = 0){
 
         $cofunds_model = new cofunds_model();
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Added Funds Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Success!</a>
+                    </div>';
+        }
+
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
             $this->load->view('cofunds_list',array(
-                'cofundsdetails' => $cofunds_model->get_cofunds()/*'form_message'=>$form_message*/));
+                'cofundsdetails' => $cofunds_model->get_cofunds(),'form_message'=>$form_message));
             $this->load->view('footer');
 
     }
 
     public function add(){
         $cofunds_model = new cofunds_model();
+        $getList['fundsourcelist'] = $cofunds_model->get_fund_source();
 
         $this->validateAddForm();
 
@@ -31,19 +52,20 @@ class cofunds extends CI_Controller
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('cofunds_add');
+            $this->load->view('cofunds_add', $getList);
             $this->load->view('footer');
         }
         else
         {
 
-            $year = $this->input->post('year');
+            $fundsourcelist = $this->input->post('fundsourcelist');
             $funds_amount = $this->input->post('funds_amount');
+            $funds_amount2 = preg_replace('/\D/', '', $funds_amount);
             $status = $this->input->post('status');
             $regionlist = 190000000;
-            $funds_identifier = $year.$regionlist;
+            $funds_identifier = $fundsourcelist.$regionlist;
             $myid = $this->input->post('myid');
-            $addResult = $cofunds_model->insertFunds($year,$funds_amount,$myid, $status, $funds_identifier);
+            $addResult = $cofunds_model->insertFunds($fundsourcelist,$funds_amount2,$myid, $status, $funds_identifier);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
@@ -52,8 +74,22 @@ class cofunds extends CI_Controller
                 $this->load->view('cofunds_list',array(
                     'cofundsdetails' => $cofunds_model->get_cofunds()/*'form_message'=>$form_message*/));
                 $this->load->view('footer');
+                $this->redirectIndex(1);
             }
         }
+    }
+
+    public function history($fund_source){
+
+        $cofunds_model = new cofunds_model();
+        $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
+        $getList['fundsdetails'] = $cofunds_model->get_consofunds_history($fund_source);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('cofunds_history', $getList);
+        $this->load->view('footer');
+
     }
 
     public function edit($aid)
@@ -146,11 +182,11 @@ class cofunds extends CI_Controller
         );
         return $this->form_validation->set_rules($config);
     }
-    public function redirectIndex()
+    public function redirectIndex($function)
     {
-        $page = base_url('cofunds/index');
-
-        header("LOCATION: $page");
+        $page = base_url('cofunds/index/'.$function);
+//        $sec = "1";
+        header("Location: $page");
     }
 
 

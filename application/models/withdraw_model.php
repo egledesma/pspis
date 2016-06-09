@@ -79,12 +79,11 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 
 
         $this->db->query('Update tbl_funds_allocated set
-                  funds_allocated = "'.$saro_amount.'" - funds_allocated,
+                  funds_allocated = funds_allocated - "'.$saro_amount.'",
+                  remaining_budget ="'.$saro_amount.'",
                   date_modified = now(),
                   modified_by = "'.$this->session->userdata('uid').'"
                   WHERE region_code = "'.$from_region.'" ');
-
-
 
 
 
