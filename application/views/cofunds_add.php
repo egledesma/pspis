@@ -38,21 +38,34 @@
 
 
                 <div class="form-group row">
-                    <div id="for_year" class="col-sm-2">
-                        <label for="for_year" class="control-label">For Year:</label>
-                        <input id="year" name="year" placeholder="For Year" type="text" value="<?php echo date('Y');?>" disabled class="form-control"/>
-                        <input id="year" name="year"  type="hidden" value="<?php echo date('Y');?>"  class="form-control"/>
+                    <div class="col-sm-4">
+                        <label for="fundsourcelist" class="control-label">Fund Source:</label>
+                        <select name="fundsourcelist" id="fundsourcelist" class="form-control" requried autofocus>
+                            <option value="">Choose Fund Source</option>
+                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
+                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
+                                    <?php echo $fundsourceselect->fund_source; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
                 </div>
-
 
                 <div class="form-group row">
-                        <div id="funds_allocated" class="col-sm-4">
-                            <label for="funds_amount" class="control-label">Funds Amount:</label>
-                            <input id="funds_amount" name="funds_amount" placeholder="Funds Amount"  type="number" min="0" value="<?php echo set_value('funds_amount'); ?>"  class="form-control" required/>
-                        </div>
+                    <div id="funds_allocated" class="col-sm-4">
+                        <label for="funds_amount" class="control-label">Funds Amount:</label>
+                        <input type="text" class="form-control" name="funds_amount" id="inputCurrency" data-plugin="formatter"
+                               data-pattern="₱ [[9]],[[999]],[[999]],[[999]]" />
+                        <p class="help-block">₱ 9,999,999,999</p>
+                    </div>
                 </div>
+
+<!--                <div class="form-group row">-->
+<!--                        <div id="funds_allocated" class="col-sm-4">-->
+<!--                            <label for="funds_amount" class="control-label">Funds Amount:</label>-->
+<!--                            <input id="funds_amount" name="funds_amount" placeholder="Funds Amount"  type="number" min="0" value="--><?php //echo set_value('funds_amount'); ?><!--"  class="form-control" required/>-->
+<!--                        </div>-->
+<!--                </div>-->
 
                 <div class="form-group row">
 
