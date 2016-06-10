@@ -9,17 +9,25 @@ $region_code = $this->session->userdata('uregion');
         recalculateMultiply();
     }
 
+    function checkValidate(){
 
+        var numBene = parseInt($('#number_bene').val());
+        if(numBene == 0){
+            alert('No Beneficiaries')
+            return false;
+        }
+
+    }
     function get_muni() {
         var prov_code = $('#prov_pass').val();
         var cityCode = $('#city_pass').val();
         $('#brgylist option:gt(0)').remove().end();
         if(prov_code > 0) {
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_muni'); ?>",
+                url: "<?php echo base_url('cashforwork/populate_muni_edit/'.$proj_prov->cashforwork_id.'/'.$proj_prov->city_code.''); ?>",
                 async: false,
                 type: "POST",
-                data: "prov_code="+prov_code,
+                data:"prov_code="+prov_code,
                 dataType: "html",
                 success: function(data) {
                     $('#muniID').html(data);
@@ -40,16 +48,16 @@ $region_code = $this->session->userdata('uregion');
     }
 </script>
 
-
 <div class="page ">
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Add </h1>
+        <h1 class="page-title">Edit
+        </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
             <li><a href="<?php echo base_url('cashforwork/viewCash_muni/'.$proj_prov->cashforwork_id.'') ?>">City/Municipality</a></li>
-            <li class="active">Add Municipality</li>
+            <li class="active">Edit City/Municipality</li>
         </ol>
     </div>
 
@@ -57,7 +65,7 @@ $region_code = $this->session->userdata('uregion');
         <div class="panel">
             <header class="panel-heading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Add City/Municipality</h3>
+                    <h3 class="panel-title">Edit City/Municipality</h3>
                 </div>
             </header>
             <div class="panel-body">
@@ -68,7 +76,7 @@ $region_code = $this->session->userdata('uregion');
 
                 echo form_open("cashforwork/updateCashforwork_muni", $attributes);?>
 <!--                <pre>-->
-<!--                --><?php //print_r($proj_prov)?>
+<!--                --><?php //print_r($countBene)?>
 <!--                </pre>-->
 
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
@@ -117,7 +125,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="number_bene" class="control-label">Number of Beneficiaries in City/Municipality:</label>
-                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo $proj_prov->no_of_bene_muni; ?>" required autofocus onchange = "recalculateMultiply();"/>
+                        <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control" max = "<?php echo $title->number_of_bene - $countBene->totalbene + $proj_prov->no_of_bene_muni ;?>"  value="<?php echo $proj_prov->no_of_bene_muni; ?>" required autofocus onchange = "recalculateMultiply();"/>
                         <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
                     </div>
                     <div class="col-sm-4">
@@ -143,7 +151,7 @@ $region_code = $this->session->userdata('uregion');
 
 
                 <div class="site-action">
-                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                    <button  onclick = "return checkValidate();"  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                              data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>

@@ -192,7 +192,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
     public function get_cashforworkDetails($cashforwork_id)
     {
-        $sql = 'SELECT a.project_title, b.region_name,c.work_nature,a.no_of_days,a.daily_payment
+        $sql = 'SELECT a.project_title, b.region_name,c.work_nature,a.no_of_days,a.daily_payment,a.number_of_bene,a.cost_of_assistance
                 FROM `tbl_cashforwork`a
                 inner join lib_region b
                 on a.region_code = b.region_code
@@ -215,7 +215,13 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
 
     }
 
-
+    public function get_countbene_muni($cashforwork_id)
+    {
+        $sql = 'select sum(no_of_bene_muni) as totalbene from tbl_cash_muni where deleted = 0 and cashforwork_id = '.$cashforwork_id.'';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+    }
     public function get_cashmuni_list($cashforwork_id)
     {
         $sql = 'SELECT a.cost_of_assistance_muni,a.no_of_bene_muni,a.cash_muni_id,a.cashforwork_id,b.city_name,a.daily_payment
@@ -230,7 +236,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     }
     public function get_project_title($cashforwork_id)
     {
-        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id from tbl_cashforwork a
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id,a.number_of_bene from tbl_cashforwork a
                 where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -703,8 +709,9 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 
     }
 
-
     public function get_regions() {
+
+
         $get_regions = "
         SELECT
           region_code,
@@ -736,7 +743,23 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         return $this->db->query($get_prov,$region_code)->result();
     }
 
-    public function get_muni($prov_code) {
+    public function get_muni($prov_code,$cashforwork_id) {
+        $city_qry = $this->db->query('SELECT city_code FROM `tbl_cash_muni` where prov_code = "'.$prov_code.'" and cashforwork_id = "'.$cashforwork_id.'" and deleted = 0;');
+        $city_codes =  $city_qry->result_array();
+        $unformat = "";
+        foreach($city_codes as $i=>$row)
+        {
+            $unformat .= "'".$row['city_code']."',";
+        }
+        $format = substr($unformat,0,-1);
+        if($city_qry->num_rows() > 0) {
+            $where  = "AND city_code not in (".$format.")";
+        }
+        else
+        {
+            $where  = "";
+        }
+
         $get_cities = "
         SELECT
             city_code,
@@ -744,7 +767,38 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         FROM
           lib_municipality
         WHERE
-          prov_code = ?
+          prov_code = ? ".$where."
+        ORDER BY
+          city_name
+        ";
+
+        return $this->db->query($get_cities,$prov_code)->result();
+    }
+    public function get_muni_edit($prov_code,$cashforwork_id,$city_code) {
+        $city_qry = $this->db->query('SELECT city_code FROM `tbl_cash_muni` where prov_code = "'.$prov_code.'" and cashforwork_id = "'.$cashforwork_id.'" and deleted = 0 and city_code != "'.$city_code.'";');
+        $city_codes =  $city_qry->result_array();
+        $unformat = "";
+        foreach($city_codes as $i=>$row)
+        {
+            $unformat .= "'".$row['city_code']."',";
+        }
+        $format = substr($unformat,0,-1);
+        if($city_qry->num_rows() > 0) {
+            $where  = "AND city_code not in (".$format.")";
+        }
+        else
+        {
+            $where  = "";
+        }
+
+        $get_cities = "
+        SELECT
+            city_code,
+            city_name
+        FROM
+          lib_municipality
+        WHERE
+          prov_code = ? ".$where."
         ORDER BY
           city_name
         ";
