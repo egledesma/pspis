@@ -11,10 +11,10 @@
     {
         document.getElementById("AddMuniForm").style.display = "block";
     }
-    function callEditform()
-    {
-        document.getElementById("EditMuniForm").style.display = "block";
-    }
+//    function callAddbrgyform()
+//    {
+//        document.getElementById("AddBrgyForm").style.display = "block";
+//    }
 </script>
     <div class="page ">
 
@@ -114,15 +114,16 @@
                             <tr>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a class="btn btn-info btn-outline" id="confirm"
+                                        <a class="btn btn-info btn-outline" id="edit_cashforworkmuni"
                                            href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>"
                                            data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
-                                        <a class="confirmation btn btn-danger btn-outline" id="confirm"
+                                        <a class="confirmation btn btn-danger btn-outline" id="delete_cashforworkmuni"
                                            href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
-                                        <a class="confirmation btn btn-success btn-outline" id="confirm"
-                                           href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
+<!--                                        <iframe width="700" height="200" src="--><?php //echo site_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'');?><!--">>    </iframe>-->
+                                        <a class="confirmation btn btn-success btn-outline" id="add_cashforworkbrgy"
+                                           href="<?php echo base_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" target ="addbrgy" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add Brgy"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                     </div>
 
@@ -138,6 +139,9 @@
                         </tbody>
                     </table>
                 </div>
+<!--                <div id = "AddBrgyForm">-->
+<!----> <iframe width="1000" height="200" name="addbrgy">    </iframe>
+<!--                </div>-->
             </div>
 
     </div>

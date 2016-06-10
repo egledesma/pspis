@@ -418,7 +418,10 @@ class cashforwork extends CI_Controller
             $this->redirectIndexviewBrgy_muni($cash_muni_id_pass);
         }
     }
-
+    function view_list()
+    {
+        $this->load->view('cashforwork_brgy_add');
+    }
     public function addCash_brgy($cashforwork_muni_id)
     {
         $cashforwork_model = new cashforwork_model();
@@ -438,8 +441,8 @@ class cashforwork extends CI_Controller
             }
 
             $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
+//            $this->load->view('navbar');
+//            $this->load->view('sidebar');
 
             $this->load->view('cashforwork_brgy_add', $getList);
             $this->load->view('footer');
