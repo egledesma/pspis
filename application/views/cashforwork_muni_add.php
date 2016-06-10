@@ -12,7 +12,6 @@ $region_code = $this->session->userdata('uregion');
     function checkValidate(){
 
         var numBene = parseInt($('#number_bene').val());
-        alert(numBene);
         if(numBene == 0){
             alert('No Beneficiaries')
             return false;

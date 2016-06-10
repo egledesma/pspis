@@ -774,6 +774,37 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 
         return $this->db->query($get_cities,$prov_code)->result();
     }
+    public function get_muni_edit($prov_code,$cashforwork_id,$city_code) {
+        $city_qry = $this->db->query('SELECT city_code FROM `tbl_cash_muni` where prov_code = "'.$prov_code.'" and cashforwork_id = "'.$cashforwork_id.'" and deleted = 0 and city_code != "'.$city_code.'";');
+        $city_codes =  $city_qry->result_array();
+        $unformat = "";
+        foreach($city_codes as $i=>$row)
+        {
+            $unformat .= "'".$row['city_code']."',";
+        }
+        $format = substr($unformat,0,-1);
+        if($city_qry->num_rows() > 0) {
+            $where  = "AND city_code not in (".$format.")";
+        }
+        else
+        {
+            $where  = "";
+        }
+
+        $get_cities = "
+        SELECT
+            city_code,
+            city_name
+        FROM
+          lib_municipality
+        WHERE
+          prov_code = ? ".$where."
+        ORDER BY
+          city_name
+        ";
+
+        return $this->db->query($get_cities,$prov_code)->result();
+    }
 
     public function get_brgy($city_code) {
         $get_brgy = "

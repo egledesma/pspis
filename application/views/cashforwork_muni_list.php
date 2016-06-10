@@ -9,8 +9,11 @@
 <script type = "text/javascript">
     function callAddform()
     {
-        document.getElementById("testing").style.display = "block";
-        document.getElementById("confirm").disabled = true;
+        document.getElementById("AddMuniForm").style.display = "block";
+    }
+    function callEditform()
+    {
+        document.getElementById("EditMuniForm").style.display = "block";
     }
 </script>
     <div class="page ">
@@ -20,7 +23,8 @@
         <h1 class="page-title">Cash for work (<?php echo $title->project_title;?>)</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li class="active">Cash for work</li>
+            <li><a href="<?php echo base_url('cashforwork/index') ?>">Cash for work</a></li>
+            <li class="active">City/Municipality</li>
         </ol>
     </div>
 
@@ -72,14 +76,20 @@
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
                         <a class= "btn btn-outline btn-primary" onclick = "callAddform();" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
-
-<!--                        href="--><?php //echo base_url('cashforwork/addCash_muni/'.$cashforworkpass_id.'') ?><!--"-->
                     </div>
                     <br>
-                        <div id = "testing" style = "display:none">
+                        <div id = "AddMuniForm" style = "display:none">
                             <?php $this->view('cashforwork_muni_add'); ?>
-                            <a class= "btn btn-outline btn-danger" onclick = "sample();" ><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>
+                            <a class= "btn btn-outline btn-danger" href="<?php echo base_url('cashforwork/viewCash_muni/'.$cashforworkpass_id.'') ?>"><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>
+
                         </div>
+<!---->
+<!--                    <div id = "EditMuniForm" style = "display:none">-->
+<!--                        --><?php //$this->view('cashforwork_muni_add'); ?>
+<!--                        <a class= "btn btn-outline btn-danger" href="--><?php //echo base_url('cashforwork/viewCash_muni/'.$cashforworkpass_id.'') ?><!--"><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>-->
+<!---->
+<!--                    </div>-->
+
                     <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                         <thead><h2> <?php echo $proj_prov->prov_name;?></h2>
                         <tr>
@@ -104,9 +114,6 @@
                             <tr>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-<!--                                        <a class="btn btn-dark btn-outline" id="confirm"-->
-<!--                                           href="--><?php //echo base_url('cashforwork/view/'.$cashmuni_listData->cash_muni_id.'') ?><!--" data-toggle="tooltip"-->
-<!--                                           data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>-->
                                         <a class="btn btn-info btn-outline" id="confirm"
                                            href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>"
                                            data-toggle="tooltip"
