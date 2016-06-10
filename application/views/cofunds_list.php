@@ -1,4 +1,14 @@
-<div class="page ">
+<?php
+$user_region = $this->session->userdata('uregion');
+$user_access = $this->session->userdata('access');
+if ($user_region != "190000000"){
+    if ($user_access != "-1") {
+    redirect('/dashboardc/dashboard', 'location');
+    }
+    redirect('/dashboardc/dashboard', 'location');
+}
+
+?><div class="page ">
 
     <div class="page-header page-header-bordered">
 
@@ -61,17 +71,17 @@
                         <tr>
                             <td><?php echo $cofundsData->co_funds_id ?></td>
                             <td><?php echo $cofundsData->fund_source ?></td>
-                            <td><?php echo '₱ '. number_format($fundsallocate,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsdownload,2); ?></td>
-                            <td><?php echo '₱ '. number_format($fundsutilize,2); ?></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds History" href="<?php echo base_url('cofunds/fundshistory/' . $cofundsData->fundsource_id . '') ?>"><?php echo '₱ '. number_format($fundsallocate,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Downloaded History"href="<?php echo base_url('cofunds/downloadedhistory/' . $cofundsData->fundsource_id . '') ?>"><?php echo '₱ '. number_format($fundsdownload,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Utilized History"href="<?php echo base_url('cofunds/utilizedhistory/' . $cofundsData->fundsource_id . '') ?>"><?php echo '₱ '. number_format($fundsutilize,2); ?></a></td>
                             <td><?php echo '₱ '. number_format($budget,2); ?></td>
                             <td><?php echo $status; ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-danger btn-outline"  href="<?php echo base_url('fundsallocation/add/') ?>" data-toggle="tooltip"
+                                    <a class="btn btn-danger btn-outline"  href="<?php echo base_url('fundsallocation/download/' . $cofundsData->fundsource_id . '') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Download funds to FO"><i class="icon wb-download" aria-hidden="true" ></i> </a>
-                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('cofunds/history/' . $cofundsData->fundsource_id . '') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-toggle="tooltip" data-original-title="View History"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+<!--                                    <a class="btn btn-dark btn-outline"  href="--><?php //echo base_url('cofunds/history/' . $cofundsData->fundsource_id . '') ?><!--" data-toggle="tooltip"-->
+<!--                                       data-placement="top" data-toggle="tooltip" data-original-title="View History"><i class="icon wb-search" aria-hidden="true" ></i> </a>-->
 <!--                                    <a class="confirmation btn btn-danger btn-outline" id="confirm"-->
 <!--                                       href="--><?php //echo base_url('cofunds/delete/') ?><!--" data-toggle="tooltip"-->
 <!--                                       data-placement="top" data-original-title="Delete"><i class="icon wb-close" aria-hidden="true"></i> </a>-->

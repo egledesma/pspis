@@ -13,6 +13,7 @@ class fundsallocation extends CI_Controller
     public function index(){
 
         $fundsallocation_model = new fundsallocation_model();
+
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
@@ -20,6 +21,48 @@ class fundsallocation extends CI_Controller
                 'fundsdetails' => $fundsallocation_model->get_funds()/*'form_message'=>$form_message*/));
             $this->load->view('footer');
 
+    }
+
+    public function download($fundsource_id){
+        $fundsallocation_model = new fundsallocation_model();
+
+        $this->validateAddForm();
+
+        if ($this->form_validation->run() == FALSE) {
+            $getList['regionlist'] = $fundsallocation_model->get_regions();
+            $getList['fundsourcelist'] = $fundsallocation_model->get_fundsource_byid($fundsource_id);
+
+            $this->load->view('header');
+            $this->load->view('navbar');
+            $this->load->view('sidebar');
+
+            $this->load->view('fundsallocation_download', $getList);
+            $this->load->view('footer');
+        }
+        else
+        {
+
+            $regionlist = $this->input->post('regionlist');
+            $fund_source = $this->input->post('fs');
+            $saa = $this->input->post('saa');
+            $funds_allocated = $this->input->post('funds_allocated');
+            $funds_allocated2 = preg_replace('/\D/', '', $funds_allocated);
+            $status = $this->input->post('status');
+            $funds_identifier = $fund_source.$regionlist;
+            $myid = $this->input->post('myid');
+            $addResult = $fundsallocation_model->insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$status,$funds_identifier);
+            if ($addResult){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+
+                $this->load->view('fundsallocation_list',array(
+                    'fundsdetails' => $fundsallocation_model->get_funds()
+                ));
+                $this->load->view('footer');
+            }
+            $this->redirectIndex();
+        }
     }
 
     public function add(){

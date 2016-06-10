@@ -18,7 +18,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="apple-touch-icon" href="<?php echo base_url('assets/images/apple-touch-icon.png'); ?>">
     <link rel="shortcut icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="<?php echo base_url('assets/ajax/jquery.min.js'); ?>"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
@@ -37,7 +38,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url('assets/fonts/web-icons/web-icons.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/fonts/font-awesome/font-awesome.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/fonts/brand-icons/brand-icons.min.css'); ?>">
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+    <link rel="stylesheet" href="<?php echo base_url('assets/fonts/roboto.css'); ?>">
+<!--    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>-->
 
 
     <!-- Plugin -->

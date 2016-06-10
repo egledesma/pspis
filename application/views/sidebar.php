@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $region_code = $this->session->userdata('uregion');
+$user_access = $this->session->userdata('access');
+
 ?><div class="site-menubar">
 	<div class="site-menubar-body">
 		<div>
@@ -23,12 +25,14 @@ $region_code = $this->session->userdata('uregion');
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
+							<?php if($region_code != "190000000") { } else {?>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('cofunds/index/1') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('cofunds/index/0') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">Consolidated Funds</span>
 								</a>
 							</li>
+							<?php }?>
 							<li class="site-menu-item">
 								<a class="animsition-link" href="<?php echo base_url('fundsallocation/index') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>

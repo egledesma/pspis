@@ -23,56 +23,51 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Year</th>
+                        <th>Fund Source</th>
                         <th>Region</th>
-                        <th>Allocated Funds</th>
-                        <th>Funds Downloaded to LGU</th>
+                        <th>Funds Allocated</th>
+                        <th>Funds Obligated</th>
                         <th>Funds Utilized</th>
+                        <th>Other Funds</th>
                         <th>Remaining Budget</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Year</th>
+                        <th>Fund Source</th>
                         <th>Region</th>
-                        <th>Allocated Funds</th>
-                        <th>Funds Downloaded to LGU</th>
+                        <th>Funds Allocated</th>
+                        <th>Funds Obligated</th>
                         <th>Funds Utilized</th>
+                        <th>Other Funds</th>
                         <th>Remaining Budget</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </tfoot>
                     <tbody>
                     <?php foreach($fundsdetails as $fundsData):
                        $fundsallocate = $fundsData->funds_allocated;
-                       $fundsdownload = $fundsData->funds_downloaded;
+                       $fundsobligated = $fundsData->funds_obligated;
                        $fundsutilize = $fundsData->funds_utilized;
+                       $otherfunds = $fundsData->other_funds;
                        $fundsbudget = $fundsData->remaining_budget;
-                        if ($fundsdownload != 0){$percent = ($fundsutilize / $fundsdownload);
-
-                            $status = number_format( $percent * 100, 2 ) . '%';
-                        } else {
-                            $status = "0.00%";
-                        }
 
 
                         ?>  <!--pagination buttons -->
-                        <?php if($fundsbudget == '0' && $fundsdownload != '0'){
+                        <?php if($fundsbudget == '0' && $fundsobligated != '0'){
                         $td = '<td class="success">'; } else {
                         $td = '<td>'; } ?>
                          <tr>
                             <?php echo $td.$fundsData->funds_id ?></td>
-                            <?php echo $td.$fundsData->for_year; ?></td>
+                            <?php echo $td.$fundsData->fund_source; ?></td>
                             <?php echo $td.$fundsData->region_name; ?></td>
                             <?php echo $td."₱ ". number_format($fundsallocate,2); ?></td>
-                            <?php echo $td."₱ ". number_format($fundsdownload,2); ?></td>
+                            <?php echo $td."₱ ". number_format($fundsobligated,2); ?></td>
                             <?php echo $td."₱ ". number_format($fundsutilize,2); ?></td>
+                            <?php echo $td."₱ ". number_format($otherfunds,2); ?></td>
                             <?php echo $td."₱ ". number_format($fundsData->remaining_budget,2); ?></td>
-                            <?php echo $td.$status; ?></td>
                             <td>
                                 <div class="btn-group">
                                     <?php if($fundsbudget == '0'){?>

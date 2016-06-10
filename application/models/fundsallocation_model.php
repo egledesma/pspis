@@ -13,9 +13,9 @@ class fundsallocation_model extends CI_Model
 
     public function get_funds()
     {
-        $sql = 'select a.*, b.region_name from tbl_funds_allocated a
-                INNER JOIN lib_region b
-                on a.region_code = b.region_code
+        $sql = 'select a.*, b.region_name, c.fund_source, c.fundsource_id from tbl_funds_allocated a
+                INNER JOIN lib_region b on a.region_code = b.region_code
+                INNER JOIN lib_fund_source c on a.fundsource_id = c.fundsource_id
                 where a.deleted ="0"
                ';
         $query = $this->db->query($sql);
@@ -83,6 +83,7 @@ class fundsallocation_model extends CI_Model
         return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
         $this->db->close();
     }
+
     public function get_fund_source()
     {
         $sql = 'select fundsource_id,fund_source
@@ -93,7 +94,21 @@ class fundsallocation_model extends CI_Model
         return $result;
         $this->db->close();
 
-    } public function get_lgu_counterpart()
+    }
+
+    public function get_fundsource_byid($fundsource_id = 0)
+    {
+        $sql = 'select fundsource_id,fund_source from lib_fund_source
+                where fundsource_id ="'.$fundsource_id.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+    }
+
+    public function get_lgu_counterpart()
+
     {
         $sql = 'select lgucounterpart_id,lgu_counterpart
                 from lib_lgu_counterpart
@@ -103,23 +118,23 @@ class fundsallocation_model extends CI_Model
         return $result;
         $this->db->close();
     }
-    public function insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
+    public function insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$funds_identifier)
     {
 
-        $this->db->trans_begin();
-        $this->db->query('insert into tbl_saro(
-                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
-                          values
-                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
-                          "'.$funds_identifier.'")');
+//        $this->db->trans_begin();
+//        $this->db->query('insert into tbl_saro(
+//                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
+//                          values
+//                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
+//                          "'.$funds_identifier.'")');
 
 
         $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
 
         if($result->num_rows() > 0) {
             $this->db->query('Update tbl_funds_allocated set
-                  funds_allocated = "'.$funds_allocated.'" + funds_allocated,
-                  remaining_budget = "'.$funds_allocated.'" + remaining_budget,
+                  funds_allocated = "'.$funds_allocated2.'" + funds_allocated,
+                  remaining_budget = "'.$funds_allocated2.'" + remaining_budget,
                   date_modified = now(),
                   modified_by = "'.$myid.'"
                   WHERE region_code = "'.$regionlist.'" ');
@@ -127,16 +142,39 @@ class fundsallocation_model extends CI_Model
         else
         {
             $this->db->query('insert into tbl_funds_allocated(
-                          for_year,region_code,funds_allocated,remaining_budget,date_created,created_by,status,funds_identifier)
+                          fundsource_id,region_code,funds_allocated,remaining_budget,date_created,created_by,funds_identifier)
                           values
-                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",
-                          now(),"'.$myid.'","'.$status.'",
-                          "'.$funds_identifier.'")');
+                          ("'.$fund_source.'","'.$regionlist.'","'.$funds_allocated2.'","'.$funds_allocated2.'",
+                          now(),"'.$myid.'","'.$funds_identifier.'")');
         }
+
         $this->db->query('Update tbl_co_funds set
-                  co_funds_downloaded = "'.$funds_allocated.'",
+                  co_funds_downloaded = co_funds_downloaded + "'.$funds_allocated2.'",
                   date_modified = now(),
-                  modified_by = "'.$myid.'" ');
+                  modified_by = "'.$myid.'"
+                  where fundsource_id = "'.$fund_source.'"');
+
+        $result1 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier ="2" ');
+
+        if($result1->num_rows() > 0) {
+            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier = "2" ORDER BY fundsource_id DESC limit 1 ');
+            $from_value1 = $from_value->row();
+            $conso_old_value = $from_value1->consolidated_new_value;
+            $conso_new_value = $from_value1->consolidated_new_value + $funds_allocated2 ;
+
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source.'","'.$conso_old_value.'","'.$funds_allocated2.'","'.$conso_new_value.'","DOWNLOAD FUNDS - SAA: '.$saa.'","'.$myid.'",now(),"2")');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,identifier)
+                          values
+                          ("'.$fund_source.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
+                          now(),"'.$myid.'","2")');
+        }
 
 
 

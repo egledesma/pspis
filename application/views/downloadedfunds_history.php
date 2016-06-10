@@ -2,7 +2,7 @@
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Consolidated Funds History</h1>
+        <h1 class="page-title">Downloaded Funds History</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
             <li><a href="<?php echo base_url('cofunds/index/0') ?>">Consolidated Funds</a></li>

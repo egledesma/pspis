@@ -29,6 +29,23 @@ class cofunds_model extends CI_Model
           tbl_consofunds_history
         WHERE
           fundsource_id ="'.$fund_source.'"
+          and identifier = "1"
+        ORDER BY
+        consolidated_id DESC
+        ';
+
+        return $this->db->query($get_consohistory)->result();
+    }
+
+    public function get_consodownloaded_history($fund_source) {
+        $get_consohistory = '
+        SELECT
+          *
+        FROM
+          tbl_consofunds_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+          and identifier = "2"
         ORDER BY
         consolidated_id DESC
         ';
@@ -44,16 +61,16 @@ class cofunds_model extends CI_Model
         $result = $this->db->query('SELECT * FROM tbl_co_funds WHERE fundsource_id ="'.$fundsourcelist.'" ');
 
         if($result->num_rows() > 0) {
-            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fundsourcelist.'" ORDER BY fundsource_id limit 1 ');
+            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fundsourcelist.'" ORDER BY fundsource_id DESC limit 1 ');
             $from_value1 = $from_value->row();
             $conso_old_value = $from_value1->consolidated_new_value;
             $conso_new_value = $from_value1->consolidated_new_value + $funds_amount2 ;
 
 
             $this->db->query('insert into tbl_consofunds_history(
-                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created)
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fundsourcelist.'","'.$conso_old_value.'","'.$funds_amount2.'","'.$conso_new_value.'","UPDATE FUNDS","'.$myid.'",now())');
+                          ("'.$fundsourcelist.'","'.$conso_old_value.'","'.$funds_amount2.'","'.$conso_new_value.'","UPDATE FUNDS","'.$myid.'",now(),"1")');
 
             $this->db->query('Update tbl_co_funds set
                   co_funds = co_funds + "'.$funds_amount2.'",
@@ -71,9 +88,9 @@ class cofunds_model extends CI_Model
                           "'.$funds_identifier.'")');
 
             $this->db->query('insert into tbl_consofunds_history(
-                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created)
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fundsourcelist.'","0","'.$funds_amount2.'","'.$funds_amount2.'","ADD NEW FUNDS","'.$myid.'",now())');
+                          ("'.$fundsourcelist.'","0","'.$funds_amount2.'","'.$funds_amount2.'","ADD NEW FUNDS","'.$myid.'",now(),"1")');
         }
 
 

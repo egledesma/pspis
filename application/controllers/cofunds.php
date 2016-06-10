@@ -79,7 +79,7 @@ class cofunds extends CI_Controller
         }
     }
 
-    public function history($fund_source){
+    public function fundshistory($fund_source){
 
         $cofunds_model = new cofunds_model();
         $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
@@ -88,6 +88,19 @@ class cofunds extends CI_Controller
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $this->load->view('cofunds_history', $getList);
+        $this->load->view('footer');
+
+    }
+
+    public function downloadedhistory($fund_source){
+
+        $cofunds_model = new cofunds_model();
+        $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
+        $getList['fundsdetails'] = $cofunds_model->get_consodownloaded_history($fund_source);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('downloadedfunds_history', $getList);
         $this->load->view('footer');
 
     }
