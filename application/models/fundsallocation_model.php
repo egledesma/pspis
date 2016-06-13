@@ -88,7 +88,8 @@ class fundsallocation_model extends CI_Model
     {
         $sql = 'select fundsource_id,fund_source
                 from lib_fund_source
-                where deleted = 0';
+                where deleted = 0
+                and status = 0';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
@@ -120,13 +121,12 @@ class fundsallocation_model extends CI_Model
     }
     public function insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$funds_identifier)
     {
-
-//        $this->db->trans_begin();
-//        $this->db->query('insert into tbl_saro(
-//                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
-//                          values
-//                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
-//                          "'.$funds_identifier.'")');
+        $this->db->trans_begin();
+        $this->db->query('insert into tbl_saa(
+                          fundsource_id,saa_number,region_code,saa_funds,saa_balance,date_created,created_by,status,funds_identifier)
+                          values
+                          ("'.$fund_source.'","'.$saa.'","'.$regionlist.'","'.$funds_allocated2.'","'.$funds_allocated2.'",now(),"'.$myid.'","'.$status.'",
+                          "'.$funds_identifier.'")');
 
 
         $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
@@ -166,6 +166,8 @@ class fundsallocation_model extends CI_Model
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
                           values
                           ("'.$fund_source.'","'.$conso_old_value.'","'.$funds_allocated2.'","'.$conso_new_value.'","DOWNLOAD FUNDS - SAA: '.$saa.'","'.$myid.'",now(),"2")');
+
+
         }
         else
         {
@@ -173,6 +175,35 @@ class fundsallocation_model extends CI_Model
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,identifier)
                           values
                           ("'.$fund_source.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
+                          now(),"'.$myid.'","2")');
+
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_consolidated_new_value,description,date_created,created_by,identifier)
+                          values
+                          ("'.$fund_source.'","'.$regionlist.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
+                          now(),"'.$myid.'","2")');
+        }
+
+        $result2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$regionlist.'" and identifier ="2" ');
+
+        if($result2->num_rows() > 0) {
+            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$regionlist.'" and identifier = "2" ORDER BY fundsource_id DESC limit 1 ');
+            $from_value3 = $from_value2->row();
+            $allocate_old_value = $from_value3->allocated_new_value;
+            $allocate_new_value = $from_value3->allocated_new_value + $funds_allocated2 ;
+
+            $this->db->query('insert into tbl_fallocation_history(
+                fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,identifier)
+                          values
+                          ("'.$fund_source.'","'.$regionlist.'","'.$allocate_old_value.'","'.$funds_allocated2.'","'.$allocate_new_value.'","DOWNLOAD FUNDS - SAA: '.$saa.'","'.$myid.'",now(),"2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,identifier)
+                          values
+                          ("'.$fund_source.'","'.$regionlist.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
                           now(),"'.$myid.'","2")');
         }
 
@@ -192,6 +223,19 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
 
     }
+
+    public function view_fundsallocationbyid($fund_source,$region_code)
+    {
+        $sql = 'select fund_source from lib_fund_source
+                where fundsource_id ="'.$fund_source.'" and region_code = "'.$region_code.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+    }
+
+
     public function updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
         ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
 

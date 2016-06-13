@@ -55,31 +55,22 @@
                        $fundsbudget = $fundsData->remaining_budget;
 
 
-                        ?>  <!--pagination buttons -->
-                        <?php if($fundsbudget == '0' && $fundsobligated != '0'){
-                        $td = '<td class="success">'; } else {
-                        $td = '<td>'; } ?>
-                         <tr>
-                            <?php echo $td.$fundsData->funds_id ?></td>
-                            <?php echo $td.$fundsData->fund_source; ?></td>
-                            <?php echo $td.$fundsData->region_name; ?></td>
-                            <?php echo $td."₱ ". number_format($fundsallocate,2); ?></td>
-                            <?php echo $td."₱ ". number_format($fundsobligated,2); ?></td>
-                            <?php echo $td."₱ ". number_format($fundsutilize,2); ?></td>
-                            <?php echo $td."₱ ". number_format($otherfunds,2); ?></td>
-                            <?php echo $td."₱ ". number_format($fundsData->remaining_budget,2); ?></td>
+                        ?>
+                        <tr>
+                            <td><?php echo $fundsData->funds_id ?></td>
+                            <td><?php echo $fundsData->fund_source ?></td>
+                        <td><?php echo $fundsData->region_name; ?></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds History" href="<?php echo base_url('fundsallocation/fundshistory/' . $fundsData->funds_id . '/' . $fundsData->region_code . '') ?>"><?php echo '₱ '. number_format($fundsallocate,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Downloaded History"href="<?php echo base_url('fundsallocation/downloadedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($fundsobligated,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Utilized History"href="<?php echo base_url('fundsallocation/utilizedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($fundsutilize,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Other Funds History"href="<?php echo base_url('fundsallocation/utilizedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($otherfunds,2); ?></a></td>
+                            <td><?php echo '₱ '. number_format($fundsbudget,2); ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <?php if($fundsbudget == '0'){?>
-                                        <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
-                                    <?php }else { ?>
-                                        <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saro/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="View SARO"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+                                        <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saa/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                           data-placement="top" data-original-title="View SAA List"><i class="icon wb-search" aria-hidden="true" ></i> </a>
                                         <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
-
-                                    <?php } ?>
 
                                     <!--  <a class="btn btn-primary btn-outline"  href="<?php// echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>

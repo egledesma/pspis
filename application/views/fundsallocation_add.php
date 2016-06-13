@@ -36,20 +36,24 @@
 
                 echo form_open("fundsallocation/add", $attributes);?>
 
-
                 <div class="form-group row">
-                    <div id="for_year" class="col-sm-2">
-                        <label for="for_year" class="control-label">For Year:</label>
-                        <input id="year" name="year" placeholder="For Year" type="text" value="<?php echo date('Y');?>" disabled class="form-control"/>
-                        <input id="year" name="year"  type="hidden" value="<?php echo date('Y');?>"  class="form-control"/>
+                    <div class="col-sm-4">
+                        <label for="fundsourcelist" class="control-label">Fund Source:</label>
+                        <select name="fundsourcelist" id="fundsourcelist" class="form-control" requried autofocus>
+                            <option value="">Choose Fund Source</option>
+                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
+                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
+                                    <?php echo $fundsourceselect->fund_source; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
                 </div>
 
                 <div class="form-group row">
-                    <div id="saro" class="col-sm-4">
-                        <label for="saro" class="control-label">SARO Number:</label>
-                        <input id="saro" name="saro" placeholder="SARO ############" type="text"  value="<?php echo set_value('saro'); ?>"  class="form-control" required autofocus/>
+                    <div id="saa" class="col-sm-4">
+                        <label for="saa" class="control-label">SAA Number:</label>
+                        <input id="saa" name="saa" placeholder="SAA ############" type="text"  value="<?php echo set_value('saa'); ?>"  class="form-control" required autofocus/>
                     </div>
                 </div>
 
@@ -73,13 +77,13 @@
                     </div>
                 </div>
 
-
                 <div class="form-group row">
-                        <div id="funds_allocated" class="col-sm-4">
-                            <label for="funds_allocated" class="control-label">Funds Allocated:</label>
-                            <input id="funds_allocated" name="funds_allocated" placeholder="Funds Allocated" data-plugin="formatter"
-                                   data-pattern="₱[[999]],[[999]],[[999]].[[99]]" type="number" min="0" value="<?php echo set_value('funds_allocated'); ?>"  class="form-control" required/>
-                        </div>
+                    <div id="funds_allocated" class="col-sm-4">
+                        <label for="funds_allocated" class="control-label">Funds Amount:</label>
+                        <input type="text" class="form-control" name="funds_allocated" id="inputCurrency" data-plugin="formatter"
+                               data-pattern="₱ [[9]],[[999]],[[999]],[[999]]" />
+                        <p class="help-block">₱ 9,999,999,999</p>
+                    </div>
                 </div>
 
 
