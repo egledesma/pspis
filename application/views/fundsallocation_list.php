@@ -60,16 +60,16 @@
                             <td><?php echo $fundsData->funds_id ?></td>
                             <td><?php echo $fundsData->fund_source ?></td>
                         <td><?php echo $fundsData->region_name; ?></td>
-                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds History" href="<?php echo base_url('fundsallocation/fundshistory/' . $fundsData->funds_id . '/' . $fundsData->region_code . '') ?>"><?php echo '₱ '. number_format($fundsallocate,2); ?></a></td>
-                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Downloaded History"href="<?php echo base_url('fundsallocation/downloadedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($fundsobligated,2); ?></a></td>
-                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Utilized History"href="<?php echo base_url('fundsallocation/utilizedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($fundsutilize,2); ?></a></td>
-                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Other Funds History"href="<?php echo base_url('fundsallocation/utilizedhistory/' . $fundsData->funds_id . '') ?>"><?php echo '₱ '. number_format($otherfunds,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds History" href="<?php echo base_url('fundsallocation/fundshistory/' . $fundsData->fundsource_id . '/' . $fundsData->region_code . '') ?>"><?php echo '₱ '. number_format($fundsallocate,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Obligated History"href="<?php echo base_url('fundsallocation/downloadedhistory/' . $fundsData->fundsource_id . '') ?>"><?php echo '₱ '. number_format($fundsobligated,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Funds Utilized History"href="<?php echo base_url('fundsallocation/utilizedhistory/' . $fundsData->fundsource_id . '') ?>"><?php echo '₱ '. number_format($fundsutilize,2); ?></a></td>
+                            <td><a data-toggle="tooltip" data-placement="top" data-original-title="View Other Funds History" href="<?php echo base_url('fundsallocation/otherfundshistory/' . $fundsData->fundsource_id . '/' . $fundsData->region_code . '') ?>"><?php echo '₱ '. number_format($otherfunds,2); ?></a></td>
                             <td><?php echo '₱ '. number_format($fundsbudget,2); ?></td>
                             <td>
                                 <div class="btn-group">
                                         <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saa/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="View SAA List"><i class="icon wb-search" aria-hidden="true" ></i> </a>
-                                        <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                        <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/' . $fundsData->fundsource_id . '/' . $fundsData->region_code . '') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
 
                                     <!--  <a class="btn btn-primary btn-outline"  href="<?php// echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"

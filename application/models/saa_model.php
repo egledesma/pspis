@@ -19,17 +19,19 @@ class saa_model extends CI_Model
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
     }
 
-    public function get_saro_region1($region_code)
+    public function get_saa_byregion($fund_source, $region_code)
     {
-        $sql = 'select * from tbl_saro
-                where region_code ="'.$region_code.'"
+        $sql = 'select * from tbl_saa
+                where region_code ="'.$region_code.'" and fundsource_id ="'.$fund_source.'"
                 and status = 0
                ';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
+        $this->db->close();
     }
 
     public function get_saro_history($saro_id) {
@@ -43,6 +45,7 @@ class saa_model extends CI_Model
         ';
 
         return $this->db->query($get_sarohistory)->result();
+        $this->db->close();
     }
 
     public function get_from_region($region_code) {
@@ -57,6 +60,7 @@ class saa_model extends CI_Model
         ';
 
         return $this->db->query($get_regions1)->result();
+        $this->db->close();
     }
 
     public function get_to_region($region_code) {
@@ -71,6 +75,7 @@ class saa_model extends CI_Model
         ';
 
         return $this->db->query($get_regions1)->result();
+        $this->db->close();
     }
 
 

@@ -57,8 +57,8 @@
                             <td><?php echo '₱ '. number_format($saaData->saa_balance,2); ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saa/history/'.$saaData->saa_id.'') ?>" data-toggle="tooltip"
-                                       data-placement="top" data-original-title="View History"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+<!--                                    <a class="btn btn-dark btn-outline"  href="--><?php //echo base_url('saa/history/'.$saaData->saa_id.'') ?><!--" data-toggle="tooltip"-->
+<!--                                       data-placement="top" data-original-title="View History"><i class="icon wb-search" aria-hidden="true" ></i> </a>-->
                                     <a class="btn btn-info btn-outline"  href="<?php echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>
                                  <!--   <a class="confirmation btn btn-danger btn-outline" id="confirm"

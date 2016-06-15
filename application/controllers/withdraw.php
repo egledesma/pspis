@@ -10,9 +10,9 @@
 class withdraw extends CI_Controller
 {
 
-    public function index($region_code){
+    public function index($funds_id, $region_code){
 
-        $saro_model = new saro_model();
+        $saa_model = new saa_model();
         $withdraw_model = new withdraw_model();
 
         $this->validateAddForm();
@@ -20,9 +20,10 @@ class withdraw extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
 
 
-            $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
+            $getList['saalist'] = $saa_model->get_saa_byregion($funds_id, $region_code);
             $getList['from_region'] = $withdraw_model->get_from_region($region_code);
-            $getList['to_region'] = $saro_model->get_to_region($region_code);
+            $getList['funds'] = $withdraw_model->get_fundsource_byid($funds_id);
+            $getList['to_region'] = $saa_model->get_to_region($region_code);
             $getList['region_list'] = $withdraw_model->get_regions();
             $this->load->view('header');
             $this->load->view('navbar');
@@ -34,19 +35,22 @@ class withdraw extends CI_Controller
         {
             $withdraw_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('withdraw_date'))));
             $year = $this->input->post('year');
-            $sarolist = $this->input->post('saro_number');
-            $new_saro = $this->input->post('new_saro');
+            $saalist = $this->input->post('saa_number');
+            $fund_source = $this->input->post('fund_source');
+            $new_saa = $this->input->post('new_saa');
             $from_region = $this->input->post('from_region');
             $to_region = $this->input->post('to_region');
             $remarks = $this->input->post('remarks');
-            $saro_id = $this->input->post('saro_id');
+            $saa_id = $this->input->post('saa_id');
             $funds_identifier = $year.$to_region;
-            $saro_amount = $this->input->post('saro_amount');
-            $addResult = $withdraw_model->withdrawFunds($saro_id,$withdraw_date,$sarolist,$new_saro,$from_region,$to_region,$saro_amount,$remarks,$funds_identifier,$year);
+            $saa_amount = $this->input->post('saa_amount');
+            $addResult = $withdraw_model->withdrawFunds($fund_source,$saa_id,$withdraw_date,$saalist,$new_saa,$from_region,$to_region,$saa_amount,$remarks,$funds_identifier,$year);
             if ($addResult){
-                $getList['sarolist'] = $saro_model->get_saro_region1($region_code);
-                $getList['from_region'] = $saro_model->get_from_region($region_code);
-                $getList['to_region'] = $saro_model->get_to_region($region_code);
+                $getList['saalist'] = $saa_model->get_saa_byregion($region_code);
+                $getList['from_region'] = $withdraw_model->get_from_region($region_code);
+                $getList['funds'] = $withdraw_model->get_fundsource_byid($funds_id);
+                $getList['to_region'] = $saa_model->get_to_region($region_code);
+                $getList['region_list'] = $withdraw_model->get_regions();
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
@@ -65,8 +69,8 @@ class withdraw extends CI_Controller
         $config = array(
 
             array(
-                'field'   => 'sarolist',
-                'label'   => 'sarolist',
+                'field'   => 'saalist',
+                'label'   => 'saalist',
                 'rules'   => 'required'
             ),
         );
@@ -82,26 +86,26 @@ class withdraw extends CI_Controller
     }
 
 
-    public function populate_saro_amount()
+    public function populate_saa_amount()
     {
 
-        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+        if($_POST['saa_id'] > 0 and isset($_POST) and isset($_POST['saa_id']))
         {
-            $saro_id = $_POST['saro_id'];
-            $sarodata = $this->withdraw_model->get_saro_amount($saro_id);
+            $saa_id = $_POST['saa_id'];
+            $saadata = $this->withdraw_model->get_saa_amount($saa_id);
             $label = array(
-            'for'          => 'saro_amount',
+            'for'          => 'saa_amount',
             'class'        => 'control-label'
                 );
-            echo form_label('Saro Amount', '', $label);
+            echo form_label('Saa Amount:', '', $label);
 
             $data1 = array(
                 'type'        => 'number',
-                'id'          => 'saro_amount',
-                'name'       =>  'saro_amount',
-                'max'   => $sarodata->saro_funds,
+                'id'          => 'saa_amount',
+                'name'       =>  'saa_amount',
+                'max'   => $saadata->saa_balance,
                 'min'   => '0',
-                'value'   =>  $sarodata->saro_funds,
+                'value'   =>  $saadata->saa_balance,
                 'class'        => 'form-control'
             );
 
@@ -109,22 +113,22 @@ class withdraw extends CI_Controller
 
             $data2 = array(
                 'type'        => 'hidden',
-                'id'          => 'saro_id',
-                'name'       =>  'saro_id',
-                'max'   => $sarodata->saro_id,
+                'id'          => 'saa_id',
+                'name'       =>  'saa_id',
+                'max'   => $saadata->saa_id,
                 'min'   => '0',
-                'value'   =>  $sarodata->saro_id,
+                'value'   =>  $saadata->saa_id,
                 'class'        => 'form-control'
             );
 
             echo form_input($data2);
             $data3 = array(
                 'type'        => 'hidden',
-                'id'          => 'saro_number',
-                'name'       =>  'saro_number',
-                'max'   => $sarodata->saro_number,
+                'id'          => 'saa_number',
+                'name'       =>  'saa_number',
+                'max'   => $saadata->saa_number,
                 'min'   => '0',
-                'value'   =>  $sarodata->saro_number,
+                'value'   =>  $saadata->saa_number,
                 'class'        => 'form-control'
             );
 

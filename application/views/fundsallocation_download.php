@@ -41,7 +41,7 @@
                     <div id="fund_source1" class="col-sm-2">
                         <label for="fund_source1" class="control-label">Fund Source:</label>
                         <input id="fund_source1" name="fund_source1" placeholder="Fund Source" type="text" value="<?php echo $fundsourcelist->fund_source ?>" disabled class="form-control"/>
-                        <input id="fs" name="fs"  type="text" value="<?php echo $fundsourcelist->fundsource_id ?>"  class="form-control"/>
+                        <input id="fs" name="fs"  type="hidden" value="<?php echo $fundsourcelist->fundsource_id ?>"  class="form-control"/>
                     </div>
 
                 </div>

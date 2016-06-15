@@ -129,7 +129,7 @@ class fundsallocation_model extends CI_Model
                           "'.$funds_identifier.'")');
 
 
-        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
+        $result = $this->db->query('SELECT * FROM tbl_funds_allocated1 WHERE region_code ="'.$regionlist.'" and fundsource_id ="'.$fund_source.'"');
 
         if($result->num_rows() > 0) {
             $this->db->query('Update tbl_funds_allocated set
@@ -176,12 +176,12 @@ class fundsallocation_model extends CI_Model
                           values
                           ("'.$fund_source.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
                           now(),"'.$myid.'","2")');
-
-            $this->db->query('insert into tbl_fallocation_history(
-                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_consolidated_new_value,description,date_created,created_by,identifier)
-                          values
-                          ("'.$fund_source.'","'.$regionlist.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
-                          now(),"'.$myid.'","2")');
+//
+//            $this->db->query('insert into tbl_fallocation_history(
+//                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_consolidated_new_value,description,date_created,created_by,identifier)
+//                          values
+//                          ("'.$fund_source.'","'.$regionlist.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
+//                          now(),"'.$myid.'","2")');
         }
 
         $result2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$regionlist.'" and identifier ="2" ');
@@ -193,7 +193,7 @@ class fundsallocation_model extends CI_Model
             $allocate_new_value = $from_value3->allocated_new_value + $funds_allocated2 ;
 
             $this->db->query('insert into tbl_fallocation_history(
-                fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,identifier)
+                fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
                           ("'.$fund_source.'","'.$regionlist.'","'.$allocate_old_value.'","'.$funds_allocated2.'","'.$allocate_new_value.'","DOWNLOAD FUNDS - SAA: '.$saa.'","'.$myid.'",now(),"2")');
 
@@ -201,10 +201,10 @@ class fundsallocation_model extends CI_Model
         else
         {
             $this->db->query('insert into tbl_fallocation_history(
-                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,identifier)
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
                           ("'.$fund_source.'","'.$regionlist.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
-                          now(),"'.$myid.'","2")');
+                          "'.$myid.'",now(),"2")');
         }
 
 
@@ -224,10 +224,56 @@ class fundsallocation_model extends CI_Model
 
     }
 
-    public function view_fundsallocationbyid($fund_source,$region_code)
+    public function get_fundsallocation_history($fund_source,$region_code) {
+        $get_fundsallocationhistory = '
+        SELECT
+          *
+        FROM
+          tbl_fallocation_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+          and region_code = "'.$region_code.'"
+          and identifier = "2"
+        ORDER BY
+        allocation_history_id DESC
+        ';
+
+        return $this->db->query($get_fundsallocationhistory)->result();
+    }
+
+    public function get_otherfunds_history($fund_source,$region_code) {
+        $get_otherfundshistory = '
+        SELECT
+          a.*, b.region_name as from_office, c.region_name as to_office
+        FROM
+          tbl_withdraw a
+          inner join lib_region b on a.from_office = b.region_code
+          inner join lib_region c on a.to_office = c.region_code
+        WHERE
+          a.fundsource_id ="'.$fund_source.'"
+          and a.from_office = "'.$region_code.'"
+        ORDER BY
+        withdraw_id DESC
+        ';
+
+        return $this->db->query($get_otherfundshistory)->result();
+    }
+
+    public function view_fundsallocationbyid($fund_source)
     {
         $sql = 'select fund_source from lib_fund_source
-                where fundsource_id ="'.$fund_source.'" and region_code = "'.$region_code.'"
+                where fundsource_id ="'.$fund_source.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+    }
+
+    public function view_regionbyid($region_code)
+    {
+        $sql = 'select region_name from lib_region
+                where region_code ="'.$region_code.'"
                ';
         $query = $this->db->query($sql);
         $result = $query->row();
