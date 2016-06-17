@@ -9,13 +9,70 @@
 <script type = "text/javascript">
     function callAddform()
     {
+        document.getElementById("divFrame").style.display = "none";
         document.getElementById("AddMuniForm").style.display = "block";
+        document.getElementById("cancelButton").style.display = "block";
+//        document.getElementById("AddBrgyForm").style.display = "none";
     }
-//    function callAddbrgyform()
-//    {
+    function callmuniEditForm()
+    {
+        document.getElementById("divFrame").style.display = "block";
+    }
+    function callviewBrgy()
+    {
+        document.getElementById("divFrame").style.display = "block";
+        document.getElementById("AddMuniForm").style.display = "none";
+        document.getElementById("cancelButton").style.display = "none";
+//        document.getElementById("addCityMuni").style.display = "none";
+//        document.getElementById("AddBrgyForm").style.display = "none";
+//        document.getElementById("viewCashbrgyForm").style.display = "block";
+//        document.getElementById("actionButton").style.display = "none";
+    }
+    function callAddBrgyForm()
+    {
+        document.getElementById("divFrame").style.display = "block";
+        document.getElementById("AddMuniForm").style.display = "none";
+        document.getElementById("cancelButton").style.display = "none";
+//        document.getElementById("addCityMuni").style.display = "none";
+//        document.getElementById("AddMuniForm").style.display = "none";
+//        document.getElementById("cancelButton").style.display = "none";
 //        document.getElementById("AddBrgyForm").style.display = "block";
-//    }
+//        document.getElementById("viewCashbrgyForm").style.display = "none";
+    }
+    function callCancel()
+    {
+        document.getElementById("AddMuniForm").style.display = "none";
+        document.getElementById("cancelButton").style.display = "none";
+//        document.getElementById("addCityMuni").style.display = "none";
+//        document.getElementById("AddMuniForm").style.display = "none";
+//        document.getElementById("cancelButton").style.display = "none";
+//        document.getElementById("AddBrgyForm").style.display = "block";
+//        document.getElementById("viewCashbrgyForm").style.display = "none";
+    }
+    function closeIframe() {
+//        document.getElementById('AddBrgyForm').style.display = 'none';
+        document.getElementById("divFrame").style.display = "none";
+    }
 </script>
+<style>
+    .fluidMedia {
+        position: relative;
+        padding-bottom: 22%; /* proportion value to aspect ratio 16:9 (9 / 16 = 0.5625 or 56.25%) */
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+
+    }
+
+    .fluidMedia iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow-y: hidden;
+    }
+</style>
     <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -37,7 +94,7 @@
 
                 </div>
                 <div class="panel-body">
-                    <table  class="table">
+                    <table  class="table  table-striped width-full">
                         <tr>
                             <td>
                                 <div>
@@ -74,23 +131,33 @@
                 </div>
                     <?php endforeach ?>
                 <div class="panel-body">
-                    <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary" onclick = "callAddform();" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
+
+                    <div id = "divFrame"  style = "display:none" class="fluidMedia" >
+                        <iframe name="idisplayForm" frameborder="0"></iframe>
                     </div>
-                    <br>
-                        <div id = "AddMuniForm" style = "display:none">
-                            <?php $this->view('cashforwork_muni_add'); ?>
-                            <a class= "btn btn-outline btn-danger" href="<?php echo base_url('cashforwork/viewCash_muni/'.$cashforworkpass_id.'') ?>"><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>
+                    <div class = "form-group row">
+                        <table class="table">
+                        <tr>
+                            <td>
+                            <div id="addCityMuni"  style = "display:block" >
+                                <a class= "btn btn-outline btn-primary" onclick = "callAddform();" ><i class="icon wb-plus" aria-hidden="true"></i> Add City/Municipality</a>
+                            </div>
+                            </td>
+                            <td>
+                            <div id = "cancelButton" style = "display:none">
+                                <a class= "btn btn-outline btn-danger" onclick = "callCancel();"><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>
+                            </div>
+                            </td>
+                        </tr>
+                    </table>
 
-                        </div>
-<!---->
-<!--                    <div id = "EditMuniForm" style = "display:none">-->
-<!--                        --><?php //$this->view('cashforwork_muni_add'); ?>
-<!--                        <a class= "btn btn-outline btn-danger" href="--><?php //echo base_url('cashforwork/viewCash_muni/'.$cashforworkpass_id.'') ?><!--"><i class="icon wb-close" aria-hidden="true"></i> Cancel</a>-->
-<!---->
-<!--                    </div>-->
+                    </div>
+                    <div id = "AddMuniForm" style = "display:none">
+                        <?php $this->view('cashforwork_muni_add'); ?>
+                    </div>
 
-                    <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
+
+                    <table class="table table-hover table-bordered dataTable table-striped width-full" id="CityMuniTable">
                         <thead><h2> <?php echo $proj_prov->prov_name;?></h2>
                         <tr>
                             <th>Action</th>
@@ -113,22 +180,22 @@
                         <?php foreach($cashmuni_list as $cashmuni_listData): ?>
                             <tr>
                                 <td>
-                                    <div class="btn-group btn-group-sm" role="group">
+                                    <div class="btn-group btn-group-sm" role="group" id = "actionButton" style = "display:block">
                                         <a class="btn btn-info btn-outline" id="edit_cashforworkmuni"
-                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>"
+                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callmuniEditForm();"; target ="idisplayForm"
                                            data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-danger btn-outline" id="delete_cashforworkmuni"
                                            href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
-<!--                                        <iframe width="700" height="200" src="--><?php //echo site_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'');?><!--">>    </iframe>-->
                                         <a class="confirmation btn btn-success btn-outline" id="add_cashforworkbrgy"
-                                           href="<?php echo base_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" target ="addbrgy" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callAddBrgyForm();"; target ="idisplayForm" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add Brgy"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                     </div>
 
                                 </td>
-                                <td><?php echo $cashmuni_listData->city_name; ?></td>
+                                <td><a id="viewCashbrgy" href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callviewBrgy();"; target ="idisplayForm"><?php echo $cashmuni_listData->city_name; ?>
+                                </td>
                                 <td><?php echo  $cashmuni_listData->no_of_bene_muni; ?></td>
                                 <td><?php echo '₱ '. number_format($cashmuni_listData->cost_of_assistance_muni,2); ?></td>
 
@@ -138,10 +205,14 @@
                         <?php endforeach ?>
                         </tbody>
                     </table>
-                </div>
-<!--                <div id = "AddBrgyForm">-->
-<!----> <iframe width="1000" height="200" name="addbrgy">    </iframe>
-<!--                </div>-->
+
+
+
+
             </div>
 
+
+         </div>
+    </div>
+    </div>
     </div>

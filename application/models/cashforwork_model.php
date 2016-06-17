@@ -152,7 +152,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost
+        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
                 FROM `tbl_cashforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
@@ -207,7 +207,7 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     }
     public function get_bene_list($cashforwork_id)
     {
-        $sql = 'select a.cashforwork_brgy_id,a.bene_id,a.bene_fullname,a.cashforwork_id from tbl_cash_bene_list a
+        $sql = 'select a.cashforwork_brgy_id,a.bene_id,concat(a.first_name,\' \',a.middle_name,\' \',a.last_name,\' \',a.ext_name) as bene_fullname,a.cashforwork_id,a.cashforwork_muni_id from tbl_cash_bene_list a
         where a.deleted = 0 and a.cashforwork_brgy_id = "'.$cashforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
@@ -218,6 +218,13 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
     public function get_countbene_muni($cashforwork_id)
     {
         $sql = 'select sum(no_of_bene_muni) as totalbene from tbl_cash_muni where deleted = 0 and cashforwork_id = '.$cashforwork_id.'';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+    }
+    public function get_countbene_brgy($cashforwork_muni_id)
+    {
+        $sql = 'select sum(no_of_bene_brgy) as totalbene from tbl_cash_brgy where deleted = 0 and cashforwork_muni_id = '.$cashforwork_muni_id.'';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -274,7 +281,13 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
-
+    }
+    public function get_countbene_benelist($cashforwork_muni_id)
+    {
+        $sql = 'SELECT count(bene_id) as countBene FROM `tbl_cash_bene_list` where deleted = 0 and cashforwork_muni_id = "'.$cashforwork_muni_id.'";';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
     }
     public function get_project_prov_muni($cashforwork_muni_id)
     {
@@ -307,7 +320,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
     }
     public function get_project_muni_brgy($cashforwork_brgy_id)
     {
-        $sql = 'select c.city_name,b.daily_payment,b.no_of_days,a.cash_brgy_id,a.city_code,a.cashforwork_muni_id,a.brgy_code,a.no_of_bene_brgy
+        $sql = 'select c.city_name,b.daily_payment,b.no_of_days,a.cash_brgy_id,a.city_code,a.cashforwork_muni_id,a.brgy_code,a.no_of_bene_brgy,a.cashforwork_id
                 from tbl_cash_brgy a
                 inner join tbl_cashforwork b
                 on a.cashforwork_id = b.cashforwork_id
@@ -338,9 +351,9 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         }
         $this->db->close();
     }
-    public function get_upload_filename($cashforwork_brgy)
+    public function get_upload_filename($cashforwork_id)
     {
-        $sql = 'select file_location from tbl_cash_brgy where cash_brgy_id = "'.$cashforwork_brgy.'" and deleted = 0' ;// for verification
+        $sql = 'select file_location from tbl_cashforwork where cashforwork_id = "'.$cashforwork_id.'" and deleted = 0' ;// for verification
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -456,13 +469,13 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         $this->db->close();
 
     }
-    public function insertBene($cashforwork_muni_idpass,$cashforwork_idpass,$bene_fullname,$myid,$cashforwork_brgyidpass)
+    public function insertBene($cashforwork_muni_idpass,$cashforwork_idpass,$bene_firstname,$bene_middlename,$bene_lastname,$bene_extname,$myid,$cashforwork_brgyidpass)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_cash_bene_list(bene_fullname,cashforwork_id,cashforwork_brgy_id,cashforwork_muni_id,date_created,created_by,deleted)
+        $this->db->query('insert into tbl_cash_bene_list(first_name,middle_name,last_name,ext_name,cashforwork_id,cashforwork_brgy_id,cashforwork_muni_id,date_created,created_by,deleted)
                           values
-                          ("'.$bene_fullname.'","'.$cashforwork_idpass.'","'.$cashforwork_brgyidpass.'","'.$cashforwork_muni_idpass.'",now(),"'.$myid.'","0")');
+                          ("'.$bene_firstname.'","'.$bene_middlename.'","'.$bene_lastname.'","'.$bene_extname.'","'.$cashforwork_idpass.'","'.$cashforwork_brgyidpass.'","'.$cashforwork_muni_idpass.'",now(),"'.$myid.'","0")');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -664,17 +677,17 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 
         $this->db->close();
     }
-    public function uploadBenefile($myid,$file_name,$cashforwork_brgy_id){
+    public function uploadBenefile($myid,$file_name,$cashforwork_id){
 
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_cash_brgy
+        $this->db->query('UPDATE tbl_cashforwork
                         SET
                         file_location = "'.$file_name.'",
                         modified_by = "'.$myid.'",
                         date_modified = now()
                         WHERE
-                        cash_brgy_id = "'.$cashforwork_brgy_id.'"');
+                        cashforwork_id = "'.$cashforwork_id.'"');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -806,7 +819,22 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         return $this->db->query($get_cities,$prov_code)->result();
     }
 
-    public function get_brgy($city_code) {
+    public function get_brgy($city_code,$cashforwork_id) {
+        $brgy_qry = $this->db->query('SELECT brgy_code FROM `tbl_cash_brgy` where city_code = "'.$city_code.'" and cashforwork_id = "'.$cashforwork_id.'" and deleted = 0; ');
+        $brgy_codes =  $brgy_qry->result_array();
+        $unformat = "";
+        foreach($brgy_codes as $i=>$row)
+        {
+            $unformat .= "'".$row['brgy_code']."',";
+        }
+        $format = substr($unformat,0,-1);
+        if($brgy_qry->num_rows() > 0) {
+            $where  = "AND brgy_code not in (".$format.")";
+        }
+        else
+        {
+            $where  = "";
+        }
         $get_brgy = "
         SELECT
             brgy_code,
@@ -814,7 +842,38 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         FROM
           lib_brgy
         WHERE
-          city_code = ?
+          city_code = ? ".$where."
+        ORDER BY
+          brgy_name
+        ";
+
+        return $this->db->query($get_brgy,$city_code)->result();
+    }
+
+    public function get_brgy_edit($city_code,$cashforwork_id,$brgy_code) {
+        $brgy_qry = $this->db->query('SELECT brgy_code FROM `tbl_cash_brgy` where city_code = "'.$city_code.'" and cashforwork_id = "'.$cashforwork_id.'" and deleted = 0 and brgy_code != "'.$brgy_code.'";');
+        $brgy_codes =  $brgy_qry->result_array();
+        $unformat = "";
+        foreach($brgy_codes as $i=>$row)
+        {
+            $unformat .= "'".$row['brgy_code']."',";
+        }
+        $format = substr($unformat,0,-1);
+        if($brgy_qry->num_rows() > 0) {
+            $where  = "AND brgy_code not in (".$format.")";
+        }
+        else
+        {
+            $where  = "";
+        }
+        $get_brgy = "
+        SELECT
+            brgy_code,
+            brgy_name
+        FROM
+          lib_brgy
+        WHERE
+          city_code = ? ".$where."
         ORDER BY
           brgy_name
         ";

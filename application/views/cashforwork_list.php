@@ -78,6 +78,15 @@
                         <a class="btn btn-info btn-outline" id="confirm"
                            href="<?php echo base_url('cashforwork/finalize_saro/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                            data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
+                        <?php if($projectData->file_location == '') {?>
+                            <a class="btn btn-info btn-outline" id="confirm"
+                               href="<?php echo base_url('cashforwork/upload_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Attach file"><i class="icon wb-upload" aria-hidden="true"></i></a>
+                        <?php } else {?>
+                            <a class="btn btn-info btn-outline" id="confirm"
+                               href="<?php echo base_url('cashforwork/download_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Download file"><i class="icon wb-download" aria-hidden="true"></i></a>
+                        <?php }?>
                     </div>
 
                 </td>

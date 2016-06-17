@@ -152,7 +152,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                         <label for="project_title" class="control-label">Project Title:</label>
-                        <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" required/>
+                        <input pattern="[A-Za-z0-9 \\s ]*" title="Please input alphabet characters only!" id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" required/>
                         <span class="text-danger"><?php echo form_error('project_title'); ?></span>
                     </div>
                 </div>
@@ -233,7 +233,7 @@ $region_code = $this->session->userdata('uregion');
                     <div class="form-group row">
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
-                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>" onblur="recalculateMultiply()" required autofocus/>
+                            <input id="number_days" name="number_days" pattern = "[0-9]+" title="Please input number characters only!" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo set_value('number_days'); ?>" onblur="recalculateMultiply()" required autofocus/>
                             <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                         </div>
                         <div class="col-sm-4">

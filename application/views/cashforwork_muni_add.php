@@ -86,14 +86,7 @@ $region_code = $this->session->userdata('uregion');
 <!--                <input class="form-control" id = "saro_id" name ="saro_id" type = "hidden" value = "--><?php //echo $title->saro_id;?><!--" >-->
                 <input class="form-control" id = "cashforworkpass_id" name ="cashforworkpass_id" type = "hidden" value = "<?php echo $cashforworkpass_id;?>" >
 <!--                <input class="form-control" id = "region_pass" name ="region_pass" type = "hidden" value = "--><?php //echo $region_pass;?><!--" >-->
-                <div class="form-group row">
-<!--                    <div class="col-sm-3">-->
-<!--                        <label for="provlist" class="control-label">Province :</label>-->
-<!--                        <input class="form-control" id = "proj_prov_name" name ="proj_prov_name" type = "text" value = "--><?php //echo $proj_prov->prov_name;?><!--" disabled>-->
-<!--                    </div>-->
 
-
-                </div>
                 <table class ="table">
                     <tr>
                         <th>Municipality:</th>
@@ -135,7 +128,7 @@ $region_code = $this->session->userdata('uregion');
                         </td>
                         <td>
                             <div class="col-lg-6">
-                                <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control" required autofocus/>
+                                <input readonly id="cost_of_assistance" name="cost_of_assistance"  placeholder="Cost of Assistance" type="number"  class="form-control" required autofocus/>
                                 <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
                                 <label>(number of days x number of beneficiaries x daily payment)</label>
                             </div>
