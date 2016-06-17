@@ -14,7 +14,7 @@
     <div class="panel">
         <div class="panel">
             <header class="panel-heading">
-                <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; <?php echo $consofunds->fund_source ?>  Funds History&nbsp;&nbsp;&nbsp;</mark>&nbsp;&nbsp;&nbsp;</h1>
+                <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; <?php echo $consofunds->fund_source ?> - Funds History&nbsp;&nbsp;&nbsp;</mark>&nbsp;&nbsp;&nbsp;</h1>
             </header>
             <div class="panel-body"><br>
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">

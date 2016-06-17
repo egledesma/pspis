@@ -7,73 +7,40 @@
  */
 
 
-class fundsallocation extends CI_Controller
+class saa extends CI_Controller
 {
 
-    public function index(){
+    public function index($region_code){
 
-        $fundsallocation_model = new fundsallocation_model();
-
+        $saa_model = new saa_model();
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
-            $this->load->view('fundsallocation_list',array(
-                'fundsdetails' => $fundsallocation_model->get_funds()/*'form_message'=>$form_message*/));
+            $this->load->view('saa_list',array(
+                'saadetails' => $saa_model->get_saa_region($region_code)/*'form_message'=>$form_message*/));
             $this->load->view('footer');
 
     }
 
-    public function download($fundsource_id){
-        $fundsallocation_model = new fundsallocation_model();
+    public function history($saro_id){
 
-        $this->validateAddForm();
+        $saro_model = new saro_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saro_history',array(
+            'sarodetails' => $saro_model->get_saro_history($saro_id)/*'form_message'=>$form_message*/));
+        $this->load->view('footer');
 
-        if ($this->form_validation->run() == FALSE) {
-            $getList['regionlist'] = $fundsallocation_model->get_regions();
-            $getList['fundsourcelist'] = $fundsallocation_model->get_fundsource_byid($fundsource_id);
-
-            $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
-
-            $this->load->view('fundsallocation_download', $getList);
-            $this->load->view('footer');
-        }
-        else
-        {
-
-            $regionlist = $this->input->post('regionlist');
-            $fund_source = $this->input->post('fs');
-            $saa = $this->input->post('saa');
-            $funds_allocated = $this->input->post('funds_allocated');
-            $funds_allocated2 = preg_replace('/\D/', '', $funds_allocated);
-            $status = $this->input->post('status');
-            $funds_identifier = $fund_source.$regionlist;
-            $myid = $this->input->post('myid');
-            $addResult = $fundsallocation_model->insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$status,$funds_identifier);
-            if ($addResult){
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-
-                $this->load->view('fundsallocation_list',array(
-                    'fundsdetails' => $fundsallocation_model->get_funds()
-                ));
-                $this->load->view('footer');
-            }
-            $this->redirectIndex();
-        }
     }
 
     public function add(){
         $fundsallocation_model = new fundsallocation_model();
 
-
         $this->validateAddForm();
 
         if ($this->form_validation->run() == FALSE) {
             $getList['regionlist'] = $fundsallocation_model->get_regions();
-            $getList['fundsourcelist'] = $fundsallocation_model->get_fund_source();
 
             $this->load->view('header');
             $this->load->view('navbar');
@@ -86,14 +53,13 @@ class fundsallocation extends CI_Controller
         {
 
             $regionlist = $this->input->post('regionlist');
-            $fund_source = $this->input->post('fundsourcelist');
-            $saa = $this->input->post('saa');
+            $year = $this->input->post('year');
+            $saro = $this->input->post('saro');
             $funds_allocated = $this->input->post('funds_allocated');
-            $funds_allocated2 = preg_replace('/\D/', '', $funds_allocated);
             $status = $this->input->post('status');
-            $funds_identifier = $fund_source.$regionlist;
+            $funds_identifier = $year.$regionlist;
             $myid = $this->input->post('myid');
-            $addResult = $fundsallocation_model->insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$status,$funds_identifier);
+            $addResult = $fundsallocation_model->insertFunds($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier);
             if ($addResult){
                 $this->load->view('header');
                 $this->load->view('navbar');
@@ -106,47 +72,6 @@ class fundsallocation extends CI_Controller
             }
             $this->redirectIndex();
         }
-    }
-
-    public function fundshistory($fund_source,$region_code){
-
-        $fundsallocation_model = new fundsallocation_model();
-        $getList['fundsallocation'] = $fundsallocation_model->view_fundsallocationbyid($fund_source);
-        $getList['region'] = $fundsallocation_model->view_regionbyid($region_code);
-        $getList['allocationdetails'] = $fundsallocation_model->get_fundsallocation_history($fund_source,$region_code);
-        $this->load->view('header');
-        $this->load->view('navbar');
-        $this->load->view('sidebar');
-        $this->load->view('fundsallocation_history', $getList);
-        $this->load->view('footer');
-
-    }
-
-    public function downloadedhistory($fund_source){
-
-        $cofunds_model = new cofunds_model();
-        $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
-        $getList['fundsdetails'] = $cofunds_model->get_consodownloaded_history($fund_source);
-        $this->load->view('header');
-        $this->load->view('navbar');
-        $this->load->view('sidebar');
-        $this->load->view('downloadedfunds_history', $getList);
-        $this->load->view('footer');
-
-    }
-
-    public function otherfundshistory($fund_source,$region_code){
-
-        $fundsallocation_model = new fundsallocation_model();
-        $getList['fundsallocation'] = $fundsallocation_model->view_fundsallocationbyid($fund_source);
-        $getList['region'] = $fundsallocation_model->view_regionbyid($region_code);
-        $getList['allocationdetails'] = $fundsallocation_model->get_otherfunds_history($fund_source,$region_code);
-        $this->load->view('header');
-        $this->load->view('navbar');
-        $this->load->view('sidebar');
-        $this->load->view('otherfunds_history', $getList);
-        $this->load->view('footer');
-
     }
 
     public function edit($aid = "")

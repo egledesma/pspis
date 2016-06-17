@@ -1,27 +1,27 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $region_code = $this->session->userdata('uregion');
-//saro
+//saa
 ?>
 <script type="text/javascript">
 
-function get_saro_amount()
+function get_saa_amount()
 {
 
-    var saro_id = $('#sarolist').val();
+    var saa_id = $('#saalist').val();
 
-    if(saro_id > 0){
+    if(saa_id > 0){
 
         $.ajax({
-            url: "<?php echo base_url('withdraw/populate_saro_amount'); ?>",
+            url: "<?php echo base_url('withdraw/populate_saa_amount'); ?>",
             async: false,
             type: "POST",
-            data: "saro_id="+saro_id,
+            data: "saa_id="+saa_id,
             dataType: "html",
             success: function(data,data1,data2) {
 
-                $('#saro_number_amount').html(data);
-                $('#saro_number_id').html(data1);
-                $('#saro_number').html(data2);
+                $('#saa_number_amount').html(data);
+                $('#saa_number_id').html(data1);
+                $('#saa_number').html(data2);
             }
         });
     }
@@ -54,6 +54,7 @@ function get_saro_amount()
 
                 echo form_open("", $attributes);?>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                <input class="form-control"  type="hidden" name="fund_source" value="<?php echo $funds->fundsource_id?>">
 
                 <div class="form-group row">
                     <div id="liqui_date" class="col-sm-6">
@@ -62,25 +63,25 @@ function get_saro_amount()
                                             <span class="input-group-addon">
                                               <i class="icon wb-calendar" aria-hidden="true"></i>
                                             </span>
-                            <input id="withdraw_date" name="withdraw_date" placeholder="Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('liqui_date'); ?></span>
+                            <input id="withdraw_date" name="withdraw_date" placeholder="Date" type="text"  class="form-control"  value="" data-plugin="datepicker" required/><span class="text-danger"><?php echo form_error('withdraw_date'); ?></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_amount();" autofocus>
-                            <option value="">Choose Saro Number</option>
-                            <?php foreach($sarolist as $saroselect): ?>
-                                <option value="<?php echo $saroselect->saro_id; ?>"
-                                    <?php if(isset($saro_id)) {
-                                        if($saroselect->saro_id == $saro_id) {
+                        <label class="control-label" for="saalist">Saa Number:</label>
+                        <select name="saalist" id="saalist" class="form-control"  required="required" onchange="get_saa_amount();" autofocus>
+                            <option value="">Choose Saa Number</option>
+                            <?php foreach($saalist as $saaselect): ?>
+                                <option value="<?php echo $saaselect->saa_id; ?>"
+                                    <?php if(isset($saao_id)) {
+                                        if($saaselect->saa_id == $saa_id) {
                                             echo " selected";
                                         }
                                     } ?>
                                 >
-                                    <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
+                                    <?php echo $saaselect->saa_number."  (₱  ".number_format($saaselect->saa_balance).")"; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -88,9 +89,9 @@ function get_saro_amount()
                     <div class="col-sm-6">
 
 
-                        <div id = "saro_number_amount" name = "saro_number_amount">
-                            <!--                            <label for="saro_amount" class="control-label">Amount Requested:</label>-->
-<!--                                                        <input type = "number" id="saro_amount"  name ="saro_amount" value="0" class = "form-control">-->
+                        <div id = "saa_number_amount" name = "saa_number_amount">
+                            <!--                            <label for="saa_amount" class="control-label">Amount Requested:</label>-->
+<!--                                                        <input type = "number" id="saa_amount"  name ="saa_amount" value="0" class = "form-control">-->
                         </div>
 
                     </div>
@@ -98,9 +99,9 @@ function get_saro_amount()
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="control-label" for="new_saro">New Saro Number:</label>
-                        <input id="new_saro" name="new_saro" placeholder="New Saro Number" type="text"  class="form-control"  required/>
-                        <span class="text-danger"><?php echo form_error('new_saro'); ?></span>
+                        <label class="control-label" for="new_saa">New Saa Number:</label>
+                        <input id="new_saa" name="new_saa" placeholder="New Saa Number" type="text"  class="form-control"  required/>
+                        <span class="text-danger"><?php echo form_error('new_saa'); ?></span>
                     </div>
                 </div>
                 <input id="year" name="year"  type="hidden" value="<?php echo date('Y');?>"  class="form-control"/>
