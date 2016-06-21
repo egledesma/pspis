@@ -9,7 +9,21 @@
 
 class cashforwork_model extends CI_Model
 {
+    public function get_fund_source()
+    {
+        $get_fund_source = "
+        SELECT
+          fundsource_id,
+          fund_source
+        FROM
+          lib_fund_source
+        WHERE
+        deleted = 0
+        ";
 
+        return $this->db->query($get_fund_source)->result();
+
+    }
     public function viewcashforwork($cashforwork_id)
     {
 
@@ -53,6 +67,17 @@ FROM `tbl_cash_brgy` a
 inner join lib_brgy b
 on a.brgy_code = b.brgy_code
 where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
+    public function get_saa($fundsource_id)
+    {
+
+        $sql = 'SELECT saa_id,saa_number,saa_balance
+FROM `tbl_saa`
+where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;

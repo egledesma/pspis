@@ -129,7 +129,7 @@ class fundsallocation_model extends CI_Model
                           "'.$funds_identifier.'")');
 
 
-        $result = $this->db->query('SELECT * FROM tbl_funds_allocated1 WHERE region_code ="'.$regionlist.'" and fundsource_id ="'.$fund_source.'"');
+        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" and fundsource_id ="'.$fund_source.'"');
 
         if($result->num_rows() > 0) {
             $this->db->query('Update tbl_funds_allocated set

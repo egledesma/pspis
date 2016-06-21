@@ -32,6 +32,25 @@ $region_code = $this->session->userdata('uregion');
             });
         }
     }
+
+    function get_saro_list()
+    {
+        var fundsource_id = $('#fundsource').val();
+
+        if(fundsource_id > 0){
+            alert(fundsource_id);
+            $.ajax({
+                url: "<?php echo base_url('cashforwork/populate_saa_list'); ?>",
+                async: false,
+                type: "POST",
+                data: "fundsource_id="+fundsource_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#saa_name').html(data);
+                }
+            });
+        }
+    }
     function get_prov() {
         var region_code = $('#regionlist').val();
 
@@ -126,26 +145,68 @@ $region_code = $this->session->userdata('uregion');
 
                 echo form_open("cashforwork/addCashforwork", $attributes);?>
 <!--<pre>-->
-<?php //print_r($natureofworklist)?>
-<!--</pre>-->  <div class="form-group row">
+<?php //print_r($fundlist)?>
+<!--</pre>-->
+                <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus>
-                            <option value="">Choose Saro Number</option>
-                            <?php foreach($sarolist as $saroselect): ?>
-                                <option value="<?php echo $saroselect->saro_id; ?>"
-                                    <?php if(isset($saro_id)) {
-                                        if($saroselect->saro_id == $saro_id) {
-                                            echo " selected";
-                                        }
-                                    } ?>
+                        <label class="control-label" for="fundsource">Fund Source:</label>
+                        <select name="fundsource" id="fundsource" class="form-control"  onchange = "get_saro_list();"required="required"  autofocus>
+                            <option value="">Choose Fund Source</option>
+                            <?php foreach($fundlist as $fundselect): ?>
+                                <option value="<?php echo $fundselect->fundsource_id; ?>"
                                 >
-                                    <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
+                                    <?php echo $fundselect->fund_source; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
+                <div class="form-group row">
+                <div id = "saa_name" name = "saa_name"class="col-sm-6">
+                    <label for="sarolist" class="control-label">SAA Number:</label>
+                    <select id="sarolist" name="sarolist" class="form-control"  required>
+                        <?php if(isset($_SESSION['province']) or isset($user_region)) {
+                            ?>
+                            <option value="">Choose Province</option>
+                            <?php
+                            foreach ($sarolist as $saroselect) { ?>
+                                <option value="<?php echo $saroselect->saro_id; ?>"
+                                    <?php
+                                    if ($saroselect->saro_id) {
+                                        echo " selected";
+                                    } ?>
+                                >
+                                    <?php echo $saroselect->saro_number; ?></option>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <option value="">Select Fund Source First</option>
+                            <?php
+                        } ?>
+                    </select>
+                </div>
+                </div>
+
+<!--                <div class="form-group row">-->
+<!--                    <div class="col-sm-6">-->
+<!--                        <label class="control-label" for="sarolist">SAA Number:</label>-->
+<!--                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus>-->
+<!--                            <option value="">Choose SAA Number</option>-->
+<!--                            --><?php //foreach($sarolist as $saroselect): ?>
+<!--                                <option value="--><?php //echo $saroselect->saro_id; ?><!--"-->
+<!--                                    --><?php //if(isset($saro_id)) {
+//                                        if($saroselect->saro_id == $saro_id) {
+//                                            echo " selected";
+//                                        }
+//                                    } ?>
+<!--                                >-->
+<!--                                    --><?php //echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
+<!--                                </option>-->
+<!--                            --><?php //endforeach; ?>
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div name = "saronumber" id = "saronumber">
 
                 </div>
@@ -228,7 +289,7 @@ $region_code = $this->session->userdata('uregion');
                             </select>
                         </div>
                     </div>
-                    </div>
+                </div>
 
                     <div class="form-group row">
                         <div class="col-sm-4">

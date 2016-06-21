@@ -180,7 +180,9 @@ class cashforwork extends CI_Controller
             $this->assistance_session();
             $this->init_rpmb_session();
             $regionsaro = $this->session->userdata('uregion');
-            $getList['sarolist'] = $cashforwork_model->get_saro($regionsaro);
+            $getList['fundlist'] = $cashforwork_model->get_fund_source();
+//            $getList['sarolist'] = $cashforwork_model->get_saro($regionsaro);
+
             $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
             $getList['regionlist'] = $cashforwork_model->get_regions();
 
@@ -698,6 +700,33 @@ class cashforwork extends CI_Controller
 
         }
     }
+    public function populate_saa_list()
+    {
+
+//        $saadata = $this->cashforwork_model->get_saa($fundsource_id);
+        $label = array(
+            'for'          => 'sarolist',
+            'class'        => 'control-label'
+        );
+        echo form_label('SAA Number:', '', $label);
+        if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
+        {
+            $fundsource_id = $_POST['fundsource_id'];
+            $saa_data = $this->cashforwork_model->get_saa($fundsource_id);
+//            print_r($saa_data);
+            $saalist[''] = "Choose Saa Number";
+            foreach($saa_data as $saa_select) {
+                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+            }
+
+            $saalist_prop = 'name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus';
+
+            echo form_dropdown('sarolist', $saalist, '', $saalist_prop);
+        }
+
+    }
+
+
     protected function validateBeneAddForm()
     {
         $config = array(
