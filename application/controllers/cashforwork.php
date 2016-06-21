@@ -59,6 +59,21 @@ class cashforwork extends CI_Controller
         ));
         $this->load->view('footer');
     }
+    public function cashforworkBenelist($cashforwork_id)
+    {
+        $cashforwork_model = new cashforwork_model();
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+//        $region_code = $this->session->userdata('uregion');
+        $this->load->view('cashforwork_viewbenelist',array(
+            'project' => $cashforwork_model->viewcashforwork($cashforwork_id),
+            'call_muni' => $cashforwork_model->viewcashforwork_callmuni($cashforwork_id),
+            'call_brgy' => $cashforwork_model->viewcashforwork_callbrgy($cashforwork_id),
+            'call_bene' => $cashforwork_model->viewcashforwork_callbenelist($cashforwork_id)
+        ));
+        $this->load->view('footer');
+    }
     public function updateCashforwork($cashforwork_id)
     {
         $cashforwork_model = new cashforwork_model();
@@ -482,12 +497,10 @@ class cashforwork extends CI_Controller
         $this->load->view('header');
 //        $this->load->view('navbar');
 //        $this->load->view('sidebar');
-        $cashforwork_muni_id_qry = $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id);
-        $cashforwork_muni_id = $cashforwork_muni_id_qry->cashforwork_muni_id;
+
         $this->load->view('cashforwork_beneAdd',array(
             'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
-            'countBene' => $cashforwork_model->get_countbene_benelist($cashforwork_muni_id),
-            'countBeneMuni' => $cashforwork_model->get_project_prov_muni($cashforwork_muni_id),
+            'countBene' => $cashforwork_model->get_countbene_benelist($cashforworkbrgy_id),
             'cashforwork_brgyidpass' => $cashforworkbrgy_id,
             'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
         $this->load->view('footer');
@@ -502,12 +515,10 @@ class cashforwork extends CI_Controller
             $this->load->view('header');
 //            $this->load->view('navbar');
 //            $this->load->view('sidebar');
-            $cashforwork_muni_id_qry = $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id);
-            $cashforwork_muni_id = $cashforwork_muni_id_qry->cashforwork_muni_id;
+
             $this->load->view('cashforwork_beneAdd',array(
                 'cash_benelist' => $cashforwork_model->get_bene_list($cashforworkbrgy_id),
-                'countBene' => $cashforwork_model->get_countbene_benelist($cashforwork_muni_id),
-                'countBeneMuni' => $cashforwork_model->get_project_prov_muni($cashforwork_muni_id),
+                'countBene' => $cashforwork_model->get_countbene_benelist($cashforworkbrgy_id),
                 'cashforwork_brgyidpass' => $cashforworkbrgy_id,
                 'cashforwork_idpass' => $cashforwork_model->get_brgy_cashforwork_id($cashforworkbrgy_id)));
             $this->load->view('footer');

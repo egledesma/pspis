@@ -10,10 +10,11 @@
 
     <div class="page-header page-header-bordered">
 
-        <h1 class="page-title">Food for work</h1>
+        <h1 class="page-title">Cash for work</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li class="active">Food for work</li>
+            <li><a href="<?php echo base_url('cashforwork/index') ?>">Cash for work</a></li>
+            <li class="active">View Project</li>
         </ol>
     </div>
 

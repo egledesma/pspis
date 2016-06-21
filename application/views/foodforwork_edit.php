@@ -4,6 +4,7 @@
 <script type="text/javascript">
 
     document.onreadystatechange=function(){
+        recalculateMultiply();
         get_prov();
         get_muni();
         get_brgy();
@@ -51,45 +52,53 @@
             $('#provlist option:gt(0)').remove().end();
         }
     }
-    function get_muni() {
-        var prov_code = $('#provlist').val();
-        var cityCode = $('#city_pass').val();
-        $('#brgylist option:gt(0)').remove().end();
-        if(prov_code > 0) {
-            $.ajax({
-                url: "<?php echo base_url('foodforwork/populate_muni'); ?>",
-                async: false,
-                type: "POST",
-                data: "prov_code="+prov_code,
-                dataType: "html",
-                success: function(data) {
-                    $('#muniID').html(data);
-                    $('#munilist').val(cityCode);
-                }
-            });
-        } else {
-            $('#munilist option:gt(0)').remove().end();
-        }
+    function recalculateMultiply()
+    {
+        var num1 = parseInt(document.getElementById("number_of_bene").value);
+        var num2 = parseInt(document.getElementById("number_days").value);
+        var num3 = parseInt(document.getElementById("daily_payment").value);
+        document.getElementById("cost_of_assistance").value = num1 * num2 * num3 ;
+
     }
-    function get_brgy() {
-        var city_code = $('#munilist').val();
-        var brgy = $('#brgy_pass').val();
-        if(city_code > 0) {
-            $.ajax({
-                url: "<?php echo base_url('foodforwork/populate_brgy'); ?>",
-                async: false,
-                type: "POST",
-                data: "city_code="+city_code,
-                dataType: "html",
-                success: function(data) {
-                    $('#brgyID').html(data);
-                    $('#brgylist').val(brgy);
-                }
-            });
-        } else {
-            $('#brgylist option:gt(0)').remove().end();
-        }
-    }
+//    function get_muni() {
+//        var prov_code = $('#provlist').val();
+//        var cityCode = $('#city_pass').val();
+//        $('#brgylist option:gt(0)').remove().end();
+//        if(prov_code > 0) {
+//            $.ajax({
+//                url: "<?php //echo base_url('foodforwork/populate_muni'); ?>//",
+//                async: false,
+//                type: "POST",
+//                data: "prov_code="+prov_code,
+//                dataType: "html",
+//                success: function(data) {
+//                    $('#muniID').html(data);
+//                    $('#munilist').val(cityCode);
+//                }
+//            });
+//        } else {
+//            $('#munilist option:gt(0)').remove().end();
+//        }
+//    }
+//    function get_brgy() {
+//        var city_code = $('#munilist').val();
+//        var brgy = $('#brgy_pass').val();
+//        if(city_code > 0) {
+//            $.ajax({
+//                url: "<?php //echo base_url('foodforwork/populate_brgy'); ?>//",
+//                async: false,
+//                type: "POST",
+//                data: "city_code="+city_code,
+//                dataType: "html",
+//                success: function(data) {
+//                    $('#brgyID').html(data);
+//                    $('#brgylist').val(brgy);
+//                }
+//            });
+//        } else {
+//            $('#brgylist option:gt(0)').remove().end();
+//        }
+//    }
 
 </script>
 
@@ -101,7 +110,7 @@
         <h1 class="page-title">Edit </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('foodforwork/index') ?>">Food for work</a></li>
+            <li><a href="<?php echo base_url('foodforwork/index') ?>">food for work</a></li>
             <li class="active">Edit</li>
         </ol>
     </div>
@@ -110,7 +119,7 @@
         <div class="panel">
             <header class="panel-heading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Edit Project(Food for work)</h3>
+                    <h3 class="panel-title">Edit Project(food for work)</h3>
                 </div>
             </header>
             <div class="panel-body">
@@ -123,11 +132,6 @@
                 <!--<pre>-->
                 <?php //print_r($natureofworklist)?>
                 <!--</pre>-->
-                <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $foodforworkdata->prov_code ?>" >
-                <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="<?php echo $foodforworkdata->city_code ?>" >
-                <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="<?php echo $foodforworkdata->brgy_code ?>" >
-                <input type="hidden" id = "foodforwork_id" name = "foodforwork_id" value = "<?php echo $foodforworkdata->foodforwork_id ?>">
-                <input class="form-control"  type="hidden" name="region_pass" value="<?php echo $foodforworkdata->region_code?>">
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="sarolist">Saro Number:</label>
@@ -147,6 +151,11 @@
                         </select>
                     </div>
                 </div>
+
+                <input class="form-control" type="hidden" id = "prov_pass" name="prov_pass" value ="<?php echo $foodforworkdata->prov_code ?>" >
+<!--                <input class="form-control" type="hidden" id = "city_pass" name="city_pass" value ="--><?php //echo $foodforworkdata->city_code ?><!--" >-->
+<!--                <input class="form-control" type="hidden" id = "brgy_pass" name="prov_pass" value ="--><?php //echo $foodforworkdata->brgy_code ?><!--" >-->
+                <input type="hidden" id = "foodforwork_id" name = "foodforwork_id" value = "<?php echo $foodforworkdata->foodforwork_id ?>">
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                         <label for="project_title" class="control-label">Project Title:</label>
@@ -155,6 +164,7 @@
                     </div>
                 </div>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
+                <input class="form-control"  type="hidden" name="region_pass" value="<?php echo $foodforworkdata->region_code?>">
                 <label  class="control-label">Project Location:</label>
                 <div class="form-group row">
                     <div id="regionID" class="col-sm-3">
@@ -202,60 +212,60 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-3">
-                        <label for="munilist" class="control-label">Municipality :</label>
-                        <div id="muniID">
-                            <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required>
-                                <?php if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
-                                    ?>
-                                    <option value="">Choose Municipality</option>
-                                    <?php
-                                    foreach ($munilist as $muniselect) { ?>
-                                        <option value="<?php echo $muniselect->city_code; ?>"
-                                            <?php
-                                            if (isset($_SESSION['muni']) and $muniselect->city_code== $_SESSION['muni']) {
-                                                echo " selected";
-                                            } ?>
-                                        >
-                                            <?php echo $muniselect->city_name; ?></option>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="">Select Province First</option>
-                                    <?php
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="provlist" class="control-label">Barangay :</label>
-                        <div id="brgyID">
-                            <select required id="brgylist" name="brgylist" class="form-control" required>
-                                <?php if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
-                                    ?>
-                                    <option value="">Choose Barangay</option>
-                                    <?php
-                                    foreach ($brgylist as $brgyselect) { ?>
-                                        <option value="<?php echo $brgyselect->brgy_code; ?>"
-                                            <?php
-                                            if (isset($_SESSION['brgy']) and $brgyselect->brgy_code == $_SESSION['brgy']) {
-                                                echo " selected";
-                                            } ?>
-                                        >
-                                            <?php echo $brgyselect->brgy_name; ?></option>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="">Select Municipality First</option>
-                                    <?php
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+<!--                    <div class="col-sm-3">-->
+<!--                        <label for="munilist" class="control-label">Municipality :</label>-->
+<!--                        <div id="muniID">-->
+<!--                            <select required id="munilist" name="munilist" onchange="get_brgy();" class="form-control" required>-->
+<!--                                --><?php //if(isset($_SESSION['muni']) or isset($_SESSION['province'])) {
+//                                    ?>
+<!--                                    <option value="">Choose Municipality</option>-->
+<!--                                    --><?php
+//                                    foreach ($munilist as $muniselect) { ?>
+<!--                                        <option value="--><?php //echo $muniselect->city_code; ?><!--"-->
+<!--                                            --><?php
+//                                            if (isset($_SESSION['muni']) and $muniselect->city_code== $_SESSION['muni']) {
+//                                                echo " selected";
+//                                            } ?>
+<!--                                        >-->
+<!--                                            --><?php //echo $muniselect->city_name; ?><!--</option>-->
+<!--                                        --><?php
+//                                    }
+//                                } else {
+//                                    ?>
+<!--                                    <option value="">Select Province First</option>-->
+<!--                                    --><?php
+//                                } ?>
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!---->
+<!--                    <div class="col-sm-3">-->
+<!--                        <label for="provlist" class="control-label">Barangay :</label>-->
+<!--                        <div id="brgyID">-->
+<!--                            <select required id="brgylist" name="brgylist" class="form-control" required>-->
+<!--                                --><?php //if(isset($_SESSION['brgy']) or isset($_SESSION['muni'])) {
+//                                    ?>
+<!--                                    <option value="">Choose Barangay</option>-->
+<!--                                    --><?php
+//                                    foreach ($brgylist as $brgyselect) { ?>
+<!--                                        <option value="--><?php //echo $brgyselect->brgy_code; ?><!--"-->
+<!--                                            --><?php
+//                                            if (isset($_SESSION['brgy']) and $brgyselect->brgy_code == $_SESSION['brgy']) {
+//                                                echo " selected";
+//                                            } ?>
+<!--                                        >-->
+<!--                                            --><?php //echo $brgyselect->brgy_name; ?><!--</option>-->
+<!--                                        --><?php
+//                                    }
+//                                } else {
+//                                    ?>
+<!--                                    <option value="">Select Municipality First</option>-->
+<!--                                    --><?php
+//                                } ?>
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
 
                 <div class="form-group row">
@@ -282,25 +292,37 @@
                             </select>
                         </div>
                     </div>
+                    </div>
 
                     <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="number_bene" class="control-label">Number of Beneficiaries:</label>
-                            <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="<?php echo $foodforworkdata->no_of_bene ?>" required autofocus/>
-                            <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
-                        </div>
+<!--                        <div class="col-sm-4">-->
+<!--                            <label for="number_bene" class="control-label">Number of Beneficiaries:</label>-->
+<!--                            <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control"  value="--><?php //echo $foodforworkdata->no_of_bene ?><!--" required autofocus/>-->
+<!--                            <span class="text-danger">--><?php //echo form_error('number_bene'); ?><!--</span>-->
+<!--                        </div>-->
 
                         <div class="col-sm-4">
                             <label for="number_days" class="control-label">Number of Days:</label>
-                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $foodforworkdata->no_of_days ?>" required autofocus/>
+                            <input id="number_days" name="number_days" placeholder="Number of Days" type="number" min="0"  class="form-control"  value="<?php echo $foodforworkdata->no_of_days ?>" onblur="" = "recalculateMultiply();" required autofocus/>
                             <span class="text-danger"><?php echo form_error('number_days'); ?></span>
                         </div>
                         <div class="col-sm-4">
-                            <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
-                            <input id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"  value="<?php echo $foodforworkdata->cost_of_assistance ?>" required autofocus/>
-                            <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
+                            <label for="daily_payment" class="control-label">Daily Payment Amount:</label>
+                            <input id="daily_payment" name="daily_payment" placeholder="Daily Payment Amount" type="number"  min="0"  class="form-control"  value="<?php echo $foodforworkdata->daily_payment ?>"   onblur = "recalculateMultiply();" required autofocus/>
+                            <span class="text-danger"><?php echo form_error('daily_payment'); ?></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="number_of_bene" class="control-label">Number of Beneficiaries:</label>
+                            <input id="number_of_bene" name="number_of_bene" placeholder="Number of Beneficiaries" type="number"  min="0"  class="form-control"  value="<?php echo $foodforworkdata->number_of_bene ?>"  onblur = "recalculateMultiply();" required autofocus/>
+                            <span class="text-danger"><?php echo form_error('number_of_bene'); ?></span>
                         </div>
 
+                        <div class="col-sm-4">
+                            <label for="cost_of_assistance" class="control-label">Cost of Assistance:</label>
+                            <input readonly id="cost_of_assistance" name="cost_of_assistance" placeholder="Cost of Assistance" type="text"  class="form-control"   required autofocus/>
+                            <span class="text-danger"><?php echo form_error('cost_of_assistance'); ?></span>
+                            <label>(number of days x number of beneficiaries x daily payment)</label>
+                        </div>
                     </div>
 
 

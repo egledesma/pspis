@@ -274,17 +274,28 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         return $result;
 
     }
+    public function viewcashforwork_callbenelist($cashforwork_id)
+    {
+
+        $sql = 'SELECT concat(a.first_name,\' \',a.middle_name,\' \',a.last_name,\' \',a.ext_name) as bene_fullname,a.cashforwork_brgy_id,a.cashforwork_id,a.cashforwork_muni_id
+from tbl_cash_bene_list a
+where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
     public function get_brgy_cashforwork_id($cashforworkbrgy_id)
     {
-        $sql = 'SELECT cashforwork_id,cashforwork_muni_id FROM `tbl_cash_brgy`
+        $sql = 'SELECT cashforwork_id,cashforwork_muni_id,no_of_bene_brgy FROM `tbl_cash_brgy`
             where cash_brgy_id = "'.$cashforworkbrgy_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
     }
-    public function get_countbene_benelist($cashforwork_muni_id)
+    public function get_countbene_benelist($cashforworkbrgy_id)
     {
-        $sql = 'SELECT count(bene_id) as countBene FROM `tbl_cash_bene_list` where deleted = 0 and cashforwork_muni_id = "'.$cashforwork_muni_id.'";';
+        $sql = 'SELECT count(bene_id) as countBene FROM `tbl_cash_bene_list` where deleted = 0 and cashforwork_brgy_id = "'.$cashforworkbrgy_id.'";';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -509,6 +520,11 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                               WHERE
                               cashforwork_id = "'.$cashforwork_id.'"
                               ');
+        $this->db->query('UPDATE tbl_cash_benelist SET
+                              deleted ="1"
+                              WHERE
+                              cashforwork_id = "'.$cashforwork_id.'"
+                              ');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -537,6 +553,12 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                               WHERE
                               cashforwork_muni_id = "'.$cash_muni_id.'"
                               ');
+        $this->db->query('UPDATE tbl_cash_benelist SET
+                              deleted ="1"
+                              WHERE
+                              cashforwork_muni_id = "'.$cash_muni_id.'"
+                              ');
+
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -559,6 +581,12 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                               WHERE
                               cash_brgy_id = "'.$cash_brgy_id.'"
                               ');
+        $this->db->query('UPDATE tbl_cash_benelist SET
+                              deleted ="1"
+                              WHERE
+                              cash_brgy_id = "'.$cash_brgy_id.'"
+                              ');
+
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -893,11 +921,14 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         }
         $this->db->close();
     }
-    public function updateCashbene($bene_idpass, $fullname, $myid)
+    public function updateCashbene($bene_idpass, $bene_firstname, $bene_middlename, $bene_lastname, $bene_extname, $myid)
     {
         $this->db->trans_begin();
         $this->db->query('UPDATE tbl_cash_bene_list SET
-                              bene_fullname ="'.$fullname.'",
+                              first_name ="'.$bene_firstname.'",
+                              middle_name ="'.$bene_middlename.'",
+                              last_name ="'.$bene_lastname.'",
+                              ext_name ="'.$bene_extname.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
 

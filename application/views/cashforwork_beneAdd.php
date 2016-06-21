@@ -44,7 +44,7 @@ error_reporting(0);
             </header>
             <div class="panel-body">
                 <div id="exampleTableAddToolbar">
-                    <?php if($countBene->countBene >= $countBeneMuni->no_of_bene_muni ){?>
+                    <?php if($countBene->countBene >= $cashforwork_idpass->no_of_bene_brgy ){?>
                     <button id="exampleTableAddBtn" class="btn btn-outline btn-primary"   data-target="#exampleFormModal" data-toggle="modal"disabled>
                         <i class="icon wb-plus" aria-hidden="true"></i> Add Record
                     </button>

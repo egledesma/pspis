@@ -23,86 +23,93 @@
             <div class="panel">
                 <header class="panel-heading">
                     &nbsp;<?php //echo $form_message; ?>
-                </header>
-                <div class="panel-body">
-                    <div id="exampleTableAddToolbar" >
-                        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('foodforwork/addfoodforwork') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Project</a>
-                    </div><br>
-                    <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
-                        <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>Saro Number</th>
-                            <th>Project Title</th>
-                            <th>Region</th>
-                            <th>Nature of work</th>
-                            <th>Number of Beneficiaries</th>
-                            <th>Number of Days</th>
-                            <th>Cost of Assistance</th>
-                            <!-- <th>Status</th> -->
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>Action</th>
-                            <th>Saro Number</th>
-                            <th>Project Title</th>
-                            <th>Region</th>
-                            <th>Nature of work</th>
-                            <th>Number of Beneficiaries</th>
-                            <th>Number of Days</th>
-                            <th>Cost of Assistance</th>
-                        </tr>
-                        </tfoot>
-                        <tbody  data-plugin="scrollable" data-direction="horizontal">
+</header>
+<div class="panel-body">
+    <div id="exampleTableAddToolbar" >
+        <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('foodforwork/addfoodforwork') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Project</a>
+    </div><br>
+    <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Project Title</th>
+            <th>Saa Number</th>
+            <th>Region</th>
+            <th>Nature of work</th>
+            <th>Number of Beneficiaries</th>
+            <th>Number of Days</th>
+            <th>Cost of Assistance</th>
+            <!-- <th>Status</th> -->
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>Action</th>
+            <th>Project Title</th>
+            <th>Saa Number</th>
+            <th>Region</th>
+            <th>Nature of work</th>
+            <th>Number of Beneficiaries</th>
+            <th>Number of Days</th>
+            <th>Cost of Assistance</th>
+        </tr>
+        </tfoot>
+        <tbody  data-plugin="scrollable" data-direction="horizontal">
 
-                        <?php foreach($project as $projectData): ?>
-                            <tr>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a class="btn btn-dark btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/view/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>
-                                        <a class="btn btn-info btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/updatefoodforwork/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
-                                        <a class="confirmation btn btn-danger btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/deletefoodforwork/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
-                                        <a class="confirmation btn btn-success btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/food_benelist/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Add beneficiaries"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
-                                        <a class="btn btn-info btn-outline" id="confirm"
-                                           href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                           data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
-                                        <?php if($projectData->file_location == '') {?>
-                                            <a class="btn btn-info btn-outline" id="confirm"
-                                               href="<?php echo base_url('foodforwork/upload_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                               data-placement="top" data-original-title="Upload Beneficiaries "><i class="icon wb-upload" aria-hidden="true"></i></a>
-                                        <?php } else {?>
-                                            <a class="btn btn-info btn-outline" id="confirm"
-                                               href="<?php echo base_url('foodforwork/download_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
-                                               data-placement="top" data-original-title="Download Beneficiaries "><i class="icon wb-download" aria-hidden="true"></i></a>
-                                        <?php }?>
-                                    </div>
+        <?php foreach($project as $projectData): ?>
+            <tr>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+<!--                        <a class="btn btn-dark btn-outline" id="confirm"-->
+<!--                           href="--><?php //echo base_url('foodforwork/masterviewfoodforwork/'.$projectData->foodforwork_id.'') ?><!--" data-toggle="tooltip"-->
+<!--                           data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>-->
 
-                                </td>
-                                <td><?php echo $projectData->saro_number; ?></td>
-                                <td><?php echo $projectData->project_title; ?></td>
-                                <td><?php echo $projectData->region_name; ?></td>
-                                <td><?php echo $projectData->work_nature; ?></td>
-                                <td><?php echo $projectData->no_of_bene; ?></td>
-                                <td><?php echo $projectData->no_of_days; ?></td>
-                                <td><?php echo '₱ '. number_format($projectData->cost_of_assistance,2); ?></td>
+                        <a class="btn btn-info btn-outline" id="confirm"
+                           href="<?php echo base_url('foodforwork/updatefoodforwork/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                           data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
+                        <a class="confirmation btn btn-danger btn-outline" id="confirm"
+                           href="<?php echo base_url('foodforwork/deletefoodforwork/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                           data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
 
-                                <!-- <td><?php // echo $projectData->status; ?></td> -->
+<!--                        <a class="confirmation btn btn-success btn-outline" id="confirm"-->
+<!--                           href="--><?php //echo base_url('foodforwork/viewfood_muni/'.$projectData->foodforwork_id.'') ?><!--" data-toggle="tooltip"-->
+<!--                           data-placement="top" data-original-title="Add City/Municipality"><i class="icon wb-user-add" aria-hidden="true"></i> </a>-->
 
-                            </tr>
-                        <?php endforeach ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                        <a class="btn btn-info btn-outline" id="confirm"
+                           href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                           data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
+                        <?php if($projectData->file_location == '') {?>
+                            <a class="btn btn-info btn-outline" id="confirm"
+                               href="<?php echo base_url('foodforwork/upload_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Attach file"><i class="icon wb-upload" aria-hidden="true"></i></a>
+                        <?php } else {?>
+                            <a class="btn btn-info btn-outline" id="confirm"
+                               href="<?php echo base_url('foodforwork/download_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                               data-placement="top" data-original-title="Download file"><i class="icon wb-download" aria-hidden="true"></i></a>
+                        <?php }?>
+                    </div>
 
-    </div>
+                </td>
+                <td><a id="viewProject" href="<?php echo base_url('foodforwork/masterviewfoodforwork/'.$projectData->foodforwork_id.'') ?>"data-toggle="tooltip"
+                       data-placement="top" data-original-title="View Project"><?php echo $projectData->project_title; ?></a></td>
+                <td><?php echo $projectData->saro_number; ?></td>
+                <td> <a id="addCityMuni"
+                        href="<?php echo base_url('foodforwork/viewfood_muni/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                        data-placement="top" data-original-title="Add City/Municipality"><?php echo $projectData->region_name; ?></a></td>
+                <td><?php echo $projectData->work_nature; ?></td>
+                <td><a id="total_bene" href="<?php echo base_url('foodforwork/foodforworkBenelist/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
+                       data-placement="top" data-original-title="Beneficiaries list"><?php echo $projectData->total_bene; ?></a></td>
+                <td><?php echo $projectData->no_of_days; ?></td>
+                <td><?php echo '₱ '. number_format($projectData->total_cost,2); ?></td>
+
+                <!-- <td><?php // echo $projectData->status; ?></td> -->
+
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+</div>
