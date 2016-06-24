@@ -9,7 +9,21 @@
 
 class foodforwork_model extends CI_Model
 {
+    public function get_fund_source()
+    {
+        $get_fund_source = "
+        SELECT
+          fundsource_id,
+          fund_source
+        FROM
+          lib_fund_source
+        WHERE
+        deleted = 0
+        ";
 
+        return $this->db->query($get_fund_source)->result();
+
+    }
     public function viewfoodforwork($foodforwork_id)
     {
 
@@ -64,6 +78,17 @@ where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"';
         $sql = 'SELECT concat(a.first_name,\' \',a.middle_name,\' \',a.last_name,\' \',a.ext_name) as bene_fullname,a.foodforwork_brgy_id,a.foodforwork_id,a.foodforwork_muni_id
 from tbl_food_bene_list a
 where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+    }
+    public function get_saa($fundsource_id)
+    {
+
+        $sql = 'SELECT saa_id,saa_number,saa_balance
+FROM `tbl_saa`
+where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
@@ -400,15 +425,15 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 //
 //    }
 // manual input
-    public function insertProject($number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_foodforwork(assistance_id,saro_id,
+        $this->db->query('insert into tbl_foodforwork(assistance_id,saro_id,fundsource_id,
                           project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,number_of_bene,cost_of_assistance,date_created,created_by,deleted)
                           values
-                          ("2","'.$saro.'","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$saro.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
                           "'.$number_days.'",

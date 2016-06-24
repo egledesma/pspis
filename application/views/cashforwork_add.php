@@ -167,7 +167,7 @@ $region_code = $this->session->userdata('uregion');
                     <select id="sarolist" name="sarolist" class="form-control"  required>
                         <?php if(isset($_SESSION['province']) or isset($user_region)) {
                             ?>
-                            <option value="">Choose Province</option>
+                            <option value="">Choose SAA number</option>
                             <?php
                             foreach ($sarolist as $saroselect) { ?>
                                 <option value="<?php echo $saroselect->saro_id; ?>"
