@@ -93,6 +93,12 @@ class cofunds_model extends CI_Model
                           ("'.$fundsourcelist.'","0","'.$funds_amount2.'","'.$funds_amount2.'","ADD NEW FUNDS","'.$myid.'",now(),"1")');
         }
 
+            $this->db->query('Update lib_fund_source set
+                  identifier = 1,
+                  date_modified = now(),
+                  modified_by = "'.$myid.'"
+                  WHERE fundsource_id = "'.$fundsourcelist.'" ');
+
 
         if ($this->db->trans_status() === FALSE)
         {

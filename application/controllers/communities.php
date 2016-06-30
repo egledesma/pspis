@@ -346,10 +346,10 @@ class communities extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->assistance_session();
             $this->init_rpmb_session();
-            $regionsaro = $this->session->userdata('uregion');
+            $regionsaa = $this->session->userdata('uregion');
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundsourcelist'] = $communities_model->get_fund_source();
-            $getList['sarolist'] = $communities_model->get_saro($regionsaro);
+            $getList['fundlist'] = $communities_model->get_fund_sourcelist();
+            $getList['saalist'] = $communities_model->get_saa($regionsaa);
             $getList['projectstatuslist'] = $communities_model->get_project_status();
             $getList['implementingagency'] = $communities_model->get_implementing_agency();
             $getList['regionlist'] = $communities_model->get_regions();
@@ -377,7 +377,7 @@ class communities extends CI_Controller
         else
         {
             $myid = $this->input->post('myid');
-            $saro_number = $this->input->post('sarolist');
+            $saa_number = $this->input->post('saalist');
             $assistancelist = $this->input->post('assistancelist');
             $project_title = $this->input->post('project_title');
             $regionlist = $this->input->post('region_pass');
@@ -406,7 +406,7 @@ class communities extends CI_Controller
             $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
             $status = $this->input->post('projectstatuslist');
 
-               $addResult = $communities_model->insertProject($myid, $saro_number, $project_title, $regionlist, $provlist, $munilist, $brgylist, $number_bene,
+               $addResult = $communities_model->insertProject($myid, $saa_number, $project_title, $regionlist, $provlist, $munilist, $brgylist, $number_bene,
                    $assistancelist, $natureofworklist, $fundsourcelist, $project_amount, $lgucounterpart_prov, $lgu_amount_prov, $lgu_remarks_prov, $lgucounterpart_muni, $lgu_amount_muni, $lgu_remarks_muni,
                    $lgucounterpart_brgy, $lgu_amount_brgy, $lgu_remarks_brgy,
                    $project_cost, $project_amount, $implementing_agency, $start_date, $target_date,
@@ -538,8 +538,39 @@ class communities extends CI_Controller
         }
     }
 
+    public function populate_saa_list()
+    {
+
+//        $saadata = $this->cashforwork_model->get_saa($fundsource_id);
+        $label = array(
+            'for'          => 'saalist',
+            'class'        => 'control-label'
+        );
+        echo form_label('SAA Number:', '', $label);
+        if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
+        {
+            $fundsource_id = $_POST['fundsource_id'];
+            $saa_data = $this->cashforwork_model->get_saa($fundsource_id);
+//            print_r($saa_data);
+            $saalist[''] = "Choose Saa Number";
+            foreach($saa_data as $saa_select) {
+                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+            }
+
+            $saalist_prop = 'name="saalist" id="saalist" class="form-control"  required="required" onchange="get_saa_balance();" autofocus';
+
+            echo form_dropdown('saalist', $saalist, '', $saalist_prop);
+        }
+
+    }
+
     public function populate_naturemaxmin()
     {
+        $label = array(
+            'for'          => 'saalist',
+            'class'        => 'control-label'
+        );
+        echo form_label('Amount Requested:', '', $label);
         if($_POST['nature_id'] > 0 and isset($_POST) and isset($_POST['nature_id']))
         {
         $nature_id = $_POST['nature_id'];
@@ -660,21 +691,21 @@ class communities extends CI_Controller
         }
 
     }
-    public function populate_saro_amount()
+    public function populate_saa_amount()
     {
 
 //        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
 //        {
-            $saro_id = $_POST['saro_id'];
-            $sarodata = $this->communities_model->get_saro_balance($saro_id);
-        $saro_bal = "$sarodata->saro_balance";
+            $saa_id = $_POST['saa_id'];
+            $saadata = $this->communities_model->get_saa_balance($saa_id);
+            $saa_bal = "$saadata->saa_balance";
             $data1 = array(
                 'type'        => 'hidden',
-                'id'          => 'saro_amount',
-                'name'       =>  'saro_amount',
-                'max'   =>  $saro_bal,
+                'id'          => 'saa_amount',
+                'name'       =>  'saa_amount',
+                'max'   =>  $saa_bal,
                 'min'   => '0',
-                'value'   =>  $saro_bal,
+                'value'   =>  $saa_bal,
                 'class'        => 'form-control'
             );
 

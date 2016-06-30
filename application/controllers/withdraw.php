@@ -57,7 +57,7 @@ class withdraw extends CI_Controller
                 $this->load->view('withdraw_funds', $getList);
                 $this->load->view('footer');
             }
-            $this->redirectIndex();
+            $this->redirectIndex(2);
         }
 
     }
@@ -78,11 +78,11 @@ class withdraw extends CI_Controller
         return $this->form_validation->set_rules($config);
     }
 
-    public function redirectIndex()
+    public function redirectIndex($function)
     {
-        $page = base_url('fundsallocation/index');
-
-        header("LOCATION: $page");
+        $page = base_url('fundsallocation/index/'.$function);
+//        $sec = "1";
+        header("Location: $page");
     }
 
 

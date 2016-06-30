@@ -10,15 +10,34 @@
 class fundsallocation extends CI_Controller
 {
 
-    public function index(){
+    public function index($function = 0){
 
         $fundsallocation_model = new fundsallocation_model();
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Downloaded Funds Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Transferred Funds Successfully!</a>
+                    </div>';
+        }
 
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
             $this->load->view('fundsallocation_list',array(
-                'fundsdetails' => $fundsallocation_model->get_funds()/*'form_message'=>$form_message*/));
+                'fundsdetails' => $fundsallocation_model->get_funds(),'form_message'=>$form_message));
             $this->load->view('footer');
 
     }
@@ -61,7 +80,7 @@ class fundsallocation extends CI_Controller
                 ));
                 $this->load->view('footer');
             }
-            $this->redirectIndex();
+            $this->redirectIndex(1);
         }
     }
 
@@ -73,7 +92,7 @@ class fundsallocation extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $getList['regionlist'] = $fundsallocation_model->get_regions();
-            $getList['fundsourcelist'] = $fundsallocation_model->get_fund_source();
+            $getList['fundsourcelist'] = $fundsallocation_model->get_fund_sourcelist();
 
             $this->load->view('header');
             $this->load->view('navbar');
@@ -104,7 +123,7 @@ class fundsallocation extends CI_Controller
                 ));
                 $this->load->view('footer');
             }
-            $this->redirectIndex();
+            $this->redirectIndex(1);
         }
     }
 
@@ -270,11 +289,11 @@ class fundsallocation extends CI_Controller
         return $this->form_validation->set_rules($config);
     }
 
-    public function redirectIndex()
+    public function redirectIndex($function)
     {
-        $page = base_url('fundsallocation/index');
-
-        header("LOCATION: $page");
+        $page = base_url('fundsallocation/index/'.$function);
+//        $sec = "1";
+        header("Location: $page");
     }
 
 

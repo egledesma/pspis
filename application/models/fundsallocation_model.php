@@ -84,6 +84,20 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
     }
 
+    public function get_fund_sourcelist()
+    {
+        $sql = 'select fundsource_id,fund_source
+                from lib_fund_source
+                where deleted = 0
+                and status = 0
+                and identifier = 1';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+        $this->db->close();
+
+    }
+
     public function get_fund_source()
     {
         $sql = 'select fundsource_id,fund_source

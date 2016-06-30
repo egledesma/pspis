@@ -76,7 +76,6 @@
 
 
                 </div>
-
                 <input id="funds_identifier" name="funds_identifier"  type="hidden" value="0" class="form-control"/>
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="site-action">
