@@ -62,7 +62,7 @@ where a.deleted = 0 and a.cashforwork_id= "'.$cashforwork_id.'"';
     public function viewcashforwork_callbrgy($cashforwork_id)
     {
 
-        $sql = 'SELECT a.city_code,b.brgy_name
+        $sql = 'SELECT a.city_code,b.brgy_name,a.cash_brgy_id
 FROM `tbl_cash_brgy` a
 inner join lib_brgy b
 on a.brgy_code = b.brgy_code
