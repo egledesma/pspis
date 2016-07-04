@@ -16,7 +16,7 @@
         <h1 class="page-title">Funds Allocation</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('fundsallocation/index') ?>">Funds Allocation</a></li>
+            <li><a href="<?php echo base_url('fundsallocation/index/0') ?>">Funds Allocation</a></li>
             <li class="active">Add</li>
         </ol>
     </div>

@@ -126,28 +126,28 @@ class communities_model extends CI_Model
 
     }
 
-    public function get_saro($region)
+    public function get_saa($region)
     {
-        $get_saro = "
+        $get_saa = "
         SELECT
-          saro_id,
-          saro_number,
-          saro_balance
+          saa_id,
+          saa_number,
+          saa_balance
         FROM
-          tbl_saro
+          tbl_saa
         WHERE
-          saro_id <> '0'
+          saa_id <> '0'
           and deleted = 0
-          and saro_balance != '0.00'
+          and saa_balance != '0.00'
           and region_code = '".$region."'
           and status = 0
         GROUP BY
-         saro_id
+         saa_id
         ORDER BY
-          saro_id
+          saa_id
         ";
 
-        return $this->db->query($get_saro)->result();
+        return $this->db->query($get_saa)->result();
         $this->db->close();
 
     }
@@ -173,6 +173,31 @@ class communities_model extends CI_Model
         ";
 
         return $this->db->query($get_work_nature,$assistance_id)->result();
+        $this->db->close();
+
+    }
+
+    public function get_saa_list($fundsource_id, $regionsaa)
+    {
+
+        $get_saa_list= "
+        SELECT
+            saa_id,
+            saa_number,
+            saa_balance,
+            saa_funds
+
+        FROM
+          tbl_saa
+        WHERE
+          fundsource_id = ?
+        and region_code = ?
+        and deleted = 0
+        ORDER BY
+          work_nature
+        ";
+
+        return $this->db->query($get_saa_list,$fundsource_id,$regionsaa)->result();
         $this->db->close();
 
     }
@@ -206,6 +231,21 @@ class communities_model extends CI_Model
         $this->db->close();
 
     }
+
+    public function get_fund_sourcelist()
+    {
+        $sql = 'select fundsource_id,fund_source
+                from lib_fund_source
+                where deleted = 0
+                and status = 0
+                and identifier = 1';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+        $this->db->close();
+
+    }
+
     public function get_implementing_agency()
     {
         $sql = 'select agency_id,agency_name
@@ -242,19 +282,19 @@ class communities_model extends CI_Model
 
     }
 
-    public function insertProject($myid,$saro_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
+    public function insertProject($myid,$saa_number,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist,$project_amount,
                                   $lgucounterpart_prov,$lgu_amount_prov,$lgu_remarks_prov,$lgucounterpart_muni,$lgu_amount_muni,$lgu_remarks_muni,$lgucounterpart_brgy,
                                   $lgu_amount_brgy,$lgu_remarks_brgy,$project_cost,$project_amount,$implementing_agency,$start_date,$target_date,$status,$first_tranche,$second_tranche,$third_tranche)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(saro_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
+        $this->db->query('insert into tbl_projects(saa_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
                           ,no_of_bene,nature_id,fundsource_id
                           ,project_amount,lgucounterpart_prov,lgu_amount_prov,lgu_remarks_prov
                           ,lgucounterpart_muni,lgu_amount_muni,lgu_remarks_muni,lgucounterpart_brgy,lgu_amount_brgy,lgu_remarks_brgy
                           ,project_cost,implementing_agency,created_by,date_created,status,deleted)
                           values
-                          ("'.$saro_number.'","'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
+                          ("'.$saa_number.'","'.$assistancelist.'","'.$project_title.'","'.$regionlist.'","'.$provlist.'","'.$munilist.'","'.$brgylist.'",
                           "'.$number_bene.'","'.$natureofworklist.'","'.$fundsourcelist.'",
                           "'.$project_amount.'","'.$lgucounterpart_prov.'","'.$lgu_amount_prov.'","'.$lgu_remarks_prov.'",
                           "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgu_remarks_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'","'.$lgu_remarks_brgy.'",
@@ -272,17 +312,17 @@ class communities_model extends CI_Model
 						  "'.$this->session->userdata('uid').'",
 						  0
                           )');
-        $this->db->query('UPDATE tbl_saro set saro_funds_downloaded = saro_funds_downloaded + "'.$project_amount.'", saro_balance = saro_balance - "'.$project_amount.'"
-        where saro_number ="'.$saro_number.'"');
-        $this->db->query('UPDATE tbl_funds_allocated set funds_downloaded = funds_downloaded + "'.$project_amount.'"
+        $this->db->query('UPDATE tbl_saa set saa_funds_downloaded = saa_funds_downloaded + "'.$project_amount.'", saa_balance = saa_balance - "'.$project_amount.'"
+        where saa_number ="'.$saa_number.'"');
+        $this->db->query('UPDATE tbl_funds_allocated set funds_obligated = funds_obligated + "'.$project_amount.'"
         where region_code ="'.$regionlist.'"');
 
-        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,saro_number,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
+        $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,saa_number,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
                           VALUES
                           (
                           "'.$insert_id.'",
                           "'.$regionlist.'",
-                          "'.$saro_number.'",
+                          "'.$saa_number.'",
                           "'.$first_tranche.'",
                           0,
                           "'.$second_tranche.'",
@@ -468,10 +508,10 @@ class communities_model extends CI_Model
 
         return $this->db->query($get_brgy_name,$brgy_code)->row();
     }
-    public function get_saro_balance($saro_id)
+    public function get_saa_balance($saa_id)
     {
-        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
-where saro_number = "'.$saro_id.'" and deleted = 0';
+        $sql = 'select saa_funds,saro_id,saa_number,saa_balance from tbl_saa
+where saro_number = "'.$saa_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;

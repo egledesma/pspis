@@ -12,10 +12,8 @@
     <div class="page-content">
     <div class="panel">
         <div class="panel">
-            <header class="panel-heading">
-                &nbsp;<?php //echo $form_message; ?>
-            </header>
             <div class="panel-body">
+                &nbsp;<?php echo $form_message; ?>
                 <div id="exampleTableAddToolbar">
                     <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('fundsallocation/add') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
                 </div><br>

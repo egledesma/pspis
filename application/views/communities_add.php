@@ -10,9 +10,9 @@ $region_code = $this->session->userdata('uregion');
 
     function checkValidate(){
 
-        var saroBal = parseInt($('#saro_amount').val());
+        var saaBal = parseInt($('#saa_amount').val());
         var amountReq = parseInt($('#amount_requested').val());
-        if(saroBal < amountReq){
+        if(saaBal < amountReq){
 //        <button type="button" class="btn btn-outline btn-default" id="exampleBasic" data-plugin="sweetalert"
 //            data-title="Here's a message!">Basic</button>
             return false;
@@ -54,6 +54,7 @@ $region_code = $this->session->userdata('uregion');
             });
         }
     }
+
     function get_saro_balance()
     {
 
@@ -72,6 +73,8 @@ $region_code = $this->session->userdata('uregion');
             });
 //        }
     }
+
+
     function get_brgy_name() {
         var brgy_code =  $('#brgylist').val();
         if(brgy_code > 0) {
@@ -91,7 +94,6 @@ $region_code = $this->session->userdata('uregion');
         }
     }
 
-
     function get_natureofwork() {
         var assistance_id = $('#assistancelist').val();
 
@@ -110,6 +112,26 @@ $region_code = $this->session->userdata('uregion');
             $('#natureofworklist option:gt(0)').remove().end();
         }
     }
+
+    function get_saa_list()
+    {
+        var fundsource_id = $('#fundsource').val();
+
+        if(fundsource_id > 0){
+            alert(fundsource_id);
+            $.ajax({
+                url: "<?php echo base_url('communities/populate_saa_list'); ?>",
+                async: false,
+                type: "POST",
+                data: "fundsource_id="+fundsource_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#saa_name').html(data);
+                }
+            });
+        }
+    }
+
     function get_prov() {
         var region_code = $('#regionlist').val();
 
@@ -131,6 +153,7 @@ $region_code = $this->session->userdata('uregion');
             $('#provlist option:gt(0)').remove().end();
         }
     }
+
     function get_muni() {
         var prov_code = $('#provlist').val();
         $('#brgylist option:gt(0)').remove().end();
@@ -153,6 +176,7 @@ $region_code = $this->session->userdata('uregion');
             $('#munilist option:gt(0)').remove().end();
         }
     }
+
     function get_brgy() {
         var city_code = $('#munilist').val();
         if(city_code > 0) {
@@ -234,26 +258,50 @@ $region_code = $this->session->userdata('uregion');
 
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label class="control-label" for="sarolist">Saro Number:</label>
-                        <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange ="get_saro_balance();" autofocus required>
-                            <option value="">Choose Saro Number</option>
-                            <?php foreach($sarolist as $saroselect): ?>
-                                <option value="<?php echo $saroselect->saro_number; ?>"
-                                    <?php if(isset($saro_id)) {
-                                        if($saroselect->saro_id == $saro_id) {
-                                            echo " selected";
-                                        }
-                                    } ?>
+                        <label class="control-label" for="fundsource">Fund Source:</label>
+                        <select name="fundsource" id="fundsource" class="form-control"  onchange = "get_saa_list();"required="required"  autofocus>
+                            <option value="">Choose Fund Source</option>
+                            <?php foreach($fundlist as $fundselect): ?>
+                                <option value="<?php echo $fundselect->fundsource_id; ?>"
                                 >
-                                    <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
+                                    <?php echo $fundselect->fund_source; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
-                <div name = "saronumber" id = "saronumber">
+
+                <div class="form-group row">
+                    <div id = "saa_name" name = "saa_name"class="col-sm-6">
+                        <label for="sarolist" class="control-label">SAA Number:</label>
+                        <select id="sarolist" name="sarolist" class="form-control"  required>
+                            <?php if(isset($_SESSION['province']) or isset($user_region)) {
+                                ?>
+                                <option value="">Choose Province</option>
+                                <?php
+                                foreach ($saalist as $saaselect) { ?>
+                                    <option value="<?php echo $saaselect->saa_id; ?>"
+                                        <?php
+                                        if ($saaselect->saa_id) {
+                                            echo " selected";
+                                        } ?>
+                                    >
+                                        <?php echo $saaselect->saa_number; ?></option>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <option value="">Select Fund Source First</option>
+                                <?php
+                            } ?>
+                        </select>
+                    </div>
+
+
+                <div name = "saanumber" id = "saanumber">
 
                 </div>
+
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="control-label" for="assistancelist">Type of Assistance:</label>
@@ -272,16 +320,16 @@ $region_code = $this->session->userdata('uregion');
                             <?php endforeach; ?>
                         </select>
                     </div>
-
                 </div>
+
+                    </div>
 
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
                     <label for="project_title" class="control-label">Project Title:</label>
-                    <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" />
+                    <input id="project_title" name="project_title" placeholder="Project Title" type="text"  class="form-control"  value="<?php echo set_value('project_title'); ?>" required/>
                     <span class="text-danger"><?php echo form_error('project_title'); ?></span>
                     </div>
-
                 </div>
 
                 <label  class="control-label">Project Location:</label>
@@ -434,19 +482,6 @@ $region_code = $this->session->userdata('uregion');
 
                             </div>
                     </div>
-
-                    <div class="col-sm-4">
-                        <label for="fundsourcelist" class="control-label">Fund Source:</label>
-                        <select name="fundsourcelist" id="fundsourcelist" class="form-control">
-                            <option value="">Choose Fund Source</option>
-                            <?php foreach($fundsourcelist as $fundsourceselect): ?>
-                                <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
-                                    <?php echo $fundsourceselect->fund_source; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
 
                 </div>
 
