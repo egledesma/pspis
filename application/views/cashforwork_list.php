@@ -83,7 +83,7 @@
                                href="<?php echo base_url('cashforwork/upload_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Attach file"><i class="icon wb-upload" aria-hidden="true"></i></a>
                         <?php } else {?>
-                            <a class="btn btn-info btn-outline" id="confirm"
+                            <a class="btn btn-info btn-outline" id="confirm" target = "_blank"
                                href="<?php echo base_url('cashforwork/download_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Download file"><i class="icon wb-download" aria-hidden="true"></i></a>
                         <?php }?>

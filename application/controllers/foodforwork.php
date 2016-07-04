@@ -576,7 +576,7 @@ class foodforwork extends CI_Controller
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $foodforwork_idpass['foodforwork_id'] = $foodforwork_id;
-        $this->load->view('upload_bene',$foodforwork_idpass);
+        $this->load->view('upload_benefood',$foodforwork_idpass);
         $this->load->view('footer');
     }
     function download_bene($foodforwork_id)
@@ -587,9 +587,10 @@ class foodforwork extends CI_Controller
         $this->load->view('sidebar');
 
         $foodforworkdata = $foodforwork_model->get_upload_filename($foodforwork_id);
+
+        ob_clean();
         $name = $foodforworkdata->file_location;
         $data = file_get_contents("./uploads/foodforwork/".$name); // Read the file's contents
-
 
         force_download($name, $data);
         $this->load->view('footer');
@@ -598,7 +599,7 @@ class foodforwork extends CI_Controller
     {
         $config['upload_path'] = './uploads/foodforwork';
         $config['allowed_types'] = 'pdf|jpg|doc|docx';
-        $config['max_size']	= '25000';
+        $config['max_size']	= '50000';
         $config['max_width']  = '1024';
         $config['max_height']  = '1024';
         $foodforwork_model = new foodforwork_model();

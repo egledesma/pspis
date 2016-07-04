@@ -585,6 +585,7 @@ class cashforwork extends CI_Controller
         $this->load->view('sidebar');
 
         $cashforworkdata = $cashforwork_model->get_upload_filename($cashforwork_id);
+        ob_clean();
         $name = $cashforworkdata->file_location;
         $data = file_get_contents("./uploads/cashforwork/".$name); // Read the file's contents
 
@@ -596,7 +597,7 @@ class cashforwork extends CI_Controller
     {
         $config['upload_path'] = './uploads/cashforwork';
         $config['allowed_types'] = 'pdf|jpg|doc|docx';
-        $config['max_size']	= '25000';
+        $config['max_size']	= '50000';
         $config['max_width']  = '1024';
         $config['max_height']  = '1024';
         $cashforwork_model = new cashforwork_model();
