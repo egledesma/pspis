@@ -28,7 +28,7 @@ error_reporting(0);
             <?php echo form_open_multipart('foodforwork/do_upload/'.$foodforwork_id);?>
 
             <input type="file" name="userfile" id = "userfile" size="20" />
-            <label>File types PDF,JPG,DOC and DOCX - 25kb allowable size</label>
+            <label>File types PDF,JPG,DOC and DOCX - 50kb allowable size</label>
 
             <br /><br />
 

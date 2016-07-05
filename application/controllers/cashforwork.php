@@ -26,9 +26,10 @@ class cashforwork extends CI_Controller
         if ($cashforwork_id > 0){
             $getResult = $cashforwork_model->finalize($cashforwork_id);
             $total_cost = $getResult->total_cost;
-            $saro = $getResult->saro_id;
+            $saa = $getResult->saa_id;
+            $fundsource_id = $getResult->fundsource_id;
             $regionsaro = $this->session->userdata('uregion');
-            $deleteResult = $cashforwork_model->finalize_update($total_cost,$saro,$regionsaro);
+            $deleteResult = $cashforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regionsaro);
 
             if ($deleteResult){
                 $this->load->view('header');
@@ -207,7 +208,8 @@ class cashforwork extends CI_Controller
         {
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
-            $saro = $this->input->post('sarolist');
+            $saa = $this->input->post('sarolist');
+            $fundsource = $this->input->post('fundsource');
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $natureofworklist = $this->input->post('natureofworklist');
@@ -216,7 +218,7 @@ class cashforwork extends CI_Controller
             $cost_of_assistance = $this->input->post('cost_of_assistance');
             $number_days = $this->input->post('number_days');
 
-            $addResult = $cashforwork_model->insertProject($number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+            $addResult = $cashforwork_model->insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saa,$myid,$project_title,$regionlist,$provlist
                 ,$natureofworklist,$daily_payment,$number_days);
             if ($addResult){
                 $this->load->view('header');
@@ -585,6 +587,7 @@ class cashforwork extends CI_Controller
         $this->load->view('sidebar');
 
         $cashforworkdata = $cashforwork_model->get_upload_filename($cashforwork_id);
+        ob_clean();
         $name = $cashforworkdata->file_location;
         $data = file_get_contents("./uploads/cashforwork/".$name); // Read the file's contents
 
@@ -596,7 +599,7 @@ class cashforwork extends CI_Controller
     {
         $config['upload_path'] = './uploads/cashforwork';
         $config['allowed_types'] = 'pdf|jpg|doc|docx';
-        $config['max_size']	= '25000';
+        $config['max_size']	= '50000';
         $config['max_width']  = '1024';
         $config['max_height']  = '1024';
         $cashforwork_model = new cashforwork_model();

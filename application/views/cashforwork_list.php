@@ -83,7 +83,7 @@
                                href="<?php echo base_url('cashforwork/upload_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Attach file"><i class="icon wb-upload" aria-hidden="true"></i></a>
                         <?php } else {?>
-                            <a class="btn btn-info btn-outline" id="confirm"
+                            <a class="btn btn-info btn-outline" id="confirm" target = "_blank"
                                href="<?php echo base_url('cashforwork/download_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Download file"><i class="icon wb-download" aria-hidden="true"></i></a>
                         <?php }?>
@@ -92,7 +92,7 @@
                 </td>
                 <td><a id="viewProject" href="<?php echo base_url('cashforwork/masterviewcashforwork/'.$projectData->cashforwork_id.'') ?>"data-toggle="tooltip"
                        data-placement="top" data-original-title="View Project"><?php echo $projectData->project_title; ?></a></td>
-                <td><?php echo $projectData->saro_number; ?></td>
+                <td><?php echo $projectData->saa_number; ?></td>
                 <td> <a id="addCityMuni"
                         href="<?php echo base_url('cashforwork/viewcash_muni/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                         data-placement="top" data-original-title="Add City/Municipality"><?php echo $projectData->region_name; ?></a></td>

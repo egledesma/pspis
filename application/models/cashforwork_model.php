@@ -27,14 +27,14 @@ class cashforwork_model extends CI_Model
     public function viewcashforwork($cashforwork_id)
     {
 
-        $sql = 'SELECT a.cashforwork_id,d.saro_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+        $sql = 'SELECT a.cashforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
 FROM `tbl_cashforwork` a
 inner join lib_region b
 on a.region_code = b.region_code
 inner join lib_provinces c
 on a.prov_code = c.prov_code
-inner join tbl_saro d
-on a.saro_id = d.saro_id
+inner join tbl_saa d
+on a.saa_id = d.saa_id
 inner join lib_work_nature e
 on a.nature_id = e.nature_id
 inner join tbl_cash_muni f
@@ -123,7 +123,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     public function finalize($cashforwork_id)
     {
 
-        $sql = 'select a.saro_id,cost_of_assistance total_cost
+        $sql = 'select a.saa_id,a.cost_of_assistance total_cost,a.fundsource_id
                                     from tbl_cashforwork a
                                     where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $query = $this->db->query($sql);
@@ -131,36 +131,88 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         return $result;
 
     }
-    public function finalize_update($total_cost,$saro_id,$regionsaro)
+//    public function finalize_update($total_cost,$saro_id,$regionsaro)
+//    {
+//        $this->db->trans_begin();
+//
+//        $this->db->query('UPDATE tbl_saro SET
+//                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded,
+//                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized,
+//                              saro_balance = saro_balance - "'.$total_cost.'",
+//                              modified_by = "'.$this->session->userdata('uid').'"
+//                              WHERE
+//                              saro_id = "'.$saro_id.'"
+//                              ');
+//        $this->db->query('UPDATE tbl_funds_allocated SET
+//                              funds_downloaded ="'.$total_cost.'" + funds_downloaded,
+//                              funds_utilized ="'.$total_cost.'" + funds_utilized,
+//                              remaining_budget  = remaining_budget - "'.$total_cost.'",
+//                              modified_by = "'.$this->session->userdata('uid').'"
+//                              WHERE
+//                              region_code = "'.$regionsaro.'"
+//                              ');
+//        $date = date('Y');
+//        $this->db->query('UPDATE tbl_co_funds SET
+//                              co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
+//                              co_funds_remaining = co_funds_remaining - "'.$total_cost.'",
+//                              modified_by = "'.$this->session->userdata('uid').'"
+//                              WHERE
+//                              for_year = "'.$date.'"
+//                              ');
+//
+//
+//        if ($this->db->trans_status() === FALSE)
+//        {
+//            $this->db->trans_rollback();
+//            return FALSE;
+//        }
+//        else
+//        {
+//            $this->db->trans_commit();
+//            return TRUE;
+//        }
+//        $this->db->close();
+//
+//    }
+    public function finalize_update($fundsource_id,$total_cost,$saa_id,$regionsaro)
     {
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded,
-                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized,
-                              saro_balance = saro_balance - "'.$total_cost.'",
+        $this->db->query('UPDATE tbl_saa SET
+                              saa_funds_downloaded ="'.$total_cost.'" + saa_funds_downloaded,
+                              saa_funds_utilized = "'.$total_cost.'" + saa_funds_utilized,
+                              saa_balance = saa_balance - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              saro_id = "'.$saro_id.'"
+                              saa_id = "'.$saa_id.'"
                               ');
+
+        //for tbl_saa_historyY
         $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_downloaded ="'.$total_cost.'" + funds_downloaded,
                               funds_utilized ="'.$total_cost.'" + funds_utilized,
-                              remaining_budget  = remaining_budget - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
+                              fundsource_id  = "'.$fundsource_id.'" and
                               region_code = "'.$regionsaro.'"
                               ');
         $date = date('Y');
+        //for tbl_fallocation_history
+        //check if existing
+        //yes
+        //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
+        //no old_value = 0
         $this->db->query('UPDATE tbl_co_funds SET
-                              co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
-                              co_funds_remaining = co_funds_remaining - "'.$total_cost.'",
+                              co_funds_utilized = "'.$total_cost.'" + co_funds_utilized
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              for_year = "'.$date.'"
+                              fundsource_id = "'.$fundsource_id.'"
                               ');
 
-
+        //for tbl_consofund_history
+        //check if existing
+        //yes
+        //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
+        //no old_value = 0
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -177,14 +229,14 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saro_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
+        $sql = 'SELECT g.saa_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
                 FROM `tbl_cashforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
                 INNER JOIN lib_work_nature c
                 on a.nature_id = c.nature_id
-                inner join tbl_saro g
-                on a.saro_id = g.saro_id
+                inner join tbl_saa g
+                on a.saa_id = g.saa_id
                 where a.deleted = 0 and a.region_code = '.$region_code.'
                 GROUP BY a.cashforwork_id
                ';
@@ -268,7 +320,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     }
     public function get_project_title($cashforwork_id)
     {
-        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id,a.number_of_bene from tbl_cashforwork a
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saa_id,a.number_of_bene from tbl_cashforwork a
                 where a.cashforwork_id = "'.$cashforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -425,15 +477,15 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 //
 //    }
 // manual input
-    public function insertProject($number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saa,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_cashforwork(assistance_id,saro_id,
+        $this->db->query('insert into tbl_cashforwork(assistance_id,saa_id,fundsource_id,
                           project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,number_of_bene,cost_of_assistance,date_created,created_by,deleted)
                           values
-                          ("2","'.$saro.'","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$saa.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
                           "'.$number_days.'",

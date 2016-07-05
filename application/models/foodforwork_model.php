@@ -27,14 +27,14 @@ class foodforwork_model extends CI_Model
     public function viewfoodforwork($foodforwork_id)
     {
 
-        $sql = 'SELECT a.foodforwork_id,d.saro_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+        $sql = 'SELECT a.foodforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
 FROM `tbl_foodforwork` a
 inner join lib_region b
 on a.region_code = b.region_code
 inner join lib_provinces c
 on a.prov_code = c.prov_code
-inner join tbl_saro d
-on a.saro_id = d.saro_id
+inner join tbl_saa d
+on a.saa_id = d.saa_id
 inner join lib_work_nature e
 on a.nature_id = e.nature_id
 inner join tbl_food_muni f
@@ -188,14 +188,14 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saro_number,a.foodforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
+        $sql = 'SELECT g.saa_number,a.foodforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
                 FROM `tbl_foodforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
                 INNER JOIN lib_work_nature c
                 on a.nature_id = c.nature_id
-                inner join tbl_saro g
-                on a.saro_id = g.saro_id
+                inner join tbl_saa g
+                on a.saa_id = g.saa_id
                 where a.deleted = 0 and a.region_code = '.$region_code.'
                 GROUP BY a.foodforwork_id
                ';
@@ -279,7 +279,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     }
     public function get_project_title($foodforwork_id)
     {
-        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id,a.number_of_bene from tbl_foodforwork a
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saa_id,a.number_of_bene from tbl_foodforwork a
                 where a.foodforwork_id = "'.$foodforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
@@ -425,15 +425,15 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 //
 //    }
 // manual input
-    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saa,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_foodforwork(assistance_id,saro_id,fundsource_id,
+        $this->db->query('insert into tbl_foodforwork(assistance_id,saa_id,fundsource_id,
                           project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,number_of_bene,cost_of_assistance,date_created,created_by,deleted)
                           values
-                          ("2","'.$saro.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$saa.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
                           "'.$number_days.'",
