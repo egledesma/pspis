@@ -206,7 +206,7 @@ class foodforwork extends CI_Controller
         {
             $myid = $this->input->post('myid');
             $project_title = $this->input->post('project_title');
-            $saro = $this->input->post('sarolist');
+            $saa = $this->input->post('sarolist');
             $fundsource = $this->input->post('fundsource');
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
@@ -216,7 +216,7 @@ class foodforwork extends CI_Controller
             $cost_of_assistance = $this->input->post('cost_of_assistance');
             $number_days = $this->input->post('number_days');
 
-            $addResult = $foodforwork_model->insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+            $addResult = $foodforwork_model->insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saa,$myid,$project_title,$regionlist,$provlist
                 ,$natureofworklist,$daily_payment,$number_days);
             if ($addResult){
                 $this->load->view('header');

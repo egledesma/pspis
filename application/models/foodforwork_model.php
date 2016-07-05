@@ -188,14 +188,14 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saro_number,a.foodforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
+        $sql = 'SELECT g.saa_number,a.foodforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
                 FROM `tbl_foodforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code
                 INNER JOIN lib_work_nature c
                 on a.nature_id = c.nature_id
-                inner join tbl_saro g
-                on a.saro_id = g.saro_id
+                inner join tbl_saa g
+                on a.saa_id = g.saa_id
                 where a.deleted = 0 and a.region_code = '.$region_code.'
                 GROUP BY a.foodforwork_id
                ';
@@ -425,15 +425,15 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 //
 //    }
 // manual input
-    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saro,$myid,$project_title,$regionlist,$provlist
+    public function insertProject($fundsource,$number_of_bene,$cost_of_assistance,$saa,$myid,$project_title,$regionlist,$provlist
         ,$natureofworklist,$daily_payment,$number_days)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_foodforwork(assistance_id,saro_id,fundsource_id,
+        $this->db->query('insert into tbl_foodforwork(assistance_id,saa_id,fundsource_id,
                           project_title,region_code,prov_code,nature_id,daily_payment,no_of_days,number_of_bene,cost_of_assistance,date_created,created_by,deleted)
                           values
-                          ("2","'.$saro.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
+                          ("2","'.$saa.'","'.$fundsource.'","'.$project_title.'","'.$regionlist.'",
                           "'.$provlist.'","'.$natureofworklist.'",
                           "'.$daily_payment.'",
                           "'.$number_days.'",

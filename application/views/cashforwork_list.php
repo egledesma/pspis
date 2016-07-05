@@ -92,7 +92,7 @@
                 </td>
                 <td><a id="viewProject" href="<?php echo base_url('cashforwork/masterviewcashforwork/'.$projectData->cashforwork_id.'') ?>"data-toggle="tooltip"
                        data-placement="top" data-original-title="View Project"><?php echo $projectData->project_title; ?></a></td>
-                <td><?php echo $projectData->saro_number; ?></td>
+                <td><?php echo $projectData->saa_number; ?></td>
                 <td> <a id="addCityMuni"
                         href="<?php echo base_url('cashforwork/viewcash_muni/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                         data-placement="top" data-original-title="Add City/Municipality"><?php echo $projectData->region_name; ?></a></td>
