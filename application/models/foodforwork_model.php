@@ -27,14 +27,14 @@ class foodforwork_model extends CI_Model
     public function viewfoodforwork($foodforwork_id)
     {
 
-        $sql = 'SELECT a.foodforwork_id,d.saro_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+        $sql = 'SELECT a.foodforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
 FROM `tbl_foodforwork` a
 inner join lib_region b
 on a.region_code = b.region_code
 inner join lib_provinces c
 on a.prov_code = c.prov_code
-inner join tbl_saro d
-on a.saro_id = d.saro_id
+inner join tbl_saa d
+on a.saa_id = d.saa_id
 inner join lib_work_nature e
 on a.nature_id = e.nature_id
 inner join tbl_food_muni f
@@ -279,7 +279,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     }
     public function get_project_title($foodforwork_id)
     {
-        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saro_id,a.number_of_bene from tbl_foodforwork a
+        $sql = 'select a.no_of_days,a.project_title,a.daily_payment,a.saa_id,a.number_of_bene from tbl_foodforwork a
                 where a.foodforwork_id = "'.$foodforwork_id.'" and a.deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();

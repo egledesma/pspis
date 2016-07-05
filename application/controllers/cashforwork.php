@@ -26,9 +26,10 @@ class cashforwork extends CI_Controller
         if ($cashforwork_id > 0){
             $getResult = $cashforwork_model->finalize($cashforwork_id);
             $total_cost = $getResult->total_cost;
-            $saro = $getResult->saro_id;
+            $saa = $getResult->saa_id;
+            $fundsource_id = $getResult->fundsource_id;
             $regionsaro = $this->session->userdata('uregion');
-            $deleteResult = $cashforwork_model->finalize_update($total_cost,$saro,$regionsaro);
+            $deleteResult = $cashforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regionsaro);
 
             if ($deleteResult){
                 $this->load->view('header');
