@@ -93,18 +93,6 @@ if ($user_region != "190000000"){
                 </table>
             </div>
 
-            <div class="modal fade" id="exampleFormModal1" aria-hidden="false" aria-labelledby="exampleFormModalLabel1"
-                 role="dialog" tabindex="-1">
-                <div class="modal-dialog modal-center">
-                    <?php
-                    $attributes = array("class" => "modal-content", "id" => "cofunds_edit", "name" => "cofunds_edit");
-                    //input here the next location when click insert1
-                    echo form_open("cofunds/edit", $attributes);?>
-
-                    <?php echo form_close(); ?>
-                    <?php echo $this->session->flashdata('msg'); ?>
-                </div>
-            </div>
 
         </div>
     </div>

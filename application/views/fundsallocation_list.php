@@ -1,3 +1,6 @@
+<?php
+$region_code = $this->session->userdata('uregion');
+?>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -65,10 +68,15 @@
                             <td><?php echo '₱ '. number_format($fundsbudget,2); ?></td>
                             <td>
                                 <div class="btn-group">
+                                    <?php if($region_code == "19000000"){ ?>
                                         <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saa/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="View SAA List"><i class="icon wb-search" aria-hidden="true" ></i> </a>
                                         <a class="btn btn-primary btn-outline"  href="<?php echo base_url('withdraw/index/' . $fundsData->fundsource_id . '/' . $fundsData->region_code . '') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Withdraw/Transfer Funds"><i class="icon fa-exchange" aria-hidden="true" ></i> </a>
+                                    <?php }else { ?>
+                                        <a class="btn btn-dark btn-outline"  href="<?php echo base_url('saa/index/'.$fundsData->region_code.'') ?>" data-toggle="tooltip"
+                                           data-placement="top" data-original-title="View SAA List"><i class="icon wb-search" aria-hidden="true" ></i> </a>
+                                    <?php }?>
 
                                     <!--  <a class="btn btn-primary btn-outline"  href="<?php// echo base_url('fundsallocation/edit/') ?>" data-toggle="tooltip"
                                        data-placement="top" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true" ></i> </a>

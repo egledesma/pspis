@@ -143,13 +143,14 @@ class fundsallocation extends CI_Controller
 
     public function downloadedhistory($fund_source){
 
-        $cofunds_model = new cofunds_model();
-        $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
-        $getList['fundsdetails'] = $cofunds_model->get_consodownloaded_history($fund_source);
+        $fundsallocation_model = new fundsallocation_model();
+        $getList['fundsallocation'] = $fundsallocation_model->view_fundsallocationbyid($fund_source);
+        $getList['region'] = $fundsallocation_model->view_regionbyid($region_code);
+        $getList['allocationdetails'] = $fundsallocation_model->get_fundsallocation_history($fund_source,$region_code);
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
-        $this->load->view('downloadedfunds_history', $getList);
+        $this->load->view('fundsallocation_history', $getList);
         $this->load->view('footer');
 
     }

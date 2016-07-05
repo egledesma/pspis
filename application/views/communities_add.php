@@ -280,7 +280,7 @@ $region_code = $this->session->userdata('uregion');
                                 <option value="">Choose Province</option>
                                 <?php
                                 foreach ($saalist as $saaselect) { ?>
-                                    <option value="<?php echo $saaselect->saa_id; ?>"
+                                    <option value="<?php echo $saaselect->saa_number; ?>"
                                         <?php
                                         if ($saaselect->saa_id) {
                                             echo " selected";

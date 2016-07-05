@@ -1,4 +1,11 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+$region_code = $this->session->userdata('uregion');
+if($region_code != "190000000"){
+    redirect('/fundsallocation/index/0','location');
 
+}
+//saa
+?>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>

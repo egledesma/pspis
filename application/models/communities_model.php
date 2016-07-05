@@ -288,7 +288,7 @@ class communities_model extends CI_Model
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects(saa_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
+        $this->db->query('insert into tbl_projects1(saa_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
                           ,no_of_bene,nature_id,fundsource_id
                           ,project_amount,lgucounterpart_prov,lgu_amount_prov,lgu_remarks_prov
                           ,lgucounterpart_muni,lgu_amount_muni,lgu_remarks_muni,lgucounterpart_brgy,lgu_amount_brgy,lgu_remarks_brgy
@@ -301,7 +301,7 @@ class communities_model extends CI_Model
                           "'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
 
         $insert_id = $this->db->insert_id();
-        $this->db->query('INSERT INTO tbl_project_implementation(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
+        $this->db->query('INSERT INTO tbl_project_implementation1(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
                           VALUES
                           (
                           "'.$insert_id.'",

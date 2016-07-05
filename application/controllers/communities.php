@@ -383,17 +383,17 @@ class communities extends CI_Controller
             $regionlist = $this->input->post('region_pass');
             $provlist = $this->input->post('provlist');
             $munilist = $this->input->post('munilist');
-            $brgylist = $this->input->post('lgucounterpart_brgy_code');
+            $brgylist = $this->input->post('brgylist');
             $number_bene = $this->input->post('number_bene');
             $natureofworklist = $this->input->post('natureofworklist');
-            $fundsourcelist = $this->input->post('fundsourcelist');
+            $fundsourcelist = $this->input->post('fundsource');
             $project_amount = $this->input->post('amount_requested');
             $first_tranche = ($project_amount * 0.50);
             $second_tranche = ($project_amount* 0.40);
             $third_tranche = ($project_amount * 0.10);
             $lgucounterpart_prov = $this->input->post('lgucounterpart_prov_code');
             $lgucounterpart_muni = $this->input->post('lgucounterpart_muni_code');
-            $lgucounterpart_brgy = $this->input->post('lgucounterpart_brgy_code');
+            $lgucounterpart_brgy = $this->input->post('brgylist');
             $lgu_amount_prov = $this->input->post('lgu_amount_prov');
             $lgu_amount_muni= $this->input->post('lgu_amount_muni');
             $lgu_amount_brgy = $this->input->post('lgu_amount_brgy');
@@ -554,7 +554,7 @@ class communities extends CI_Controller
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {
-                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+                $saalist[$saa_select->saa_number] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
             }
 
             $saalist_prop = 'name="saalist" id="saalist" class="form-control"  required="required" onchange="get_saa_balance();" autofocus';

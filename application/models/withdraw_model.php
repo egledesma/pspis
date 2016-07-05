@@ -148,6 +148,28 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                           "'.$this->session->userdata('uid').'",now(),"2")');
         }
 
+//        $result3 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$to_region.'" and identifier ="4" ');
+
+//        if($result3->num_rows() > 0) {
+//            $from_value4 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$to_region.'" and identifier = "4" ORDER BY fundsource_id DESC limit 1 ');
+//            $from_value5 = $from_value4->row();
+//            $allocate_old_value = $from_value5->allocated_new_value;
+//            $allocate_new_value = $from_value5->allocated_new_value + $saa_amount ;
+//
+//            $this->db->query('insert into tbl_fallocation_history(
+//                fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+//                          values
+//                          ("'.$fund_source.'","'.$to_region.'","'.$allocate_old_value.'","'.$saa_amount.'","'.$allocate_new_value.'","WITHDRAW FUNDS - SAA: '.$saalist.'","'.$this->session->userdata('uid').'",now(),"4")');
+//        }
+//        else
+//        {
+//            $this->db->query('insert into tbl_fallocation_history(
+//                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+//                          values
+//                          ("'.$fund_source.'","'.$to_region.'","0","'.$saa_amount.'","'.$saa_amount.'","WITHDRAW FUNDS - SAA: '.$saalist.'",
+//                          "'.$this->session->userdata('uid').'",now(),"4")');
+//        }
+
 
 
         if ($this->db->trans_status() === FALSE)
