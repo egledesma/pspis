@@ -94,28 +94,28 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         return $result;
 
     }
-    public function get_saro($region)
-    {
-        $get_saro = "
-        SELECT
-          saro_id,
-          saro_number,
-          saro_balance
-        FROM
-          tbl_saro
-        WHERE
-          saro_id <> '0'
-          and deleted = 0
-          and region_code = '".$region."'
-        GROUP BY
-         saro_id
-        ORDER BY
-          saro_id
-        ";
-
-        return $this->db->query($get_saro)->result();
-
-    }
+//    public function get_saro($region)
+//    {
+//        $get_saro = "
+//        SELECT
+//          saro_id,
+//          saro_number,
+//          saro_balance
+//        FROM
+//          tbl_saro
+//        WHERE
+//          saro_id <> '0'
+//          and deleted = 0
+//          and region_code = '".$region."'
+//        GROUP BY
+//         saro_id
+//        ORDER BY
+//          saro_id
+//        ";
+//
+//        return $this->db->query($get_saro)->result();
+//
+//    }
 //  Auto Compute
 //    public function finalize($foodforwork_id)
 //    {
@@ -134,7 +134,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
     public function finalize($foodforwork_id)
     {
 
-        $sql = 'select a.saro_id,cost_of_assistance total_cost
+        $sql = 'select a.saa_id,a.cost_of_assistance total_cost,a.fundsource_id,a.project_title
                                     from tbl_foodforwork a
                                     where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"';
         $query = $this->db->query($sql);
@@ -142,36 +142,121 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         return $result;
 
     }
-    public function finalize_update($total_cost,$saro_id,$regionsaro)
+    public function finalize_update($fundsource_id,$total_cost,$saa_id,$regioncode,$project_title)
     {
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_downloaded ="'.$total_cost.'" + saro_funds_downloaded,
-                              saro_funds_utilized = "'.$total_cost.'" + saro_funds_utilized,
-                              saro_balance = saro_balance - "'.$total_cost.'",
+        $this->db->query('UPDATE tbl_saa SET
+                              saa_funds_downloaded ="'.$total_cost.'" + saa_funds_downloaded,
+                              saa_funds_utilized = "'.$total_cost.'" + saa_funds_utilized,
+                              saa_balance = saa_balance - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              saro_id = "'.$saro_id.'"
+                              saa_id = "'.$saa_id.'"
                               ');
+        $resultsaa = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id = "'.$saa_id.'" and identifier = "2" ');
+        $resultsaa_value = $resultsaa->row();
+        $funds_new_saa = $resultsaa_value->saa_new_amount;
+        $funds_new_saavalue = $funds_new_saa + $total_cost;
+
+        if($resultsaa->num_rows() > 0) {
+
+            $this->db->query('insert into tbl_saa_history(
+                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$saa_id.'","'.$funds_new_saa.'","'.$total_cost.'","'.$funds_new_saavalue.'","Allocated to project food for work '.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_saa_history(
+                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$saa_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project food for work '.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+        }
+        //for tbl_saa_historyY
         $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_downloaded ="'.$total_cost.'" + funds_downloaded,
-                              funds_utilized ="'.$total_cost.'" + funds_utilized,
-                              remaining_budget  = remaining_budget - "'.$total_cost.'",
+                              funds_obligated ="'.$total_cost.'" + funds_obligated,
+                              remaining_budget = remaining_budget - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              region_code = "'.$regionsaro.'"
+                              fundsource_id  = "'.$fundsource_id.'" and
+                              region_code = "'.$regioncode.'"
                               ');
-        $date = date('Y');
+
+        //for tbl_fallocation_history
+        //check if existing
+        //yes
+        //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
+        //no old_value = 0
+
+        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regioncode.'" and fundsource_id = "'.$fundsource_id.'" and identifier = "2" ');
+        $resultfunds_value = $resultfunds->row();
+        $funds_new_allocated = $resultfunds_value->allocated_new_value;
+        $funds_new_value = $funds_new_allocated + $total_cost;
+
+        if($resultfunds->num_rows() > 0) {
+
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundsource_id.'","'.$regioncode.'","'.$funds_new_allocated.'","'.$total_cost.'","'.$funds_new_value.'","Allocated to project food for work'.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundsource_id.'","'.$regioncode.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project food for work'.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+        }
+
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
-                              co_funds_remaining = co_funds_remaining - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              for_year = "'.$date.'"
+                              fundsource_id = "'.$fundsource_id.'"
                               ');
 
+        $resultconso = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id = "'.$fundsource_id.'" and identifier = "2" ');
+        $resultconso_value = $resultconso->row();
+        $funds_new_consofund = $resultconso_value->consolidated_new_value;
+        $funds_new_consovalue = $funds_new_consofund + $total_cost;
 
+        if($resultconso->num_rows() > 0) {
+
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundsource_id.'","'.$funds_new_consofund.'","'.$total_cost.'","'.$funds_new_consovalue.'","Allocated to project food for work'.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundsource_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project food for work '.$project_title.'",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+        }
+
+
+        //for tbl_consofund_history
+        //check if existing
+        //yes
+        //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
+        //no old_value = 0
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();
@@ -344,10 +429,10 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         $result = $query->row();
         return $result;
     }
-    public function get_saro_balance($saro_id)
+    public function get_saa_balance($saa_id)
     {
-        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
-where saro_id = "'.$saro_id.'" and deleted = 0';
+        $sql = 'select saa_funds,saa_id,saa_number,saa_balance from tbl_saa
+where saa_id = "'.$saa_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
@@ -545,7 +630,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                               WHERE
                               foodforwork_id = "'.$foodforwork_id.'"
                               ');
-        $this->db->query('UPDATE tbl_food_benelist SET
+        $this->db->query('UPDATE tbl_food_bene_list SET
                               deleted ="1"
                               WHERE
                               foodforwork_id = "'.$foodforwork_id.'"

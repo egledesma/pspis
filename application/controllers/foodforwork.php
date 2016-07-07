@@ -26,9 +26,11 @@ class foodforwork extends CI_Controller
         if ($foodforwork_id > 0){
             $getResult = $foodforwork_model->finalize($foodforwork_id);
             $total_cost = $getResult->total_cost;
-            $saro = $getResult->saro_id;
-            $regionsaro = $this->session->userdata('uregion');
-            $deleteResult = $foodforwork_model->finalize_update($total_cost,$saro,$regionsaro);
+            $saa = $getResult->saa_id;
+            $project_title= $getResult->saa_id;
+            $fundsource_id = $getResult->fundsource_id;
+            $regioncode = $this->session->userdata('uregion');
+            $deleteResult = $foodforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regioncode,$project_title);
 
             if ($deleteResult){
                 $this->load->view('header');
@@ -181,7 +183,7 @@ class foodforwork extends CI_Controller
             $this->init_rpmb_session();
             $regionsaro = $this->session->userdata('uregion');
             $getList['fundlist'] = $foodforwork_model->get_fund_source();
-            $getList['sarolist'] = $foodforwork_model->get_saro($regionsaro);
+//            $getList['sarolist'] = $foodforwork_model->get_saro($regionsaro);
             $getList['natureofworklist'] = $foodforwork_model->get_work_nature();
             $getList['regionlist'] = $foodforwork_model->get_regions();
 
@@ -681,21 +683,21 @@ class foodforwork extends CI_Controller
             $this->redirectIndexviewfood_bene($foodforwork_id);
         }
     }
-    public function populate_saro_amount()
+    public function populate_saa_amount()
     {
 
         if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
         {
-            $saro_id = $_POST['saro_id'];
-            $sarodata = $this->foodforwork_model->get_saro_balance($saro_id);
+            $saa_id = $_POST['saro_id'];
+            $sarodata = $this->foodforwork_model->get_saa_balance($saa_id);
 
             $data1 = array(
                 'type'        => 'hidden',
-                'id'          => 'saro_amount',
-                'name'       =>  'saro_amount',
-                'max'   =>  $sarodata->saro_balance,
+                'id'          => 'saa_amount',
+                'name'       =>  'saa_amount',
+                'max'   =>  $sarodata->saa_balance,
                 'min'   => '0',
-                'value'   =>  $sarodata->saro_balance,
+                'value'   =>  $sarodata->saa_balance,
                 'class'        => 'form-control'
             );
 
@@ -719,7 +721,7 @@ class foodforwork extends CI_Controller
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {
-                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. number_format($saa_select->saa_balance,2).')';
             }
 
             $saalist_prop = 'name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus';

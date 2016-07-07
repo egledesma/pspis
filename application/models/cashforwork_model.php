@@ -196,7 +196,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_saa_history(
                           saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$saa_id.'","'.$funds_new_saa.'","'.$total_cost.'","'.$funds_new_saavalue.'","Allocated to project '.$project_title.'",
+                          ("'.$saa_id.'","'.$funds_new_saa.'","'.$total_cost.'","'.$funds_new_saavalue.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
 
@@ -206,14 +206,14 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_saa_history(
                           saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$saa_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project '.$project_title.'",
+                          ("'.$saa_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
         }
         //for tbl_saa_historyY
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_obligated ="'.$total_cost.'" + funds_obligated,
-                              remaining_budget ="'.$total_cost.'" - remaining_budget,
+                              remaining_budget = remaining_budget - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
                               fundsource_id  = "'.$fundsource_id.'" and
@@ -236,7 +236,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_fallocation_history(
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundsource_id.'","'.$regioncode.'","'.$funds_new_allocated.'","'.$total_cost.'","'.$funds_new_value.'","Allocated to project '.$project_title.'",
+                          ("'.$fundsource_id.'","'.$regioncode.'","'.$funds_new_allocated.'","'.$total_cost.'","'.$funds_new_value.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
 
@@ -246,13 +246,14 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_fallocation_history(
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundsource_id.'","'.$regioncode.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project '.$project_title.'",
+                          ("'.$fundsource_id.'","'.$regioncode.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
         }
 
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
+                              co_funds_remaining = co_funds_utilized - "'.$total_cost.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
                               fundsource_id = "'.$fundsource_id.'"
@@ -268,7 +269,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_consofunds_history(
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundsource_id.'","'.$funds_new_consofund.'","'.$total_cost.'","'.$funds_new_consovalue.'","Allocated to project '.$project_title.'",
+                          ("'.$fundsource_id.'","'.$funds_new_consofund.'","'.$total_cost.'","'.$funds_new_consovalue.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
 
@@ -278,7 +279,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
             $this->db->query('insert into tbl_consofunds_history(
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundsource_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project '.$project_title.'",
+                          ("'.$fundsource_id.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
         }
@@ -472,10 +473,10 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         $result = $query->row();
         return $result;
     }
-    public function get_saro_balance($saro_id)
+    public function get_saa_balance($saa_id)
     {
-        $sql = 'select saro_funds,saro_id,saro_number,saro_balance from tbl_saro
-where saro_id = "'.$saro_id.'" and deleted = 0';
+        $sql = 'select saa_funds,saa_id,saa_number,saa_balance from tbl_saa
+where saa_id = "'.$saa_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;

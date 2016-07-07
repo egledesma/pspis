@@ -12,7 +12,7 @@ class dashboard_model extends CI_Model
 
     public function fundsAllocUtil(){
 
-        $sql = 'select b.region_name,a.funds_allocated,a.funds_utilized,(a.funds_utilized/a.funds_allocated)*100 as Status,(a.funds_allocated - a.funds_utilized) as RemainingBudget
+        $sql = 'select b.region_name,a.funds_allocated,a.funds_obligated,(a.funds_obligated/a.funds_allocated)*100 as Status,(a.funds_allocated - a.funds_obligated) as RemainingBudget
                 from tbl_funds_allocated a
                 inner join lib_region b
                 on b.region_code = a.region_code

@@ -6,19 +6,15 @@ $remaining = '';
 $region = '';
 $status = '';
 ?>
-<!--<pre>-->
-<!--    --><?php
-//    print_r($getAllocUtil);
-//?>
-<!--    </pre>-->
+
 <?php
 
 foreach($getAllocUtil as $key=>$value){
-    $alloc .= "".$value['funds_allocated'].",";
-    $remaining .= "".$value['RemainingBudget'].",";
-    $util .= "".$value['funds_utilized'].",";
+    $alloc .= "'".$value['funds_allocated']."',";
+    $remaining .= "'".$value['RemainingBudget']."',";
+    $util .= "'".$value['funds_utilized']."',";
     $region .= "'".$value['region_name']."',";
-    $status .= "".$value['Status'].",";
+    $status .= "'".$value['Status']."',";
 }
 
 
@@ -30,21 +26,22 @@ $remaining_format =  substr($remaining,0,-1);
 
 
 ?>
+
 <?php
 $grandUtil = '';
 $grandBalance = '';
 $grandSARO = '';
 foreach($getGrand as $key=>$value){
-    $grandBalance .= "".$value['balance']."";
-    $grandSARO .= "".$value['saro']."";
-    $grandUtil .= "".$value['utilized']."";
+    $grandBalance .= "'".$value['balance']."',";
+    $grandSARO .= "'".$value['saro']."',";
+    $grandUtil .= "'".$value['utilized']."',";
 
 }
 
 ?>
 
 <!--<pre>-->
-<!--        --><?php //echo $grandSaro?><!--<br>-->
+<!--        --><?php //print_r($grandSARO) ?><!--<br>-->
 <!--        --><?php //print_r($region_format)?><!--<br>-->
 <!--        --><?php //print_r($util_format)?><!--<br>-->
 <!--        --><?php //print_r($remaining_format)?><!--<br>-->
