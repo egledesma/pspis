@@ -4,7 +4,25 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class individual_model extends CI_Model
 {
+    public function get_fund_source()
+    {
+        $get_fund_source = "
+        SELECT
+          a.fundsource_id,
+          a.fund_source,
+          b.remaining_budget
+        FROM
+          lib_fund_source a
+        inner JOIN tbl_funds_allocated b
+        on a.fundsource_id = b.fundsource_id
+        WHERE
+        a.deleted = 0 and b.deleted = 0
 
+        ";
+
+        return $this->db->query($get_fund_source)->result();
+
+    }
     public function get_crims($regionsaro)
     {
         $admin_db= $this->load->database('ADMINDB', TRUE);
@@ -22,10 +40,10 @@ GROUP BY a.RegionAssist';
     }
     public function get_aics_details($regionsaro)
     {
-        $sql = 'SELECT  a.aics_id,b.saro_number,a.amount,a.region_code,a.date_utilized
+        $sql = 'SELECT  a.aics_id,b.fund_source,a.amount,a.region_code,a.date_utilized
 FROM `tbl_aics_history` a
-inner join tbl_saro b
-on a.saro_number = b.saro_id
+inner join lib_fund_source b
+on a.fundsource_id = b.fundsource_id
 where a.deleted = 0 and a.region_code = "'.$regionsaro.'" and b.status = 0
 order by a.aics_id asc';
         $query = $this->db->query($sql);
@@ -64,36 +82,86 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
 
         $this->db->close();
     }
-    public function insertAics($sarolist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid)
+    public function insertAics($fundlist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid)
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_aics_history(saro_number,region_code,amount,date_utilized,date_created,created_by,deleted)
+        $this->db->query('insert into tbl_aics_history(fundsource_id,region_code,amount,date_utilized,date_created,created_by,deleted)
                           values
-                          ("'.$sarolist.'","'.$regionlist.'","'.$utilize.'","'.$date_utilized.'",now(),"'.$myid.'","0")');
+                          ("'.$fundlist.'","'.$regionlist.'","'.$utilize.'","'.$date_utilized.'",now(),"'.$myid.'","0")');
 
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_downloaded = "'.$utilizeddifference.'" + saro_funds_downloaded,
-                              saro_funds_utilized = "'.$utilizeddifference.'" + saro_funds_utilized,
-                              saro_balance = saro_balance - "'.$utilizeddifference.'"
-                              WHERE
-                              saro_id = "'.$sarolist.'"
-                              ');
         $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_downloaded ="'.$utilizeddifference.'" + funds_downloaded,
-                              funds_utilized ="'.$utilizeddifference.'" + funds_utilized,
-                              remaining_budget  = remaining_budget - "'.$utilizeddifference.'"
-                              WHERE
-                              region_code = "'.$regionlist.'"
-                              ');
-        $date = date('Y');
-        $this->db->query('UPDATE tbl_co_funds SET
-                              co_funds_utilized = "'.$utilizeddifference.'" + co_funds_utilized,
-                              co_funds_remaining = co_funds_remaining - "'.$utilizeddifference.'",
+                              funds_utilized = "'.$utilizeddifference.'" + funds_utilized,
+                              remaining_budget = remaining_budget - "'.$utilizeddifference.'",
                               modified_by = "'.$this->session->userdata('uid').'"
                               WHERE
-                              for_year = "'.$date.'"
+                              fundsource_id  = "'.$fundlist.'" and
+                              region_code = "'.$regionlist.'"
                               ');
+
+        //for tbl_fallocation_history
+        //check if existing
+        //yes
+        //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
+        //no old_value = 0
+
+        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regionlist.'" and fundsource_id = "'.$fundlist.'" and identifier = "3" and deleted = "0" ');
+        $resultfunds_value = $resultfunds->row();
+        $funds_new_allocated = $resultfunds_value->allocated_new_value;
+        $funds_new_value = $funds_new_allocated + $utilizeddifference;
+
+        if($resultfunds->num_rows() > 0) {
+
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundlist.'","'.$regionlist.'","'.$funds_new_allocated.'","'.$utilizeddifference.'","'.$funds_new_value.'","Utilized AICS",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundlist.'","'.$regionlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","Utilized AICS",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+        }
+
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = "'.$utilizeddifference.'" + co_funds_utilized,
+                              modified_by = "'.$this->session->userdata('uid').'"
+                              WHERE
+                              fundsource_id = "'.$fundlist.'"
+                              ');
+
+        $resultconso = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id = "'.$fundlist.'" and identifier = "3"  and deleted = "0"');
+        $resultconso_value = $resultconso->row();
+        $funds_new_consofund = $resultconso_value->consolidated_new_value;
+        $funds_new_consovalue = $funds_new_consofund + $utilizeddifference;
+
+        if($resultconso->num_rows() > 0) {
+
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundlist.'","'.$funds_new_consofund.'","'.$utilizeddifference.'","'.$funds_new_consovalue.'","Utilized AICS",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
+                          values
+                          ("'.$fundlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","Utilized AICS",
+                          now(),"'.$this->session->userdata('uid').'",0,
+                          "2")');
+        }
+
 
         if ($this->db->trans_status() === FALSE)
         {

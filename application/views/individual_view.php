@@ -28,7 +28,7 @@ error_reporting(0);
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Saro Number</th>
+                            <th>Fund Source</th>
                             <th>Amount</th>
                             <th>Amount added</th>
                             <th>Date</th>
@@ -37,7 +37,7 @@ error_reporting(0);
                         <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Saro Number</th>
+                            <th>Fund Source</th>
                             <th>Amount</th>
                             <th>Amount added</th>
                             <th>Date</th>
@@ -49,7 +49,7 @@ error_reporting(0);
                         <tr>
 
                             <td><?php echo $crimsData->aics_id; ?></td>
-                            <td><?php echo $crimsData->saro_number; ?></td>
+                            <td><?php echo $crimsData->fund_source; ?></td>
                             <td><?php echo '₱ '. number_format($crimsData->amount,2); ?></td>
                             <?php $tempData1 = $crimsData->amount - $tempData;?>
                             <td><?php echo '₱ '. number_format($tempData1,2); ?></td>

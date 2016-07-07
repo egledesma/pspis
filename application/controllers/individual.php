@@ -69,7 +69,7 @@ class individual extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
 
             $regionsaro = $this->session->userdata('uregion');
-//            $getList['sarolist'] = $individual->get_saro($regionsaro);
+            $getList['fundlist'] = $individual->get_fund_source();
             $getList['crims'] = $individual->get_crims($regionsaro);
             $getList['prev_util'] = $individual->get_last_utilized($regionsaro);
             $this->init_rpmb_session();
@@ -86,14 +86,14 @@ class individual extends CI_Controller
         else
         {
 
-            $sarolist = $this->input->post('sarolist');
+            $fundlist = $this->input->post('fundsource');
             $regionlist = $this->input->post('region_code');
             $utilize = $this->input->post('Utilize');
             $prev_utilize = $this->input->post('Prev_Utilize');
             $utilizeddifference = $utilize - $prev_utilize;
             $date_utilized = $this->input->post('date_utilize');
             $myid = $this->session->userdata('uid');
-            $addResult = $individual->insertAics($sarolist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid);
+            $addResult = $individual->insertAics($fundlist,$regionlist,$utilize,$utilizeddifference,$date_utilized,$myid);
             if ($addResult){
                 $regionsaro = $this->session->userdata('uregion');
                 $crims['crims'] = $individual->get_crims($regionsaro);
@@ -294,8 +294,8 @@ class individual extends CI_Controller
     {
         $config = array(
             array(
-                'field' => 'sarolist',
-                'label' => 'sarolist',
+                'field' => 'fundsource',
+                'label' => 'fundsource',
                 'rules' => 'required'
             )
         );

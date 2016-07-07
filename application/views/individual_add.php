@@ -63,20 +63,16 @@ error_reporting(0);
 <?php //print_r($prev_util);?>
                 </header>
                 <div class="panel-body">
+
                     <div class="col-sm-6">
                         <div>
-                            <label class="control-label" for="sarolist">Saro Number:</label>
-                            <select name="sarolist" id="sarolist" class="form-control"  required="required" onchange = "get_saro_balance();" autofocus>
-                                <option value="">Choose Saro Number</option>
-                                <?php foreach($sarolist as $saroselect): ?>
-                                    <option value="<?php echo $saroselect->saro_id; ?>"
-                                        <?php if(isset($saro_id)) {
-                                            if($saroselect->saro_id == $saro_id) {
-                                                echo " selected";
-                                            }
-                                        } ?>
-                                    >
-                                        <?php echo $saroselect->saro_number."  (₱  ".number_format($saroselect->saro_balance).")"; ?>
+                            <label class="control-label" for="fundsource">Fund Source:</label>
+                            <select name="fundsource" id="fundsource" class="form-control" required="required"  autofocus>
+                                <option value="">Choose Fund Source</option>
+                                <?php foreach($fundlist as $fundselect): ?>
+                                    <option value="<?php echo $fundselect->fundsource_id; ?>"
+                                        >
+                                        <?php echo $fundselect->fund_source .' - (₱'. number_format($fundselect->remaining_budget,2).')'; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
