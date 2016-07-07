@@ -554,7 +554,7 @@ class communities extends CI_Controller
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {
-                $saalist[$saa_select->saa_number] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+                $saalist[$saa_select->saa_number] = $saa_select->saa_number.' - (₱'. number_format($saa_select->saa_balance,2).')';
             }
 
             $saalist_prop = 'name="saalist" id="saalist" class="form-control"  required="required" onchange="get_saa_balance();" autofocus';

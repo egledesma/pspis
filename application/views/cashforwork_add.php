@@ -38,7 +38,7 @@ $region_code = $this->session->userdata('uregion');
         var fundsource_id = $('#fundsource').val();
 
         if(fundsource_id > 0){
-            alert(fundsource_id);
+//            alert(fundsource_id);
             $.ajax({
                 url: "<?php echo base_url('cashforwork/populate_saa_list'); ?>",
                 async: false,

@@ -27,9 +27,10 @@ class cashforwork extends CI_Controller
             $getResult = $cashforwork_model->finalize($cashforwork_id);
             $total_cost = $getResult->total_cost;
             $saa = $getResult->saa_id;
+            $project_title= $getResult->saa_id;
             $fundsource_id = $getResult->fundsource_id;
-            $regionsaro = $this->session->userdata('uregion');
-            $deleteResult = $cashforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regionsaro);
+            $regioncode = $this->session->userdata('uregion');
+            $deleteResult = $cashforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regioncode,$project_title);
 
             if ($deleteResult){
                 $this->load->view('header');
@@ -719,7 +720,7 @@ class cashforwork extends CI_Controller
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {
-                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. $saa_select->saa_balance.')';
+                $saalist[$saa_select->saa_id] = $saa_select->saa_number.' - (₱'. number_format($saa_select->saa_balance,2).')';
             }
 
             $saalist_prop = 'name="sarolist" id="sarolist" class="form-control"  required="required" onchange="get_saro_balance();" autofocus';
