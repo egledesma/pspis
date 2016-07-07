@@ -7,7 +7,7 @@ $region = '';
 $status = '';
 ?>
 <!--<pre>-->
-        <?php print_r($getGrand) ?><br>
+<!--        --><?php //print_r($getGrand) ?><!--<br>-->
 <!---->
 <!--</pre>-->
 <?php
@@ -40,12 +40,12 @@ $remaining_format =  substr($remaining,0,-1);
 //
 //?>
 
-<pre>
-   <?php print_r($region_format)?><br>
-    <?php print_r($util_format)?><br>
-    <?php print_r($remaining_format)?><br>
-
-</pre>
+<!--<pre>-->
+<!--   --><?php //print_r($region_format)?><!--<br>-->
+<!--    --><?php //print_r($util_format)?><!--<br>-->
+<!--    --><?php //print_r($remaining_format)?><!--<br>-->
+<!---->
+<!--</pre>-->
 
 <div class="page">
 
