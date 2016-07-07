@@ -7,48 +7,45 @@ $region = '';
 $status = '';
 ?>
 <!--<pre>-->
-<!--    --><?php
-//    print_r($getAllocUtil);
-//?>
-<!--    </pre>-->
+        <?php print_r($getGrand) ?><br>
+<!---->
+<!--</pre>-->
 <?php
 
 foreach($getAllocUtil as $key=>$value){
-    $alloc .= "".$value['funds_allocated'].",";
+//    $alloc .= "'".$value['funds_allocated']."',";
     $remaining .= "".$value['RemainingBudget'].",";
-    $util .= "".$value['funds_utilized'].",";
+    $util .= "".$value['funds_obligated'].",";
     $region .= "'".$value['region_name']."',";
-    $status .= "".$value['Status'].",";
+//    $status .= "'".$value['Status']."',";
 }
 
 
 $region_format =  substr($region,0,-1);
-$status_format =  substr($status,0,-1);
-$alloc_format =  substr($alloc,0,-1);
 $util_format =  substr($util,0,-1);
 $remaining_format =  substr($remaining,0,-1);
 
-
 ?>
+
 <?php
-$grandUtil = '';
-$grandBalance = '';
-$grandSARO = '';
-foreach($getGrand as $key=>$value){
-    $grandBalance .= "".$value['balance']."";
-    $grandSARO .= "".$value['saro']."";
-    $grandUtil .= "".$value['utilized']."";
+//$grandUtil = '';
+//$grandBalance = '';
+//$grandSARO = '';
+//foreach($getGrand as $key=>$value){
+//    $grandBalance = "".$value['balance'].",";
+//    $grandSARO = "".$value['saro']."";
+//    $grandUtil = "".$value['utilized']."";
+//
+//}
+//
+//?>
 
-}
+<pre>
+   <?php print_r($region_format)?><br>
+    <?php print_r($util_format)?><br>
+    <?php print_r($remaining_format)?><br>
 
-?>
-
-<!--<pre>-->
-<!--        --><?php //echo $grandSaro?><!--<br>-->
-<!--        --><?php //print_r($region_format)?><!--<br>-->
-<!--        --><?php //print_r($util_format)?><!--<br>-->
-<!--        --><?php //print_r($remaining_format)?><!--<br>-->
-<!--</pre>-->
+</pre>
 
 <div class="page">
 
@@ -56,66 +53,14 @@ foreach($getGrand as $key=>$value){
 
         <h1 class="page-title">Dashboard</h1>
         <ol class="breadcrumb">
-            <li><a href="../index.html">Dashboard</a></li>
+<!--            <li><a href="../index.html">Dashboard</a></li>-->
            <!-- <li><a href="javascript:void(0)">Layouts</a></li> -->
         </ol>
     </div>
-
-    <script type="text/javascript">
-        $(function () {
-            $('#container2').highcharts({
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Nationwide'
-                },
-                subtitle: {
-                    text: 'Utilization of SARO  ₱ <?php echo $grandSARO; ?>'
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: ₱ {point.y:,.2f} ({point.percentage:.1f} %)',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Brands',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Remaining Funds',
-                        y: <?php echo $grandBalance;?>
-                    }, {
-                        name: 'Utilized',
-                        y:  <?php echo $grandUtil;?>,
-                        sliced: true,
-                        selected: true
-                    }]
-                }]
-            });
-        });
-    </script>
-
-
-
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <hr />
     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <script type="text/javascript">
         $(function () {
@@ -184,4 +129,55 @@ foreach($getGrand as $key=>$value){
             });
         });
 </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#container2').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Nationwide'
+                },
+                subtitle: {
+                    text: 'Utilization of SARO  ₱ <?php echo $getGrand->saro; ?>'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: ₱ {point.y:,.2f} ({point.percentage:.1f} %)',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Funds',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Remaining Funds',
+                        y: <?php echo $getGrand->utilized;?>
+                    }, {
+                        name: 'Utilized',
+                        y:  <?php echo $getGrand->saro;?>
+                    }]
+                }]
+            });
+        });
+    </script>
+
+
+
+
+
 </div>

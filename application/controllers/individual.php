@@ -69,7 +69,7 @@ class individual extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
 
             $regionsaro = $this->session->userdata('uregion');
-            $getList['sarolist'] = $individual->get_saro($regionsaro);
+//            $getList['sarolist'] = $individual->get_saro($regionsaro);
             $getList['crims'] = $individual->get_crims($regionsaro);
             $getList['prev_util'] = $individual->get_last_utilized($regionsaro);
             $this->init_rpmb_session();

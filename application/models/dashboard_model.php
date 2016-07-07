@@ -12,7 +12,7 @@ class dashboard_model extends CI_Model
 
     public function fundsAllocUtil(){
 
-        $sql = 'select b.region_name,a.funds_allocated,a.funds_utilized,(a.funds_utilized/a.funds_allocated)*100 as Status,(a.funds_allocated - a.funds_utilized) as RemainingBudget
+        $sql = 'select b.region_name,a.funds_allocated,a.funds_obligated,(a.funds_obligated/a.funds_allocated)*100 as Status,(a.funds_allocated - a.funds_obligated) as RemainingBudget
                 from tbl_funds_allocated a
                 inner join lib_region b
                 on b.region_code = a.region_code
@@ -24,10 +24,11 @@ class dashboard_model extends CI_Model
     }
     public function grandTotal(){
 
-        $sql = 'select sum(funds_allocated) as saro,sum(funds_utilized) as utilized ,sum(funds_allocated-funds_utilized) as balance
+        $sql = 'select sum(funds_allocated) as saro,sum(funds_utilized) as utilized ,sum(remaining_budget) as balance
 from tbl_funds_allocated
 where deleted  = 0;';
         $query = $this->db->query($sql);
-        return  $query->result_array();
+        $result = $query->row();
+        return $result;
     }
 }

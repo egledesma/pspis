@@ -6,8 +6,9 @@ $region_code = $this->session->userdata('uregion');
         get_prov();
     }
     function checkValidate(){
-        var saroBal = parseInt($('#saro_amount').val());
+        var saroBal = parseInt($('#saa_amount').val());
         var amountReq = parseInt($('#cost_of_assistance').val());
+//        alert(saroBal);
         if(saroBal < amountReq){
             alert('Insufficient Funds')
             return false;
@@ -21,7 +22,7 @@ $region_code = $this->session->userdata('uregion');
         if(saro_id > 0){
 //            alert(saro_id);
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_saro_amount'); ?>",
+                url: "<?php echo base_url('cashforwork/populate_saa_amount'); ?>",
                 async: false,
                 type: "POST",
                 data: "saro_id="+saro_id,
@@ -38,7 +39,7 @@ $region_code = $this->session->userdata('uregion');
         var fundsource_id = $('#fundsource').val();
 
         if(fundsource_id > 0){
-            alert(fundsource_id);
+//            alert(fundsource_id);
             $.ajax({
                 url: "<?php echo base_url('cashforwork/populate_saa_list'); ?>",
                 async: false,

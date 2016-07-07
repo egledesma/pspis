@@ -108,28 +108,28 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         $this->db->close();
 
     }
-    public function get_saro($region)
-    {
-        $get_saro = "
-        SELECT
-          saro_id,
-          saro_number,
-          saro_balance
-        FROM
-          tbl_saro
-        WHERE
-          saro_id <> '0'
-          and deleted = 0
-          and region_code = '".$region."'
-        GROUP BY
-         saro_id
-        ORDER BY
-          saro_id
-        ";
-
-        return $this->db->query($get_saro)->result();
-
-    }
+//    public function get_saro($region)
+//    {
+//        $get_saro = "
+//        SELECT
+//          saro_id,
+//          saro_number,
+//          saro_balance
+//        FROM
+//          tbl_saro
+//        WHERE
+//          saro_id <> '0'
+//          and deleted = 0
+//          and region_code = '".$region."'
+//        GROUP BY
+//         saro_id
+//        ORDER BY
+//          saro_id
+//        ";
+//
+//        return $this->db->query($get_saro)->result();
+//
+//    }
     public function get_regions() {
         $get_regions = "
         SELECT
