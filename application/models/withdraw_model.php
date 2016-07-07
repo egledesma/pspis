@@ -71,6 +71,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                           ("'.$fund_source.'","'.$new_saa.'","'.$to_region.'","'.$saa_amount.'","'.$saa_amount.'","Transferred",now(),"'.$this->session->userdata('uid').'","0",
                           "'.$funds_identifier.'")');
 
+
         //update tbl_saa
         $bal = $this->db->query('SELECT saa_balance FROM tbl_saa WHERE saa_id ="'.$saa_id.'"');
         $saabal = $bal->row();
@@ -137,7 +138,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
             $this->db->query('insert into tbl_fallocation_history(
                 fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fund_source.'","'.$to_region.'","'.$allocate_old_value.'","'.$saa_amount.'","'.$allocate_new_value.'","DOWNLOAD FUNDS - SAA: '.$new_saa.'","'.$this->session->userdata('uid').'",now(),"2")');
+                          ("'.$fund_source.'","'.$to_region.'","'.$allocate_old_value.'","'.$saa_amount.'","'.$allocate_new_value.'","DOWNLOAD FUNDS - SAA: '.$new_saa.'","'.$this->session->userdata('uid').'",now(),"12")');
         }
         else
         {
@@ -145,7 +146,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
                           ("'.$fund_source.'","'.$to_region.'","0","'.$saa_amount.'","'.$saa_amount.'","DOWNLOAD FUNDS - SAA: '.$new_saa.'",
-                          "'.$this->session->userdata('uid').'",now(),"2")');
+                          "'.$this->session->userdata('uid').'",now(),"12")');
         }
 
 //        $result3 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fund_source.'" and region_code = "'.$to_region.'" and identifier ="4" ');

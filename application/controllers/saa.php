@@ -34,6 +34,50 @@ class saa extends CI_Controller
 
     }
 
+    public function allocationhistory($saa_id,$region_code){
+
+        $saa_model = new saa_model();
+        $getList['saaallocated'] = $saa_model->view_saaallocationbyid($saa_id);
+        $getList['region'] = $saa_model->view_regionbyid($region_code);
+        $getList['saadetails'] = $saa_model->get_saaallocation_history($saa_id,$region_code);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saaallocated_history', $getList);
+        $this->load->view('footer');
+
+    }
+
+
+
+    public function downloadedhistory($saa_id,$region_code){
+
+        $saa_model = new saa_model();
+        $getList['saadownloaded'] = $saa_model->view_saaallocationbyid($saa_id);
+        $getList['region'] = $saa_model->view_regionbyid($region_code);
+        $getList['saadetails'] = $saa_model->get_saadownloaded_history($saa_id,$region_code);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saadownloaded_history', $getList);
+        $this->load->view('footer');
+
+    }
+
+    public function utilizedhistory($saa_id,$region_code){
+
+        $saa_model = new saa_model();
+        $getList['saautilized'] = $saa_model->view_saaallocationbyid($saa_id);
+        $getList['region'] = $saa_model->view_regionbyid($region_code);
+        $getList['saadetails'] = $saa_model->get_saautilized_history($saa_id,$region_code);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saautilized_history', $getList);
+        $this->load->view('footer');
+
+    }
+
     public function add(){
         $fundsallocation_model = new fundsallocation_model();
 

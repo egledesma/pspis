@@ -51,7 +51,7 @@ class communities_model extends CI_Model
 
     public function view_projectbyid($project_id = 0)
     {
-        $sql = 'select a.project_id,a.saro_number,a.project_title, a.region_code, b.assistance_name,
+        $sql = 'select a.project_id,a.saa_number,a.project_title, a.region_code, b.assistance_name,
                 c.work_nature, d.fund_source,a.lgucounterpart_prov, h.prov_name, i.city_name, j.brgy_name, k.status_name, l.agency_name, a.no_of_bene,
                 a.lgu_fundsource, sum(a.lgu_amount_prov + a.lgu_amount_muni + a.lgu_amount_brgy) as lgu_amount, a.project_cost,a.project_amount, f.fund_source as "implementing_agency", a.status, g.region_name, m.*
                 from tbl_projects a
@@ -380,10 +380,10 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
         where region_code ="'.$regionlist.'" and fundsource_id = "'.$fundsourcelist.'"');
 
         //TBL_ALLOCATION_HISTORY
-        $result = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="2" ');
+        $result = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="4" ');
 
         if($result->num_rows() > 0) {
-            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="2"');
+            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="4"');
             $from_value3 = $from_value2->row();
             $fallocation_old_value = $from_value3->allocated_new_value;
             $fallocation_new_value = $from_value3->allocated_new_value + $project_amount;
@@ -391,7 +391,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
             $this->db->query('insert into tbl_fallocation_history(
                 fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fundsourcelist.'","'.$regionlist.'","'.$fallocation_old_value.'","'.$project_amount.'","'.$fallocation_new_value.'","FUNDED PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"2")');
+                          ("'.$fundsourcelist.'","'.$regionlist.'","'.$fallocation_old_value.'","'.$project_amount.'","'.$fallocation_new_value.'","FUNDED PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"4")');
         }
         else
         {
@@ -399,7 +399,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
                           values
                           ("'.$fundsourcelist.'","'.$regionlist.'","0","'.$project_amount.'","'.$project_amount.'","FUNDED PROJECT : '.$project_title.'",
-                          "'.$this->session->userdata('uid').'",now(),"2")');
+                          "'.$this->session->userdata('uid').'",now(),"4")');
         }
 
 
@@ -617,7 +617,7 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
         }
         $this->db->close();
     }
-    public function updateLiquidateTranche($first_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date)
+    public function updateLiquidateTranche($project_title,$region_code,$first_liquidate,$fund_source,$saa_number,$myid,$remarks,$budget_id,$start_date)
     {
         $date = date('Y');
         $this->db->trans_begin();
@@ -631,30 +631,68 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_utilized = saro_funds_utilized + "'.$first_liquidate.'",
-                              saro_balance = saro_balance - "'.$first_liquidate.'",
+        $this->db->query('UPDATE tbl_saa SET
+                              saa_funds_utilized = saa_funds_utilized + "'.$first_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              saro_number = "'.$saro_number.'"
-                              ');
-        $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_utilized = funds_utilized + "'.$first_liquidate.'",
-                              remaining_budget = remaining_budget - "'.$first_liquidate.'",
-							  date_modified=now(),
-							  modified_by="'.$myid.'"
-                              WHERE
-                              region_code = "'.$this->session->userdata('uregion').'"
-                              ');
+                              saa_number = "'.$saa_number.'"');
+        //TBL_SAA_HISTORY
+        $saa_id_query = $this->db->query('SELECT saa_id FROM tbl_saa where saa_number ="'.$saa_number.'"');
+        $saa_id = $saa_id_query->row();
+        $saa_id_number = $saa_id->saa_id;
+        $result = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="3" ');
+
+        if($result->num_rows() > 0) {
+            $from_value = $this->db->query('SELECT * FROM tbl_saa_history1 WHERE saa_id ="'.$saa_id_number.'" and identifier ="3" ORDER BY saa_history_id DESC limit 1  ');
+            $from_value1 = $from_value->row();
+            $saa_old_value = $from_value1->saa_new_amount;
+            $saa_new_value = $from_value1->saa_new_amount + $first_liquidate;
+
+            $this->db->query('insert into tbl_saa_history(
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$first_liquidate.'","'.$saa_new_value.'","LIQUIDATE FIRST TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_saa_history(
+                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","0","'.$first_liquidate.'","'.$first_liquidate.'","LIQUIDATE FIRST TRANCHE, PROJECT : '.$project_title.'",
+                          "'.$this->session->userdata('uid').'",now(),"3")');
+        }
+        $fundsource_id_query = $this->db->query('SELECT fundsource_id FROM lib_fund_source where fund_source ="'.$fund_source.'"');
+        $fundsource_id = $fundsource_id_query->row();
+        $fund_source_id = $fundsource_id->fundsource_id;
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = co_funds_utilized + "'.$first_liquidate.'",
-                              co_funds_remaining = co_funds_remaining - "'.$first_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              for_year ="'.$date.'"
+                              fundsource_id ="'.$fund_source_id.'"
                               ');
+        $result = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source_id.'" and identifier ="3" ');
+
+        if($result->num_rows() > 0) {
+            $from_value2 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source_id.'" and identifier ="3" ORDER BY consolidated_id DESC limit 1 ');
+            $from_value3 = $from_value2->row();
+            $conso_old_value = $from_value3->consolidated_new_value;
+            $conso_new_value = $from_value3->consolidated_new_value + $first_liquidate;
+
+            $this->db->query('insert into tbl_consofunds_history(
+                fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$first_liquidate.'","'.$conso_new_value.'","LIQUIDATE FIRST TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_consofunds_history(
+                          fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source_id.'","0","'.$first_liquidate.'","'.$first_liquidate.'","LIQUIDATE FIRST TRANCHE, PROJECT  '.$project_title.'",
+                          "'.$this->session->userdata('uid').'",now(),"3")');
+        }
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -718,7 +756,7 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
         }
         $this->db->close();
     }
-    public function updateSecondLiquidateTranche($second_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date)
+    public function updateSecondLiquidateTranche($project_title,$region_code,$second_liquidate,$fund_source,$saa_number,$myid,$remarks,$budget_id,$start_date)
     {
         $date = date('Y');
         $this->db->trans_begin();
@@ -732,33 +770,45 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
-
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_utilized = saro_funds_utilized + "'.$second_liquidate.'",
-                              saro_balance = saro_balance - "'.$second_liquidate.'",
+        $this->db->query('UPDATE tbl_saa SET
+                              saa_funds_utilized = saa_funds_utilized + "'.$second_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              saro_number = "'.$saro_number.'"
-                              ');
+                              saa_number = "'.$saa_number.'"');
+        //TBL_SAA_HISTORY
+        $saa_id_query = $this->db->query('SELECT saa_id FROM tbl_saa where saa_number ="'.$saa_number.'"');
+        $saa_id = $saa_id_query->row();
+        $saa_id_number = $saa_id->saa_id;
+        $from_value = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="3" ORDER BY saa_history_id DESC limit 1 ');
+        $from_value1 = $from_value->row();
+        $saa_old_value = $from_value1->saa_new_amount;
+        $saa_new_value = $from_value1->saa_new_amount + $second_liquidate;
+        $this->db->query('insert into tbl_saa_history(
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$second_liquidate.'","'.$saa_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
 
-        $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_utilized = funds_utilized + "'.$second_liquidate.'",
-                              remaining_budget = remaining_budget - "'.$second_liquidate.'",
-							  date_modified=now(),
-							  modified_by="'.$myid.'"
-                              WHERE
-                              region_code = "'.$this->session->userdata('uregion').'"
-                              ');
-
+        $fundsource_id_query = $this->db->query('SELECT fundsource_id FROM lib_fund_source where fund_source ="'.$fund_source.'"');
+        $fundsource_id = $fundsource_id_query->row();
+        $fund_source_id = $fundsource_id->fundsource_id;
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = co_funds_utilized + "'.$second_liquidate.'",
-                              co_funds_remaining = co_funds_remaining - "'.$second_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              for_year ="'.$date.'"
+                              fundsource_id ="'.$fund_source_id.'"
                               ');
+        $from_value2 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source_id.'" and identifier ="3" ORDER BY consolidated_id DESC limit 1  ');
+        $from_value3 = $from_value2->row();
+        $conso_old_value = $from_value3->consolidated_new_value;
+        $conso_new_value = $from_value3->consolidated_new_value + $second_liquidate;
+
+            $this->db->query('insert into tbl_consofunds_history(
+                fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$second_liquidate.'","'.$conso_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
+
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -772,7 +822,7 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
         }
         $this->db->close();
     }
-    public function updateThirdLiquidateTranche($third_liquidate,$saro_number,$myid,$remarks,$budget_id,$start_date,$project_idpass)
+    public function updateThirdLiquidateTranche($third_liquidate,$project_title,$region_code,$fund_source,$saa_number,$myid,$remarks,$budget_id,$start_date,$project_idpass)
     {
         $this->db->trans_begin();
         $date = date('Y');
@@ -786,33 +836,51 @@ where saro_number = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               budget_id = "'.$budget_id.'"
                               ');
-        $this->db->query('UPDATE tbl_saro SET
-                              saro_funds_utilized = saro_funds_utilized + "'.$third_liquidate.'",
-                              saro_balance = saro_balance - "'.$third_liquidate.'",
+        $this->db->query('UPDATE tbl_saa SET
+                              saa_funds_utilized = saa_funds_utilized + "'.$third_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              saro_number = "'.$saro_number.'"
+                              saa_number = "'.$saa_number.'"
                               ');
-        $this->db->query('UPDATE tbl_funds_allocated SET
-                              funds_utilized = funds_utilized + "'.$third_liquidate.'",
-                              remaining_budget = remaining_budget - "'.$third_liquidate.'",
+        //TBL_SAA_HISTORY
+        $saa_id_query = $this->db->query('SELECT saa_id FROM tbl_saa where saa_number ="'.$saa_number.'"');
+        $saa_id = $saa_id_query->row();
+        $saa_id_number = $saa_id->saa_id;
+
+        $from_value = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="3" ORDER BY saa_history_id DESC limit 1 ');
+        $from_value1 = $from_value->row();
+        $saa_old_value = $from_value1->saa_new_amount;
+        $saa_new_value = $from_value1->saa_new_amount + $third_liquidate;
+        $this->db->query('insert into tbl_saa_history(
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$third_liquidate.'","'.$saa_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
+
+        $fundsource_id_query = $this->db->query('SELECT fundsource_id FROM lib_fund_source where fund_source ="'.$fund_source.'"');
+        $fundsource_id = $fundsource_id_query->row();
+        $fund_source_id = $fundsource_id->fundsource_id;
+        $this->db->query('UPDATE tbl_co_funds SET
+                              co_funds_utilized = co_funds_utilized + "'.$third_liquidate.'",
 							  date_modified=now(),
 							  modified_by="'.$myid.'"
                               WHERE
-                              region_code = "'.$this->session->userdata('uregion').'"
+                              fundsource_id ="'.$fund_source_id.'"
                               ');
+        $from_value2 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source_id.'" and identifier ="3" ORDER BY consolidated_id DESC limit 1 ');
+        $from_value3 = $from_value2->row();
+        $conso_old_value = $from_value3->consolidated_new_value;
+        $conso_new_value = $from_value3->consolidated_new_value + $third_liquidate;
+
+        $this->db->query('insert into tbl_consofunds_history(
+                fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$third_liquidate.'","'.$conso_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
+
         $this->db->query('UPDATE tbl_projects SET
                               status = 1
                               WHERE
                               project_id = "'.$project_idpass.'"
-                              ');
-        $this->db->query('UPDATE tbl_co_funds SET
-                              co_funds_utilized = co_funds_utilized + "'.$third_liquidate.'",
-                              co_funds_remaining = co_funds_remaining - "'.$third_liquidate.'",
-							  date_modified=now(),
-							  modified_by="'.$myid.'"
-							  WHERE for_year ="'.$date.'"
                               ');
 
         if ($this->db->trans_status() === FALSE)

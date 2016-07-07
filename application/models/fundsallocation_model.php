@@ -133,7 +133,7 @@ class fundsallocation_model extends CI_Model
         return $result;
         $this->db->close();
     }
-    public function insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$funds_identifier)
+    public function insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$status,$funds_identifier)
     {
         $this->db->trans_begin();
         $this->db->query('insert into tbl_saa(
@@ -141,6 +141,7 @@ class fundsallocation_model extends CI_Model
                           values
                           ("'.$fund_source.'","'.$saa.'","'.$regionlist.'","'.$funds_allocated2.'","'.$funds_allocated2.'",now(),"'.$myid.'","'.$status.'",
                           "'.$funds_identifier.'")');
+        $saa_insert_id = $this->db->insert_id();
 
 
         $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" and fundsource_id ="'.$fund_source.'"');
@@ -221,6 +222,29 @@ class fundsallocation_model extends CI_Model
                           "'.$myid.'",now(),"2")');
         }
 
+        $result3 = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_insert_id.'" and identifier ="1"');
+
+        if($result3->num_rows() > 0) {
+            $from_value4 = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_insert_id.'" and identifier = "1" ORDER BY saa_history_id DESC limit 1 ');
+            $from_value5 = $from_value4->row();
+            $saa_old_value = $from_value5->saa_new_amount;
+            $saa_new_value = $from_value5->saa_new_amount + $funds_allocated2 ;
+
+            $this->db->query('insert into tbl_saa_history(1
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,created_by,date_created,identifier)
+                          values
+                          ("'.$saa_insert_id.'","'.$saa_old_value.'","'.$funds_allocated2.'","'.$saa_new_value.'","DOWNLOAD FUNDS - SAA: '.$saa.'","'.$myid.'",now(),"1")');
+
+        }
+        else
+        {
+            $this->db->query('insert into tbl_saa_history(
+                           saa_id,saa_old_amount,saa_amount,saa_new_amount,description,created_by,date_created,identifier)
+                          values
+                          ("'.$saa_insert_id.'","0","'.$funds_allocated2.'","'.$funds_allocated2.'","DOWNLOAD FUNDS - SAA: '.$saa.'",
+                          "'.$myid.'",now(),"1")');
+        }
+
 
 
 
@@ -253,6 +277,25 @@ class fundsallocation_model extends CI_Model
         ';
 
         return $this->db->query($get_fundsallocationhistory)->result();
+        $this->db->close();
+    }
+
+    public function get_obligated_history($fund_source,$region_code) {
+        $get_obligated_history = '
+        SELECT
+          *
+        FROM
+          tbl_fallocation_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+          and region_code = "'.$region_code.'"
+          and identifier = "4"
+        ORDER BY
+        allocation_history_id DESC
+        ';
+
+        return $this->db->query($get_obligated_history)->result();
+        $this->db->close();
     }
 
     public function get_otherfunds_history($fund_source,$region_code) {
@@ -271,6 +314,7 @@ class fundsallocation_model extends CI_Model
         ';
 
         return $this->db->query($get_otherfundshistory)->result();
+        $this->db->close();
     }
 
     public function view_fundsallocationbyid($fund_source)

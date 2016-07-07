@@ -34,6 +34,79 @@ class saa_model extends CI_Model
         $this->db->close();
     }
 
+    public function view_saaallocationbyid($saa_id)
+    {
+        $sql = 'select saa_id, saa_number from tbl_saa
+                where saa_id ="'.$saa_id.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+    }
+
+    public function view_regionbyid($region_code)
+    {
+        $sql = 'select region_name from lib_region
+                where region_code ="'.$region_code.'"
+               ';
+        $query = $this->db->query($sql);
+        $result = $query->row();
+        return $result;
+        $this->db->close();
+    }
+
+    public function get_saaallocation_history($saa_id) {
+        $get_saaallocationhistory = '
+        SELECT
+          *
+        FROM
+          tbl_saa_history
+        WHERE
+          saa_id ="'.$saa_id.'"
+          and identifier = "1"
+        ORDER BY
+        saa_history_id DESC
+        ';
+
+        return $this->db->query($get_saaallocationhistory)->result();
+        $this->db->close();
+    }
+
+    public function get_saadownloaded_history($saa_id) {
+        $get_saadownloaded_history = '
+        SELECT
+          *
+        FROM
+          tbl_saa_history
+        WHERE
+          saa_id ="'.$saa_id.'"
+          and identifier = "2"
+        ORDER BY
+        saa_history_id DESC
+        ';
+
+        return $this->db->query($get_saadownloaded_history)->result();
+        $this->db->close();
+    }
+
+    public function get_saautilized_history($saa_id) {
+        $get_saautilizedshistory = '
+        SELECT
+          *
+        FROM
+          tbl_saa_history
+        WHERE
+          saa_id ="'.$saa_id.'"
+          and identifier = "3"
+        ORDER BY
+        saa_history_id DESC
+        ';
+
+        return $this->db->query($get_saautilizedshistory)->result();
+        $this->db->close();
+    }
+
     public function get_saro_history($saro_id) {
         $get_sarohistory = '
         SELECT
@@ -121,45 +194,6 @@ class saa_model extends CI_Model
         }
         $this->db->close();
 
-    }
-    public function updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
-        ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
-
-        $this->db->trans_begin();
-
-        $this->db->query('UPDATE tbl_projects
-                        SET
-                        project_title = "'.$project_title.'",
-                        region_code = "'.$regionlist.'",
-                        prov_code = "'.$provlist.'",
-                        city_code = "'.$munilist.'",
-                        brgy_code = "'.$brgylist.'",
-                        no_of_bene = "'.$number_bene.'",
-                        assistance_id = "'.$assistancelist.'",
-                        nature_id = "'.$natureofworklist.'",
-                        fundsource_id = "'.$fundsourcelist.'",
-                        lgucounterpart_id = "'.$lgucounterpartlist.'",
-                        lgu_fundsource = "'.$lgu_fundsource.'",
-                        lgu_amount = "'.$lgu_amount.'",
-                        project_cost = "'.$project_cost.'",
-                        project_amount = "'.$project_amount.'",
-                        implementing_agency = "'.$implementing_agency.'",
-                        `status` = "'.$status.'"
-                        WHERE
-                        project_id = "'.$project_id.'"');
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-
-        $this->db->close();
     }
     public function deleteProject($project_id = 0)
     {
