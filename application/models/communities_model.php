@@ -232,13 +232,15 @@ class communities_model extends CI_Model
 
     }
 
-    public function get_fund_sourcelist()
+    public function get_fund_sourcelist($regionsaa)
     {
-        $sql = 'select fundsource_id,fund_source
-                from lib_fund_source
-                where deleted = 0
-                and status = 0
-                and identifier = 1';
+        $sql = 'select t1.fundsource_id,t1.fund_source
+                from lib_fund_source t1 inner join tbl_saa t2 on t1.fundsource_id = t2.fundsource_id
+                where t1.deleted = 0
+                and t2.region_code = "'.$regionsaa.'"
+                and t1.status = 0
+                and t1.identifier = 1
+                group by t1.fundsource_id';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
@@ -255,6 +257,18 @@ class communities_model extends CI_Model
         $result = $query->result();
         return $result;
         $this->db->close();
+
+    }
+
+    public function get_saa_region($fundsource_id,$regionsaa)
+    {
+        $sql = 'SELECT saa_id,saa_number,saa_balance
+FROM `tbl_saa`
+where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
+        and region_code ="'.$regionsaa.'"';
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
 
     }
 
@@ -288,7 +302,7 @@ class communities_model extends CI_Model
     {
 
         $this->db->trans_begin();
-        $this->db->query('insert into tbl_projects1(saa_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
+        $this->db->query('insert into tbl_projects(saa_number,assistance_id,project_title,region_code,prov_code,city_code,brgy_code
                           ,no_of_bene,nature_id,fundsource_id
                           ,project_amount,lgucounterpart_prov,lgu_amount_prov,lgu_remarks_prov
                           ,lgucounterpart_muni,lgu_amount_muni,lgu_remarks_muni,lgucounterpart_brgy,lgu_amount_brgy,lgu_remarks_brgy
@@ -300,8 +314,10 @@ class communities_model extends CI_Model
                           "'.$lgucounterpart_muni.'","'.$lgu_amount_muni.'","'.$lgu_remarks_muni.'","'.$lgucounterpart_brgy.'","'.$lgu_amount_brgy.'","'.$lgu_remarks_brgy.'",
                           "'.$project_cost.'","'.$implementing_agency.'","'.$myid.'",now(),"'.$status.'","0")');
 
+
+        //TBL_IMPLEMENTATION
         $insert_id = $this->db->insert_id();
-        $this->db->query('INSERT INTO tbl_project_implementation1(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
+        $this->db->query('INSERT INTO tbl_project_implementation(project_id,start_date,target_date,project_status,date_created,created_by, deleted)
                           VALUES
                           (
                           "'.$insert_id.'",
@@ -312,11 +328,8 @@ class communities_model extends CI_Model
 						  "'.$this->session->userdata('uid').'",
 						  0
                           )');
-        $this->db->query('UPDATE tbl_saa set saa_funds_downloaded = saa_funds_downloaded + "'.$project_amount.'", saa_balance = saa_balance - "'.$project_amount.'"
-        where saa_number ="'.$saa_number.'"');
-        $this->db->query('UPDATE tbl_funds_allocated set funds_obligated = funds_obligated + "'.$project_amount.'"
-        where region_code ="'.$regionlist.'"');
 
+        //TBL_PROJECT_BUDGET
         $this->db->query('INSERT INTO tbl_project_budget(project_id,region_code,saa_number,first_tranche,first_tranche_status,second_tranche,third_tranche,date_created,created_by, deleted)
                           VALUES
                           (
@@ -331,6 +344,66 @@ class communities_model extends CI_Model
 						  "'.$this->session->userdata('uid').'",
 						  0
                           )');
+
+        //TBL_SAA
+        $this->db->query('UPDATE tbl_saa set saa_funds_downloaded = saa_funds_downloaded + "'.$project_amount.'", saa_balance = saa_balance - "'.$project_amount.'", date_modified = now(), modified_by = "'.$myid.'"
+        where saa_number ="'.$saa_number.'"');
+
+        //TBL_SAA_HISTORY
+        $saa_id_query = $this->db->query('SELECT saa_id FROM tbl_saa where saa_number ="'.$saa_number.'"');
+        $saa_id = $saa_id_query->row();
+        $saa_id_number = $saa_id->saa_id;
+        $result = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="2" ');
+
+        if($result->num_rows() > 0) {
+            $from_value = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="2" ');
+            $from_value1 = $from_value->row();
+            $saa_old_value = $from_value1->saa_new_amount;
+            $saa_new_value = $from_value1->saa_new_amount + $project_amount;
+
+            $this->db->query('insert into tbl_saa_history(
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$project_amount.'","'.$saa_new_value.'","FUNDED PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"2")');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_saa_history(
+                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          values
+                          ("'.$saa_id_number.'","0","'.$project_amount.'","'.$project_amount.'","FUNDED PROJECT : '.$project_title.'",
+                          "'.$this->session->userdata('uid').'",now(),"2")');
+        }
+
+        //TBL_FUNDS_ALLOCATION
+        $this->db->query('UPDATE tbl_funds_allocated set funds_obligated = funds_obligated + "'.$project_amount.'", remaining_budget = remaining_budget - "'.$project_amount.'", date_modified = now(), modified_by = "'.$myid.'"
+        where region_code ="'.$regionlist.'" and fundsource_id = "'.$fundsourcelist.'"');
+
+        //TBL_ALLOCATION_HISTORY
+        $result = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="2" ');
+
+        if($result->num_rows() > 0) {
+            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="2"');
+            $from_value3 = $from_value2->row();
+            $fallocation_old_value = $from_value3->allocated_new_value;
+            $fallocation_new_value = $from_value3->allocated_new_value + $project_amount;
+
+            $this->db->query('insert into tbl_fallocation_history(
+                fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fundsourcelist.'","'.$regionlist.'","'.$fallocation_old_value.'","'.$project_amount.'","'.$fallocation_new_value.'","FUNDED PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"2")');
+        }
+        else
+        {
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fundsourcelist.'","'.$regionlist.'","0","'.$project_amount.'","'.$project_amount.'","FUNDED PROJECT : '.$project_title.'",
+                          "'.$this->session->userdata('uid').'",now(),"2")');
+        }
+
+
+
         if ($this->db->trans_status() === FALSE)
         {
             $this->db->trans_rollback();

@@ -348,7 +348,7 @@ class communities extends CI_Controller
             $this->init_rpmb_session();
             $regionsaa = $this->session->userdata('uregion');
             $getList['assistancelist'] = $communities_model->get_lib_assistance();
-            $getList['fundlist'] = $communities_model->get_fund_sourcelist();
+            $getList['fundlist'] = $communities_model->get_fund_sourcelist($regionsaa);
             $getList['saalist'] = $communities_model->get_saa($regionsaa);
             $getList['projectstatuslist'] = $communities_model->get_project_status();
             $getList['implementingagency'] = $communities_model->get_implementing_agency();
@@ -541,7 +541,7 @@ class communities extends CI_Controller
     public function populate_saa_list()
     {
 
-//        $saadata = $this->cashforwork_model->get_saa($fundsource_id);
+
         $label = array(
             'for'          => 'saalist',
             'class'        => 'control-label'
@@ -550,7 +550,8 @@ class communities extends CI_Controller
         if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
         {
             $fundsource_id = $_POST['fundsource_id'];
-            $saa_data = $this->cashforwork_model->get_saa($fundsource_id);
+            $regionsaa = $this->session->userdata('uregion');
+            $saa_data = $this->communities_model->get_saa_region($fundsource_id,$regionsaa);
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {

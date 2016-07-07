@@ -13,8 +13,7 @@ $region_code = $this->session->userdata('uregion');
         var saaBal = parseInt($('#saa_amount').val());
         var amountReq = parseInt($('#amount_requested').val());
         if(saaBal < amountReq){
-//        <button type="button" class="btn btn-outline btn-default" id="exampleBasic" data-plugin="sweetalert"
-//            data-title="Here's a message!">Basic</button>
+//
             return false;
         }
     }
