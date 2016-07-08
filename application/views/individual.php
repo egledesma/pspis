@@ -20,7 +20,7 @@
             </header>
             <div class="panel-body">
             <div class="col-md-12">
-
+<?php //print_r($crims)?>
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                     <thead>
                     <tr>

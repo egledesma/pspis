@@ -26,11 +26,20 @@ class individual_model extends CI_Model
     public function get_crims($regionsaro)
     {
         $admin_db= $this->load->database('ADMINDB', TRUE);
+        if($regionsaro == 190000000 )
+        {
+            $region_code = 0;
+        }
+        else
+        {
+            $region_code = $regionsaro;
+        }
+
         $sql = 'SELECT sum(a.AmountOfFinanceAssist) as Utilize,b.region_name,a.RegionAssist
 FROM `crimsmonitoringreports` a
 inner join lib_regions b
 on a.RegionAssist = b.region_code
-where a.RegionAssist >= 0 and a.RegionAssist = "'.$regionsaro.'"
+where a.RegionAssist = "'.$region_code.'"
 GROUP BY a.RegionAssist';
         $query = $admin_db->query($sql);
         $result = $query->row();
