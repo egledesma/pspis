@@ -26,9 +26,9 @@
                         <mark class="bg-warning">&nbsp;&nbsp;&nbsp; <?php echo $projectdata->status_name ?> &nbsp;&nbsp;&nbsp;</mark></h1>
                         <?php } else {}
                         ?>
-                    <div class="panel-actions">
-                        <a class= "btn btn-outline btn-primary "  data-toggle="tooltip" data-placement="top" data-original-title="Edit Project" href="<?php echo base_url('communities/updateCommunities/'.$projectdata->project_id.'') ?>"><i class="icon wb-edit" aria-hidden="true"></i> Edit</a>
-                    </div>
+<!--                    <div class="panel-actions">-->
+<!--                        <a class= "btn btn-outline btn-primary "  data-toggle="tooltip" data-placement="top" data-original-title="Edit Project" href="--><?php //echo base_url('communities/updateCommunities/'.$projectdata->project_id.'') ?><!--"><i class="icon wb-edit" aria-hidden="true"></i> Edit</a>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="panel-body">
