@@ -37,8 +37,6 @@
                     </tr>
                     </tfoot>
                     <tbody  data-plugin="scrollable" data-direction="horizontal">
-
-
                         <tr>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
@@ -50,12 +48,9 @@
                                        data-placement="top" data-original-title="View Details"><i class="icon wb-search"" aria-hidden="true"></i> </a>
                                 </div>
                             </td>
-
                             <td><?php echo $crims->region_name; ?></td>
                             <td><?php echo '₱ '. number_format($crims->Utilize,2); ?></td>
-
                         </tr>
-
                     </tbody>
                 </table>
 
