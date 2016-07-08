@@ -124,7 +124,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
             $this->db->query('insert into tbl_fallocation_history(
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundlist.'","'.$regionlist.'","'.$funds_new_allocated.'","'.$utilizeddifference.'","'.$funds_new_value.'","Utilized AICS",
+                          ("'.$fundlist.'","'.$regionlist.'","'.$funds_new_allocated.'","'.$utilizeddifference.'","'.$funds_new_value.'","UTILIZED AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "3")');
 
@@ -134,7 +134,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
             $this->db->query('insert into tbl_fallocation_history(
                           fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundlist.'","'.$regionlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","Utilized AICS",
+                          ("'.$fundlist.'","'.$regionlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","UTILIZED AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "3")');
         }
@@ -146,7 +146,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                               fundsource_id = "'.$fundlist.'"
                               ');
 
-        $resultconso = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id = "'.$fundlist.'" and identifier = "3"  and deleted = "0"');
+        $resultconso = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id = "'.$fundlist.'" and identifier = "3"  and deleted = "0" order by consolidated_id desc limit 1');
         $resultconso_value = $resultconso->row();
         $funds_new_consofund = $resultconso_value->consolidated_new_value;
         $funds_new_consovalue = $funds_new_consofund + $utilizeddifference;
@@ -156,7 +156,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
             $this->db->query('insert into tbl_consofunds_history(
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundlist.'","'.$funds_new_consofund.'","'.$utilizeddifference.'","'.$funds_new_consovalue.'","Utilized AICS",
+                          ("'.$fundlist.'","'.$funds_new_consofund.'","'.$utilizeddifference.'","'.$funds_new_consovalue.'","UTILIZED AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
 
@@ -166,7 +166,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
             $this->db->query('insert into tbl_consofunds_history(
                           fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,date_created,created_by,deleted,identifier)
                           values
-                          ("'.$fundlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","Utilized AICS",
+                          ("'.$fundlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","UTILIZED AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
                           "2")');
         }

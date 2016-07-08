@@ -121,7 +121,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
         $result1 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier ="2" ');
 
         if($result1->num_rows() > 0) {
-            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier = "2" ORDER BY fundsource_id DESC limit 1 ');
+            $from_value = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier = "2" ORDER BY consolidated_id DESC limit 1 ');
             $from_value1 = $from_value->row();
             $conso_old_value = $from_value1->consolidated_new_value;
             $conso_new_value = $from_value1->consolidated_new_value - $saa_amount ;
@@ -131,7 +131,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                           values
                           ("'.$fund_source.'","'.$conso_old_value.'","'.$saa_amount.'","'.$conso_new_value.'","WITHDRAW FUNDS - SAA: '.$saalist.'","'.$this->session->userdata('uid').'",now(),"2")');
 
-            $from_value2 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier = "2" ORDER BY fundsource_id DESC limit 1 ');
+            $from_value2 = $this->db->query('SELECT * FROM tbl_consofunds_history WHERE fundsource_id ="'.$fund_source.'" and identifier = "2" ORDER BY consolidated_id DESC limit 1 ');
             $from_value3 = $from_value2->row();
             $conso_old_value = $from_value3->consolidated_new_value;
             $conso_new_value = $from_value3->consolidated_new_value + $saa_amount ;

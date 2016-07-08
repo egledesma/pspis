@@ -356,20 +356,20 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
         $result = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="2" ');
 
         if($result->num_rows() > 0) {
-            $from_value = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="2" ');
+            $from_value = $this->db->query('SELECT * FROM tbl_saa_history WHERE saa_id ="'.$saa_id_number.'" and identifier ="2" order by saa_history_id desc limit 1');
             $from_value1 = $from_value->row();
             $saa_old_value = $from_value1->saa_new_amount;
             $saa_new_value = $from_value1->saa_new_amount + $project_amount;
 
             $this->db->query('insert into tbl_saa_history(
-                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                saa_id,saa_old_amount,saa_amount,saa_new_amount,description,created_by,date_created,identifier)
                           values
                           ("'.$saa_id_number.'","'.$saa_old_value.'","'.$project_amount.'","'.$saa_new_value.'","FUNDED PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"2")');
         }
         else
         {
             $this->db->query('insert into tbl_saa_history(
-                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
+                          saa_id,saa_old_amount,saa_amount,saa_new_amount,description,created_by,date_created,identifier)
                           values
                           ("'.$saa_id_number.'","0","'.$project_amount.'","'.$project_amount.'","FUNDED PROJECT : '.$project_title.'",
                           "'.$this->session->userdata('uid').'",now(),"2")');
@@ -383,7 +383,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
         $result = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="4" ');
 
         if($result->num_rows() > 0) {
-            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="4"');
+            $from_value2 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE fundsource_id ="'.$fundsourcelist.'" and region_code = "'.$regionlist.'" and identifier ="4" order by allocation_history_id desc limit 1');
             $from_value3 = $from_value2->row();
             $fallocation_old_value = $from_value3->allocated_new_value;
             $fallocation_new_value = $from_value3->allocated_new_value + $project_amount;
