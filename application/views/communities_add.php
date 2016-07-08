@@ -13,7 +13,8 @@ $region_code = $this->session->userdata('uregion');
         var saaBal = parseInt($('#saa_amount').val());
         var amountReq = parseInt($('#amount_requested').val());
         if(saaBal < amountReq){
-//
+
+           alert("Insufficient Balance, Please select other SAA.");
             return false;
         }
     }
@@ -54,20 +55,20 @@ $region_code = $this->session->userdata('uregion');
         }
     }
 
-    function get_saro_balance()
+    function get_saa_amount()
     {
 
-        var saro_id = $('#sarolist').val();
-
-//        if(saro_id > 0){
+        var saa_id = $('#saalist').val();
+//        alert(saa_id);
+//        if(saa_id > 0){
             $.ajax({
-                url: "<?php echo base_url('communities/populate_saro_amount'); ?>",
+                url: "<?php echo base_url('communities/populate_saa_amount'); ?>",
                 async: false,
                 type: "POST",
-                data: "saro_id="+saro_id,
+                data: "saa_number="+saa_id,
                 dataType: "html",
                 success: function(data) {
-                    $('#saronumber').html(data);
+                    $('#saanumber').html(data);
                 }
             });
 //        }
@@ -117,7 +118,7 @@ $region_code = $this->session->userdata('uregion');
         var fundsource_id = $('#fundsource').val();
 
         if(fundsource_id > 0){
-            alert(fundsource_id);
+//            alert(fundsource_id);
             $.ajax({
                 url: "<?php echo base_url('communities/populate_saa_list'); ?>",
                 async: false,
@@ -273,7 +274,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div id = "saa_name" name = "saa_name"class="col-sm-6">
                         <label for="sarolist" class="control-label">SAA Number:</label>
-                        <select id="sarolist" name="sarolist" class="form-control"  required>
+                        <select id="sarolist" name="sarolist" class="form-control"  onchange ="get_saa_amount();" required>
                             <?php if(isset($_SESSION['province']) or isset($user_region)) {
                                 ?>
                                 <option value="">Choose Province</option>

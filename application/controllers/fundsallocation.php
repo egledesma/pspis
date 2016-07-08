@@ -169,6 +169,20 @@ class fundsallocation extends CI_Controller
 
     }
 
+    public function fundsutilizedhistory($fund_source,$region_code){
+
+        $fundsallocation_model = new fundsallocation_model();
+        $getList['fundsallocation'] = $fundsallocation_model->view_fundsallocationbyid($fund_source);
+        $getList['region'] = $fundsallocation_model->view_regionbyid($region_code);
+        $getList['allocationdetails'] = $fundsallocation_model->get_fudsutilized_history($fund_source,$region_code);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('fundsutilized_history', $getList);
+        $this->load->view('footer');
+
+    }
+
     public function edit($aid = "")
     {
         if ($aid != ""){

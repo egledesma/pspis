@@ -95,7 +95,7 @@ class communities_model extends CI_Model
         FROM
           lib_assistance_type
         WHERE
-          assistance_id <> '0'
+          assistance_id in (3,4)
           and deleted = 0
         ORDER BY
           assistance_id
@@ -581,15 +581,34 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
 
         return $this->db->query($get_brgy_name,$brgy_code)->row();
     }
+
+//    public function get_saa_balance($saa_id) {
+//        $get_saa_balance = "
+//        SELECT
+//            saa_funds,
+//            saa_id,
+//            saa_number,
+//            saa_balance
+//        FROM
+//          tbl_saa1
+//        WHERE
+//          saa_id = ?
+//          and deleted = 0
+//        ";
+//
+//        return $this->db->query($get_saa_balance,$saa_id)->row();
+//    }
     public function get_saa_balance($saa_id)
     {
-        $sql = 'select saa_funds,saro_id,saa_number,saa_balance from tbl_saa
-where saro_number = "'.$saa_id.'" and deleted = 0';
+//        echo "test";
+        $sql = 'select saa_funds,saa_id,saa_number,saa_balance from tbl_saa
+where saa_number = "'.$saa_id.'" and deleted = 0';
         $query = $this->db->query($sql);
         $result = $query->row();
+        $this->db->close();
         return $result;
 
-        $this->db->close();
+
     }
 
     public function updateFirstTranche($myid,$remarks,$budget_id,$start_date)

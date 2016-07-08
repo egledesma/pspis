@@ -57,12 +57,12 @@ $region_code = $this->session->userdata('uregion');
                             <a class="btn btn-dark btn-outline" id="confirm"
                                href="<?php echo base_url('communities/view/'.$projectData->project_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="View Project"><i class="icon wb-search" aria-hidden="true"></i></a>
-                            <a class="btn btn-info btn-outline" id="confirm"
-                               href="<?php echo base_url('communities/updateCommunities/'.$projectData->project_id.'') ?>" data-toggle="tooltip"
-                               data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
-                            <a class="confirmation btn btn-danger btn-outline" id="confirm"
-                               href="<?php echo base_url('communities/deleteCommunities/'.$projectData->project_id.'') ?>" data-toggle="tooltip"
-                               data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
+<!--                            <a class="btn btn-info btn-outline" id="confirm"-->
+<!--                               href="--><?php //echo base_url('communities/updateCommunities/'.$projectData->project_id.'') ?><!--" data-toggle="tooltip"-->
+<!--                               data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>-->
+<!--                            <a class="confirmation btn btn-danger btn-outline" id="confirm"-->
+<!--                               href="--><?php //echo base_url('communities/deleteCommunities/'.$projectData->project_id.'') ?><!--" data-toggle="tooltip"-->
+<!--                               data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>-->
                         </div>
 
                     </td>

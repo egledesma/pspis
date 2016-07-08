@@ -226,7 +226,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
         //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
         //no old_value = 0
 
-        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regioncode.'" and fundsource_id = "'.$fundsource_id.'" and identifier = "2" and deleted = "0" ');
+        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regioncode.'" and fundsource_id = "'.$fundsource_id.'" and identifier = "4" and deleted = "0" ');
         $resultfunds_value = $resultfunds->row();
         $funds_new_allocated = $resultfunds_value->allocated_new_value;
         $funds_new_value = $funds_new_allocated + $total_cost;
@@ -238,7 +238,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
                           values
                           ("'.$fundsource_id.'","'.$regioncode.'","'.$funds_new_allocated.'","'.$total_cost.'","'.$funds_new_value.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
-                          "2")');
+                          "4")');
 
         }
         else
@@ -248,7 +248,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
                           values
                           ("'.$fundsource_id.'","'.$regioncode.'","0","'.$total_cost.'","'.$total_cost.'","Allocated to project cash for work '.$project_title.'",
                           now(),"'.$this->session->userdata('uid').'",0,
-                          "2")');
+                          "4")');
         }
 
         $this->db->query('UPDATE tbl_co_funds SET

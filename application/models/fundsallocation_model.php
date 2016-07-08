@@ -280,6 +280,24 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
     }
 
+    public function get_fudsutilized_history($fund_source,$region_code) {
+        $get_fundsallocationhistory = '
+        SELECT
+          *
+        FROM
+          tbl_fallocation_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+          and region_code = "'.$region_code.'"
+          and identifier = "3"
+        ORDER BY
+        allocation_history_id DESC
+        ';
+
+        return $this->db->query($get_fundsallocationhistory)->result();
+        $this->db->close();
+    }
+
     public function get_obligated_history($fund_source,$region_code) {
         $get_obligated_history = '
         SELECT

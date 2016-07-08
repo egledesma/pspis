@@ -547,32 +547,6 @@ class communities extends CI_Controller
         }
     }
 
-    public function populate_saa_list()
-    {
-
-
-        $label = array(
-            'for'          => 'saalist',
-            'class'        => 'control-label'
-        );
-        echo form_label('SAA Number:', '', $label);
-        if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
-        {
-            $fundsource_id = $_POST['fundsource_id'];
-            $regionsaa = $this->session->userdata('uregion');
-            $saa_data = $this->communities_model->get_saa_region($fundsource_id,$regionsaa);
-//            print_r($saa_data);
-            $saalist[''] = "Choose Saa Number";
-            foreach($saa_data as $saa_select) {
-                $saalist[$saa_select->saa_number] = $saa_select->saa_number.' - (₱'. number_format($saa_select->saa_balance,2).')';
-            }
-
-            $saalist_prop = 'name="saalist" id="saalist" class="form-control"  required="required" onchange="get_saa_balance();" autofocus';
-
-            echo form_dropdown('saalist', $saalist, '', $saalist_prop);
-        }
-
-    }
 
     public function populate_naturemaxmin()
     {
@@ -701,21 +675,50 @@ class communities extends CI_Controller
         }
 
     }
-    public function populate_saa_amount()
+
+
+    public function populate_saa_list()
     {
 
-//        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+
+        $label = array(
+            'for'          => 'saalist',
+            'class'        => 'control-label'
+        );
+        echo form_label('SAA Number:', '', $label);
+        if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
+        {
+            $fundsource_id = $_POST['fundsource_id'];
+            $regionsaa = $this->session->userdata('uregion');
+            $saa_data = $this->communities_model->get_saa_region($fundsource_id,$regionsaa);
+//            print_r($saa_data);
+            $saalist[''] = "Choose Saa Number";
+            foreach($saa_data as $saa_select) {
+                $saalist[$saa_select->saa_number] = $saa_select->saa_number.' - (₱'. number_format($saa_select->saa_balance,2).')';
+            }
+
+            $saalist_prop = 'name="saalist" id="saalist" class="form-control"  required="required"  onchange ="get_saa_amount();" autofocus';
+
+            echo form_dropdown('saalist', $saalist, '', $saalist_prop);
+        }
+
+    }
+    public function populate_saa_amount()
+    {
+//        $saa_id = $_POST['saa_number'];
+
+//        if($_POST['saa_number'] > 0 and isset($_POST) and isset($_POST['saa_number']))
 //        {
-            $saa_id = $_POST['saa_id'];
-            $saadata = $this->communities_model->get_saa_balance($saa_id);
-            $saa_bal = "$saadata->saa_balance";
+            $saa_id = $_POST['saa_number'];
+            $sarodata = $this->communities_model->get_saa_balance($saa_id);
+
             $data1 = array(
                 'type'        => 'hidden',
                 'id'          => 'saa_amount',
                 'name'       =>  'saa_amount',
-                'max'   =>  $saa_bal,
+                'max'   =>  $sarodata->saa_balance,
                 'min'   => '0',
-                'value'   =>  $saa_bal,
+                'value'   =>  $sarodata->saa_balance,
                 'class'        => 'form-control'
             );
 
@@ -723,6 +726,29 @@ class communities extends CI_Controller
 
 //        }
     }
+//    public function populate_saa_amount()
+//    {
+//
+////        if($_POST['saro_id'] > 0 and isset($_POST) and isset($_POST['saro_id']))
+////        {
+//            $saa_id = $_POST['saa_id'];
+//            $saadata = $this->communities_model->get_saa_balance($saa_id);
+//            $saa_bal = $saadata->saa_balance;
+//            $data1 = array(
+//                'type'        => 'text',
+//                'id'          => 'saa_amount',
+//                'name'       =>  'saa_amount',
+//                'max'   =>  $saa_bal,
+//                'min'   => '0',
+//                'value'   =>  $saa_bal,
+//                'class'        => 'form-control'
+//            );
+//
+//            echo form_input($data1);
+//
+////        }
+//    }
+
     public function init_rpmb_session() {
         if(isset($_POST['regionlist']) and $_POST['regionlist'] > 0) {
             $_SESSION['region'] = $_POST['regionlist'];

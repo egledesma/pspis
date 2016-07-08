@@ -64,6 +64,29 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
 
         }
 
+        $result9 = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$to_region.'" and fundsource_id = "'.$fund_source.'" and identifier ="1" ');
+        if($result9->num_rows() > 0) {
+            $from_value9= $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$to_region.'" and fundsource_id = "'.$fund_source.'" and identifier ="1"  ORDER BY allocation_history_id DESC limit 1 ');
+            $from_value10 = $from_value9->row();
+            $allocated_old_value = $from_value10->allocated_new_value;
+            $allocated_new_value = $from_value10->allocated_new_value + $saa_amount ;
+
+            $this->db->query('insert into tbl_fallocation_history1(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source.'","'.$to_region.'","'.$allocated_old_value.'","'.$saa_amount.'","'.$allocated_new_value.'","DOWNLOAD FUNDS - SAA: '.$saalist.'","'.$this->session->userdata('uid').'",now(),"2")');
+
+        } else {
+
+            $this->db->query('insert into tbl_fallocation_history(
+                          fundsource_id,region_code,allocated_old_value,allocated_amount,allocated_new_value,description,created_by,date_created,identifier)
+                          values
+                          ("'.$fund_source.'","'.$to_region.'","0","'.$saa_amount.'","'.$saa_amount.'","DOWNLOAD FUNDS - SAA: '.$saalist.'",
+                          "'.$this->session->userdata('uid').'",now(),
+                          "2")');
+
+        }
+
         //insert_tbl_saa
         $this->db->query('insert into tbl_saa(
                           fundsource_id,saa_number,region_code,saa_funds,saa_balance,remarks,date_created,created_by,status,funds_identifier)

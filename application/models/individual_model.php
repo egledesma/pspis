@@ -4,7 +4,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class individual_model extends CI_Model
 {
-    public function get_fund_source()
+    public function get_fund_source($regionsaro)
     {
         $get_fund_source = "
         SELECT
@@ -16,11 +16,11 @@ class individual_model extends CI_Model
         inner JOIN tbl_funds_allocated b
         on a.fundsource_id = b.fundsource_id
         WHERE
-        a.deleted = 0 and b.deleted = 0
+        a.deleted = 0 and b.deleted = 0 and b.region_code = ?
 
         ";
 
-        return $this->db->query($get_fund_source)->result();
+        return $this->db->query($get_fund_source,$regionsaro)->result();
 
     }
     public function get_crims($regionsaro)
@@ -105,7 +105,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
         //get new _value where identifier = 3;description ;insert the get new_value to old_value then input new_value
         //no old_value = 0
 
-        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regionlist.'" and fundsource_id = "'.$fundlist.'" and identifier = "3" and deleted = "0" ');
+        $resultfunds = $this->db->query('SELECT * FROM tbl_fallocation_history WHERE region_code ="'.$regionlist.'" and fundsource_id = "'.$fundlist.'" and identifier = "3" and deleted = "0"  Order by allocation_history_id DESC limit 1');
         $resultfunds_value = $resultfunds->row();
         $funds_new_allocated = $resultfunds_value->allocated_new_value;
         $funds_new_value = $funds_new_allocated + $utilizeddifference;
@@ -117,7 +117,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                           values
                           ("'.$fundlist.'","'.$regionlist.'","'.$funds_new_allocated.'","'.$utilizeddifference.'","'.$funds_new_value.'","Utilized AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
-                          "2")');
+                          "3")');
 
         }
         else
@@ -127,7 +127,7 @@ where saro_id = "'.$saro_id.'" and deleted = 0';
                           values
                           ("'.$fundlist.'","'.$regionlist.'","0","'.$utilizeddifference.'","'.$utilizeddifference.'","Utilized AICS",
                           now(),"'.$this->session->userdata('uid').'",0,
-                          "2")');
+                          "3")');
         }
 
         $this->db->query('UPDATE tbl_co_funds SET
