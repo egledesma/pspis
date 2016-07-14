@@ -72,12 +72,12 @@ where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"';
         return $result;
 
     }
-    public function get_saa($fundsource_id)
+    public function get_saa($fundsource_id,$region_code)
     {
 
         $sql = 'SELECT saa_id,saa_number,saa_balance
 FROM `tbl_saa`
-where deleted = 0 and fundsource_id = "'.$fundsource_id.'"';
+where deleted = 0 and fundsource_id = "'.$fundsource_id.'" and region_code = "'.$region_code.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
