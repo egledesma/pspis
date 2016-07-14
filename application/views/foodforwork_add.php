@@ -22,7 +22,7 @@ $region_code = $this->session->userdata('uregion');
         if(fundsource_id > 0){
 //            alert(fundsource_id);
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_saa_list'); ?>",
+                url: "<?php echo base_url('foodforwork/populate_saa_list'); ?>",
                 async: false,
                 type: "POST",
                 data: "fundsource_id="+fundsource_id,
@@ -41,7 +41,7 @@ $region_code = $this->session->userdata('uregion');
         if(saro_id > 0){
 //            alert(saro_id);
             $.ajax({
-                url: "<?php echo base_url('cashforwork/populate_saa_amount'); ?>",
+                url: "<?php echo base_url('foodforwork/populate_saa_amount'); ?>",
                 async: false,
                 type: "POST",
                 data: "saro_id="+saro_id,

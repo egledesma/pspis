@@ -716,7 +716,8 @@ class cashforwork extends CI_Controller
         if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
         {
             $fundsource_id = $_POST['fundsource_id'];
-            $saa_data = $this->cashforwork_model->get_saa($fundsource_id);
+            $region_code = $this->session->userdata('uregion');;
+            $saa_data = $this->cashforwork_model->get_saa($fundsource_id,$region_code);
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";
             foreach($saa_data as $saa_select) {
