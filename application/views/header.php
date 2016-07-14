@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="shortcut icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>">
 
     <script src="<?php echo base_url('assets/ajax/jquery.min.js'); ?>"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
