@@ -18,11 +18,13 @@
         </ol>
     </div>
 
+    <?php print_r($call_muni) ?>
+    <?php print_r($call_brgy) ?>
     <div class="page-content">
         <div class="panel">
             <div class="panel">
                 <header class="panel-heading">
-                    &nbsp;<?php //echo $form_message; ?>
+                    &nbsp;
                 </header>
                 <div class="panel panel-bordered">
                     <div class="panel-heading">
