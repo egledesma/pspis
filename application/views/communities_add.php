@@ -273,8 +273,8 @@ $region_code = $this->session->userdata('uregion');
 
                 <div class="form-group row">
                     <div id = "saa_name" name = "saa_name"class="col-sm-6">
-                        <label for="sarolist" class="control-label">SAA Number:</label>
-                        <select id="sarolist" name="sarolist" class="form-control"  onchange ="get_saa_amount();" required>
+                        <label for="saalist" class="control-label">SAA Number:</label>
+                        <select id="saalist" name="saalist" class="form-control"  onchange ="get_saa_amount();" required>
                             <?php if(isset($_SESSION['province']) or isset($user_region)) {
                                 ?>
                                 <option value="">Choose Province</option>

@@ -277,6 +277,28 @@ class fundsallocation extends CI_Controller
         }
     }
 
+    public function populate_conso_balance()
+    {
+      echo "test";
+
+//        if($_POST['saa_number'] > 0 and isset($_POST) and isset($_POST['saa_number']))
+//        {
+        $fund_source = $_POST['fund_source'];
+        $fundsourcedata = $this->fundsallocation_model->get_conso_balance($fund_source);
+
+        $data1 = array(
+            'type'        => 'text',
+            'id'          => 'conso_balance',
+            'name'       =>  'conso_balance',
+            'value'   =>  $fundsourcedata->co_funds_remaining,
+            'class'        => 'form-control'
+        );
+
+        echo form_input($data1);
+
+//        }
+    }
+
     protected function validateAddForm()
     {
         $config = array(

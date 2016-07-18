@@ -280,6 +280,34 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
     }
 
+    public function get_conso_balance($fund_source) {
+        $get_consobalance = '
+        SELECT
+          co_funds,co_funds_id,co_funds_remaining1
+        FROM
+          tbl_co_funds1
+        WHERE
+          fundsource_id = ?
+        ORDER BY
+        allocation_history_id DESC
+        ';
+
+        return $this->db->query($get_consobalance)->result();
+        $this->db->close();
+    }
+
+//    public function get_conso_balance($fund_source)
+//    {
+////        echo "test";
+//        $sql = 'select co_funds,co_funds_id,co_funds_remaining1 from tbl_co_funds1
+//where fundsource_id = "'.$fund_source.'"';
+//        $query = $this->db->query($sql);
+//        $result = $query->row();
+//        $this->db->close();
+//        return $result;
+//
+//    }
+
     public function get_fudsutilized_history($fund_source,$region_code) {
         $get_fundsallocationhistory = '
         SELECT

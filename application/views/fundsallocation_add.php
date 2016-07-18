@@ -2,11 +2,45 @@
 
 ?>
 <script type="text/javascript">
+
+    function checkValidate(){
+
+        var fundsbal = parseInt($('#conso_balance').val());
+        var amountReq = parseInt($('#funds_allocated').val());
+        if(fundsbal < amountReq){
+
+            alert("Insufficient Balance, Please select other SAA.");
+            return false;
+        }
+    }
+
+
     function get_region_code() {
         var region_code = $('#regionlist').val();
         var date = $('#year').val();
         $('#funds_identifier').val(date+region_code);
     }
+
+    function get_consolidated_balance()
+    {
+
+        var fundsource_id = $('#fundsourcelist').val();
+        alert(fundsource_id);
+//        if(fundsource_id > 0){
+        $.ajax({
+            url: "<?php echo base_url('fundsallocation/populate_conso_balance'); ?>",
+            async: false,
+            type: "POST",
+            data: "fund_source="+fundsource_id,
+            dataType: "html",
+            success: function(data) {
+                $('#fundsource').html(data);
+            }
+        });
+//        }
+    }
+
+
 </script>
 
 <div class="page ">
@@ -39,7 +73,7 @@
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="fundsourcelist" class="control-label">Fund Source:</label>
-                        <select name="fundsourcelist" id="fundsourcelist" class="form-control" requried autofocus>
+                        <select name="fundsourcelist" id="fundsourcelist" class="form-control" onchange ="get_consolidated_balance();" requried autofocus>
                             <option value="">Choose Fund Source</option>
                             <?php foreach($fundsourcelist as $fundsourceselect): ?>
                                 <option value="<?php echo $fundsourceselect->fundsource_id; ?>">
@@ -48,6 +82,10 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+                </div>
+
+                <div name="fundsource" id ="fundsource">
+
                 </div>
 
                 <div class="form-group row">
@@ -91,7 +129,7 @@
                 <input class="form-control"  type="hidden" name="status" value="0">
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="site-action">
-                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                    <button  type="submit" onclick = "return checkValidate();" id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                              data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>
