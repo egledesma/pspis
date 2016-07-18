@@ -245,7 +245,6 @@ class cashforwork extends CI_Controller
         $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
         $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
         $getList['cashforworkinfo'] = $cashforwork_model->get_cashforworkDetails($cashforwork_id);
-
         $getList['countBene'] = $cashforwork_model->get_countbene_muni($cashforwork_id);
         $this->load->view('header');
         $this->load->view('navbar');
@@ -716,7 +715,7 @@ class cashforwork extends CI_Controller
         if($_POST['fundsource_id'] > 0 and isset($_POST) and isset($_POST['fundsource_id']))
         {
             $fundsource_id = $_POST['fundsource_id'];
-            $region_code = $this->session->userdata('uregion');;
+            $region_code = $this->session->userdata('uregion');
             $saa_data = $this->cashforwork_model->get_saa($fundsource_id,$region_code);
 //            print_r($saa_data);
             $saalist[''] = "Choose Saa Number";

@@ -24,10 +24,11 @@ class cashforwork_model extends CI_Model
         return $this->db->query($get_fund_source)->result();
 
     }
+//    ,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
     public function viewcashforwork($cashforwork_id)
     {
 
-        $sql = 'SELECT a.cashforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+        $sql = 'SELECT a.cashforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,a.cost_of_assistance as total_cost,a.number_of_bene as total_bene
 FROM `tbl_cashforwork` a
 inner join lib_region b
 on a.region_code = b.region_code
@@ -37,10 +38,8 @@ inner join tbl_saa d
 on a.saa_id = d.saa_id
 inner join lib_work_nature e
 on a.nature_id = e.nature_id
-inner join tbl_cash_muni f
-on a.cashforwork_id = f.cashforwork_id
 where a.deleted = 0 and a.cashforwork_id = "'.$cashforwork_id.'"
-GROUP BY f.cashforwork_id';
+GROUP BY a.cashforwork_id';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;

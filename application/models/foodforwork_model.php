@@ -27,7 +27,7 @@ class foodforwork_model extends CI_Model
     public function viewfoodforwork($foodforwork_id)
     {
 
-        $sql = 'SELECT a.foodforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,sum(f.cost_of_assistance_muni) as total_cost,sum(f.no_of_bene_muni) as total_bene
+        $sql = 'SELECT a.foodforwork_id,d.saa_number,a.project_title,b.region_name,c.prov_name,e.work_nature,a.no_of_days,a.daily_payment,a.cost_of_assistance as total_cost,a.number_of_bene as total_bene
 FROM `tbl_foodforwork` a
 inner join lib_region b
 on a.region_code = b.region_code
@@ -37,10 +37,8 @@ inner join tbl_saa d
 on a.saa_id = d.saa_id
 inner join lib_work_nature e
 on a.nature_id = e.nature_id
-inner join tbl_food_muni f
-on a.foodforwork_id = f.foodforwork_id
 where a.deleted = 0 and a.foodforwork_id = "'.$foodforwork_id.'"
-GROUP BY f.foodforwork_id';
+GROUP BY a.foodforwork_id';
         $query = $this->db->query($sql);
         $result = $query->row();
         return $result;
