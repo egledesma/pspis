@@ -94,7 +94,7 @@
                        data-placement="top" data-original-title="View Project"><?php echo $projectData->project_title; ?></a></td>
                 <td><?php echo $projectData->saa_number; ?></td>
                 <td> <a id="addCityMuni"
-                        href="<?php echo base_url('cashforwork/viewcash_muni/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
+                        href="<?php echo base_url('cashforwork/viewcash_muni/'.$projectData->cashforwork_id.'/0') ?>" data-toggle="tooltip"
                         data-placement="top" data-original-title="Add City/Municipality"><?php echo $projectData->region_name; ?></a></td>
                 <td><?php echo $projectData->work_nature; ?></td>
                 <td><a id="total_bene" href="<?php echo base_url('cashforwork/cashforworkBenelist/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"

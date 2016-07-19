@@ -18,8 +18,7 @@
         </ol>
     </div>
 
-    <?php print_r($call_muni) ?>
-    <?php print_r($call_brgy) ?>
+
     <div class="page-content">
         <div class="panel">
             <div class="panel">

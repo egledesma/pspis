@@ -661,7 +661,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               foodforwork_muni_id = "'.$food_muni_id.'"
                               ');
-        $this->db->query('UPDATE tbl_food_benelist SET
+        $this->db->query('UPDATE tbl_food_bene_list SET
                               deleted ="1"
                               WHERE
                               foodforwork_muni_id = "'.$food_muni_id.'"
@@ -688,10 +688,10 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               food_brgy_id = "'.$food_brgy_id.'"
                               ');
-        $this->db->query('UPDATE tbl_food_benelist SET
+        $this->db->query('UPDATE tbl_food_bene_list SET
                               deleted ="1"
                               WHERE
-                              food_brgy_id = "'.$food_brgy_id.'"
+                              foodforwork_brgy_id = "'.$food_brgy_id.'"
                               ');
         if ($this->db->trans_status() === FALSE)
         {
