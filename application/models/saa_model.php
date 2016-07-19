@@ -11,11 +11,18 @@ class saa_model extends CI_Model
 {
 
 
-    public function get_saa_region($region_code)
+    public function get_saa_region()
     {
-        $sql = 'select * from tbl_saa
-                where region_code ="'.$region_code.'"
+        $region_code = $this->session->userdata('uregion');
+        if($region_code != "190000000") {
+            $sql = 'select * from tbl_saa
+                where region_code ="' . $region_code . '"
                ';
+        }else {
+            $sql = 'select * from tbl_saa
+                where deleted = "0"
+               ';
+        }
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
@@ -152,81 +159,6 @@ class saa_model extends CI_Model
     }
 
 
-    public function insertFunds1($year,$regionlist,$saro,$funds_allocated,$myid,$status,$funds_identifier)
-    {
-
-        $this->db->trans_begin();
-        $this->db->query('insert into tbl_saro(
-                          for_year,saro_number,region_code,saro_funds,saro_balance,date_created,created_by,status,funds_identifier)
-                          values
-                          ("'.$year.'","'.$saro.'","'.$regionlist.'","'.$funds_allocated.'","'.$funds_allocated.'",now(),"'.$myid.'","'.$status.'",
-                          "'.$funds_identifier.'")');
-
-
-        $result = $this->db->query('SELECT * FROM tbl_funds_allocated WHERE region_code ="'.$regionlist.'" ');
-
-        if($result->num_rows() > 0) {
-            $this->db->query('Update tbl_funds_allocated set
-                  funds_allocated = "'.$funds_allocated.'" + funds_allocated,
-                  date_modified = now(),
-                  modified_by = "'.$myid.'"
-                  WHERE region_code = "'.$regionlist.'" ');
-        }
-        else
-        {
-            $this->db->query('insert into tbl_funds_allocated(
-                          for_year,region_code,funds_allocated,date_created,created_by,status,funds_identifier)
-                          values
-                          ("'.$year.'","'.$regionlist.'","'.$funds_allocated.'",
-                          now(),"'.$myid.'","'.$status.'",
-                          "'.$funds_identifier.'")');
-        }
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-        $this->db->close();
-
-    }
-    public function deleteProject($project_id = 0)
-    {
-        $this->db->trans_begin();
-
-        $this->db->query('UPDATE tbl_projects SET
-                              deleted ="1"
-                              WHERE
-                              project_id = "'.$project_id.'"
-                              ');
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-        $this->db->close();
-    }
-    public function get_project_byid($project_id = 0)
-    {
-        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
-        if ($query->num_rows() > 0){
-            return $query->row();
-        } else {
-            return FALSE;
-        }
-        $this->db->close();
-    }
     public function get_regions() {
         $get_regions = "
         SELECT

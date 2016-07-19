@@ -279,7 +279,6 @@ class fundsallocation extends CI_Controller
 
     public function populate_conso_balance()
     {
-      echo "test";
 
 //        if($_POST['saa_number'] > 0 and isset($_POST) and isset($_POST['saa_number']))
 //        {

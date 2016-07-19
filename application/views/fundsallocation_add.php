@@ -1,4 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+$region_code = $this->session->userdata('uregion');
+if($region_code != "190000000"){
+    redirect('/fundsallocation/index/0','location');
+
+}
 
 ?>
 <script type="text/javascript">
@@ -6,10 +11,13 @@
     function checkValidate(){
 
         var fundsbal = parseInt($('#conso_balance').val());
-        var amountReq = parseInt($('#funds_allocated').val());
-        if(fundsbal < amountReq){
+        var amountReq = $('#inputCurrency').val();
+        var lstReplace = amountReq.replace(/\D/g,'');
+        alert(fundsbal);
+        alert(lstReplace);
+        if(fundsbal < lstReplace){
 
-            alert("Insufficient Balance, Please select other SAA.");
+            alert("Insufficient Funds, Please select other Fund Source.");
             return false;
         }
     }

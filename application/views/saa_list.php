@@ -1,3 +1,6 @@
+<?php
+$region_code = $this->session->userdata('uregion');
+?>
 <div class="page ">
 
     <div class="page-header page-header-bordered">
@@ -14,12 +17,16 @@
     <div class="panel">
         <div class="panel">
             <header class="panel-heading">
-                &nbsp;<?php //echo $form_message; ?>
+                &nbsp;<?php echo $form_message; ?>
             </header>
             <div class="panel-body">
+                <?php if($region_code == "190000000") {?>
                 <div id="exampleTableAddToolbar">
                     <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('fundsallocation/add') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
                 </div><br>
+                <?php } else {?>
+                    <h3> SAA List</h3>
+                <?php } ?>
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                     <thead>
                     <tr>

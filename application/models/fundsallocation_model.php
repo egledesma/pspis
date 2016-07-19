@@ -13,76 +13,26 @@ class fundsallocation_model extends CI_Model
 
     public function get_funds()
     {
-        $sql = 'select a.*, b.region_name, c.fund_source, c.fundsource_id from tbl_funds_allocated a
+        $region_code = $this->session->userdata('uregion');
+        if($region_code == "190000000") {
+            $sql = 'select a.*, b.region_name, c.fund_source, c.fundsource_id from tbl_funds_allocated a
                 INNER JOIN lib_region b on a.region_code = b.region_code
                 INNER JOIN lib_fund_source c on a.fundsource_id = c.fundsource_id
                 where a.deleted ="0"
                ';
+        }else{
+            $sql = 'select a.*, b.region_name, c.fund_source, c.fundsource_id from tbl_funds_allocated a
+                INNER JOIN lib_region b on a.region_code = b.region_code
+                INNER JOIN lib_fund_source c on a.fundsource_id = c.fundsource_id
+                where a.deleted ="0" and a.region_code = "'.$region_code.'"
+               ';
+        }
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;
         $this->db->close();
     }
 
-    public function get_lib_assistance()
-    {
-        $get_lib_assistance = "
-        SELECT
-          assistance_id,
-          assistance_name
-        FROM
-          lib_assistance_type
-        WHERE
-          assistance_id <> '0'
-          and deleted = 0
-        ORDER BY
-          assistance_id
-        ";
-
-        return $this->db->query($get_lib_assistance)->result();
-        $this->db->close();
-
-    }
-    public function get_work_nature($assistance_id)
-    {
-
-        $get_work_nature = "
-        SELECT
-            nature_id,
-            work_nature,
-            maximum_amount,
-            minimum_amount
-
-        FROM
-          lib_work_nature
-        WHERE
-          assistance_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_nature,$assistance_id)->result();
-        $this->db->close();
-
-    }
-    public function get_naturemaxmin($nature_id) {
-        $get_work_naturemaxmin = "
-        SELECT
-            maximum_amount,
-            minimum_amount
-        FROM
-          lib_work_nature
-        WHERE
-          nature_id = ?
-        and deleted = 0
-        ORDER BY
-          work_nature
-        ";
-
-        return $this->db->query($get_work_naturemaxmin,$nature_id)->row();
-        $this->db->close();
-    }
 
     public function get_fund_sourcelist()
     {
@@ -122,17 +72,7 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
     }
 
-    public function get_lgu_counterpart()
 
-    {
-        $sql = 'select lgucounterpart_id,lgu_counterpart
-                from lib_lgu_counterpart
-                where deleted = 0';
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;
-        $this->db->close();
-    }
     public function insertFunds($fund_source,$regionlist,$saa,$funds_allocated2,$myid,$status,$funds_identifier)
     {
         $this->db->trans_begin();
@@ -165,6 +105,7 @@ class fundsallocation_model extends CI_Model
 
         $this->db->query('Update tbl_co_funds set
                   co_funds_downloaded = co_funds_downloaded + "'.$funds_allocated2.'",
+                  co_funds_remaining = co_funds_remaining - "'.$funds_allocated2.'",
                   date_modified = now(),
                   modified_by = "'.$myid.'"
                   where fundsource_id = "'.$fund_source.'"');
@@ -283,16 +224,14 @@ class fundsallocation_model extends CI_Model
     public function get_conso_balance($fund_source) {
         $get_consobalance = '
         SELECT
-          co_funds,co_funds_id,co_funds_remaining1
+          co_funds_remaining
         FROM
-          tbl_co_funds1
+          tbl_co_funds
         WHERE
-          fundsource_id = ?
-        ORDER BY
-        allocation_history_id DESC
+          fundsource_id = "'.$fund_source.'"
         ';
 
-        return $this->db->query($get_consobalance)->result();
+        return $this->db->query($get_consobalance)->row();
         $this->db->close();
     }
 
@@ -385,78 +324,6 @@ class fundsallocation_model extends CI_Model
         $this->db->close();
     }
 
-
-    public function updateProject($project_id,$project_title,$regionlist,$provlist,$munilist,$brgylist,$number_bene,$assistancelist,$natureofworklist,$fundsourcelist
-        ,$lgucounterpartlist,$lgu_fundsource,$lgu_amount,$project_cost,$project_amount,$implementing_agency,$status){
-
-        $this->db->trans_begin();
-
-        $this->db->query('UPDATE tbl_projects
-                        SET
-                        project_title = "'.$project_title.'",
-                        region_code = "'.$regionlist.'",
-                        prov_code = "'.$provlist.'",
-                        city_code = "'.$munilist.'",
-                        brgy_code = "'.$brgylist.'",
-                        no_of_bene = "'.$number_bene.'",
-                        assistance_id = "'.$assistancelist.'",
-                        nature_id = "'.$natureofworklist.'",
-                        fundsource_id = "'.$fundsourcelist.'",
-                        lgucounterpart_id = "'.$lgucounterpartlist.'",
-                        lgu_fundsource = "'.$lgu_fundsource.'",
-                        lgu_amount = "'.$lgu_amount.'",
-                        project_cost = "'.$project_cost.'",
-                        project_amount = "'.$project_amount.'",
-                        implementing_agency = "'.$implementing_agency.'",
-                        `status` = "'.$status.'"
-                        WHERE
-                        project_id = "'.$project_id.'"');
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-
-        $this->db->close();
-    }
-    public function deleteProject($project_id = 0)
-    {
-        $this->db->trans_begin();
-
-        $this->db->query('UPDATE tbl_projects SET
-                              deleted ="1"
-                              WHERE
-                              project_id = "'.$project_id.'"
-                              ');
-
-        if ($this->db->trans_status() === FALSE)
-        {
-            $this->db->trans_rollback();
-            return FALSE;
-        }
-        else
-        {
-            $this->db->trans_commit();
-            return TRUE;
-        }
-        $this->db->close();
-    }
-    public function get_project_byid($project_id = 0)
-    {
-        $query = $this->db->get_where('tbl_projects',array('project_id'=>$project_id));
-        if ($query->num_rows() > 0){
-            return $query->row();
-        } else {
-            return FALSE;
-        }
-        $this->db->close();
-    }
     public function get_regions() {
         $get_regions = "
         SELECT

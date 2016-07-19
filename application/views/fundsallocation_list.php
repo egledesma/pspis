@@ -17,9 +17,13 @@ $region_code = $this->session->userdata('uregion');
         <div class="panel">
             <div class="panel-body">
                 &nbsp;<?php echo $form_message; ?>
+                <?php if($region_code == "190000000") {?>
                 <div id="exampleTableAddToolbar">
                     <a class= "btn btn-outline btn-primary"   href="<?php echo base_url('fundsallocation/add') ?>"><i class="icon wb-plus" aria-hidden="true"></i> Add Record</a>
                 </div><br>
+                <?php } else {?>
+                <h3> Funds List</h3>
+                <?php } ?>
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                     <thead>
                     <tr>

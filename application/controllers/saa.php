@@ -10,15 +10,29 @@
 class saa extends CI_Controller
 {
 
-    public function index($region_code){
+
+    public function index($function = 0){
+
 
         $saa_model = new saa_model();
-            $this->load->view('header');
-            $this->load->view('navbar');
-            $this->load->view('sidebar');
-            $this->load->view('saa_list',array(
-                'saadetails' => $saa_model->get_saa_region($region_code)/*'form_message'=>$form_message*/));
-            $this->load->view('footer');
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=saa/index/0">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=saa/index/0">
+                      Downloaded Funds Successfully!</a>
+                    </div>';
+        }
+
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('saa_list',array(
+            'saadetails' => $saa_model->get_saa_region(),'form_message'=>$form_message));
+        $this->load->view('footer');
 
     }
 
