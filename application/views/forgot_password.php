@@ -1,7 +1,5 @@
 <?php
 /**
- * Created by JOSEF FRIEDRICH S. BALDO
- * Date Time: 10/17/15 11:16 PM
  * --
  * Michael
  *Leri
@@ -29,21 +27,16 @@ error_reporting(0);
 				<img class="brand-img" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="...">
 				<h2 class="brand-text">PSPIS</h2>
 			</div>
-			<p>SIGN-IN</p>
+			<p>FORGOT PASSWORD</p>
 			<form method="post" action="">
 				<div class="form-group"><?php echo $form_message;?><?php echo validation_errors(); ?>
-					<label class="sr-only" for="username">Username</label>
-					<input type="text" name="username" class="form-control" id="inputName" placeholder="Username" required>
-				</div>
-				<div class="form-group">
-					<label class="sr-only" for="inputPassword">Password</label>
-					<input type="password" class="form-control" id="inputPassword" name="password" required
-						   placeholder="Password">
+					<label class="sr-only" for="username">Email Address</label>
+					<input type="email" name="email" class="form-control" id="email" placeholder="Email Address" required>
 				</div>
 				<div class="form-group clearfix">
-					<a class="pull-right" href="<?php echo base_url('users/forgot_password') ?>">Forgot password?</a>
+					<a class="pull-right" href="<?php echo base_url('users/index') ?>">Sign In Here</a>
 				</div>
-				<button type="submit" class="btn btn-primary btn-block">Sign in</button>
+				<button type="submit" class="btn btn-primary btn-block">Forgot Password</button>
 			</form>
 			<p>Still no account? Please go to <a href="<?php echo base_url('users/register/0') ?>">Register</a></p>
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * Created by JOSEF FRIEDRICH S. BALDO
- * Date Time: 10/17/15 11:16 PM
  * --
  * Michael
  *Leri
@@ -13,6 +11,10 @@
  * another
  */
 $region_code = $this->session->userdata('uregion');
+if($code == $codex){
+} else{
+	redirect('/users/index', 'location');
+}
 if (!$this->session->userdata('user_data')){
 error_reporting(0);
 ?>
@@ -29,23 +31,23 @@ error_reporting(0);
 				<img class="brand-img" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="...">
 				<h2 class="brand-text">PSPIS</h2>
 			</div>
-			<p>SIGN-IN</p>
+			<p>RESET PASSWORD FORM</p>
 			<form method="post" action="">
 				<div class="form-group"><?php echo $form_message;?><?php echo validation_errors(); ?>
-					<label class="sr-only" for="username">Username</label>
-					<input type="text" name="username" class="form-control" id="inputName" placeholder="Username" required>
+					<label class="sr-only" for="username">Email Address</label>
+					<input type="email" name="email123" class="form-control" id="inputName"  value="<?php echo $email; ?>" disabled >
+					<input type="hidden" name="email" class="form-control" id="inputName"  value="<?php echo $email; ?>" >
 				</div>
 				<div class="form-group">
-					<label class="sr-only" for="inputPassword">Password</label>
-					<input type="password" class="form-control" id="inputPassword" name="password" required
-						   placeholder="Password">
+					<label class="sr-only" for="username">New Password</label>
+					<input type="password" name="npassword" class="form-control" id="inputName" placeholder="New Password" required autofocus>
 				</div>
-				<div class="form-group clearfix">
-					<a class="pull-right" href="<?php echo base_url('users/forgot_password') ?>">Forgot password?</a>
+				<div class="form-group">
+					<label class="sr-only" for="username">Confirm Password</label>
+					<input type="password" name="cpassword" class="form-control" id="inputName" placeholder="Confirm Password" required>
 				</div>
-				<button type="submit" class="btn btn-primary btn-block">Sign in</button>
+				<button type="submit" class="btn btn-primary btn-block">Update Password</button>
 			</form>
-			<p>Still no account? Please go to <a href="<?php echo base_url('users/register/0') ?>">Register</a></p>
 
 			<footer class="page-copyright">
 				<p>DSWD IMB-BSSDCD</p>

@@ -235,4 +235,5 @@ class user_model extends CI_Model
         return $this->db->query($get_brgy,$city_code)->result();
     }
 
+
 }
