@@ -31,20 +31,21 @@ if($region_code != "190000000"){
 
     function get_consolidated_balance()
     {
-
         var fundsource_id = $('#fundsourcelist').val();
-        alert(fundsource_id);
-//        if(fundsource_id > 0){
-        $.ajax({
-            url: "<?php echo base_url('fundsallocation/populate_conso_balance'); ?>",
-            async: false,
-            type: "POST",
-            data: "fund_source="+fundsource_id,
-            dataType: "html",
-            success: function(data) {
-                $('#fundsource').html(data);
-            }
-        });
+
+        if(fundsource_id > 0){
+            alert(fundsource_id);
+            $.ajax({
+                url: "<?php echo base_url('fundsallocation/populate_conso_balance'); ?>",
+                async: false,
+                type: "POST",
+                data: "fundsource_id="+fundsource_id,
+                dataType: "html",
+                success: function(data) {
+                    $('#fundsource').html(data);
+                }
+            });
+        }
 //        }
     }
 
