@@ -131,27 +131,27 @@ class cashforwork extends CI_Controller
         }
     }
 
-    public function deleteCashforwork($cashforwork_id)
-    {
-        $cashforwork_model = new cashforwork_model();
-        if ($cashforwork_id > 0){
-            $deleteResult = $cashforwork_model->deleteCashforwork($cashforwork_id);
-
-            if ($deleteResult){
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-                $region_code = $this->session->userdata('uregion');
-                $this->load->view('cashforwork_list',array(
-                    'project' => $cashforwork_model->get_project($region_code)
-                ));
-
-                $this->load->view('footer');
-            }
-            $this->redirectIndex();
-        }
-    }
-    public function deleteCashforwork_muni($cashforwork_muni_id)
+//    public function deleteCashforwork($cashforwork_id)
+//    {
+//        $cashforwork_model = new cashforwork_model();
+//        if ($cashforwork_id > 0){
+//            $deleteResult = $cashforwork_model->deleteCashforwork($cashforwork_id);
+//
+//            if ($deleteResult){
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//                $region_code = $this->session->userdata('uregion');
+//                $this->load->view('cashforwork_list',array(
+//                    'project' => $cashforwork_model->get_project($region_code)
+//                ));
+//
+//                $this->load->view('footer');
+//            }
+//            $this->redirectIndex();
+//        }
+//    }
+    public function deleteCashforwork_muni($cashforwork_muni_id,$function)
     {
         $cashforwork_model = new cashforwork_model();
         if ($cashforwork_muni_id > 0){
@@ -159,9 +159,9 @@ class cashforwork extends CI_Controller
             $cash_id = $getList->cashforwork_id;
             $deleteResult = $cashforwork_model->deleteCash_muni_and_brgy($cashforwork_muni_id);
             }
-            $this->redirectIndexviewCash_muni($cash_id);
+            $this->redirectIndexviewCash_muni($cash_id,$function);
         }
-    public function deleteCashforwork_brgy($cashforwork_brgy_id)
+    public function deleteCashforwork_brgy($cashforwork_brgy_id,$function)
     {
         $cashforwork_model = new cashforwork_model();
         if ($cashforwork_brgy_id > 0){
@@ -169,7 +169,7 @@ class cashforwork extends CI_Controller
             $cashforwork_muni_id = $getList->cashforwork_muni_id;
             $deleteResult = $cashforwork_model->deleteCash_brgy($cashforwork_brgy_id);
         }
-        $this->redirectIndexviewBrgy_muni($cashforwork_muni_id);
+        $this->redirectIndexviewBrgy_muni($cashforwork_muni_id,$function);
     }
 
     public function addCashforwork()
@@ -231,13 +231,41 @@ class cashforwork extends CI_Controller
                 ));
                 $this->load->view('footer');
             }
-            $this->redirectIndexviewCash_muni($addResult,$region_code);
+            $this->redirectIndexviewCash_muni($addResult,1);
         }
     }
 
-    public function viewCash_muni($cashforwork_id)
+    public function viewCash_muni($cashforwork_id,$function)
     {
         $cashforwork_model = new cashforwork_model();
+
+        if($function == 0){
+            $getList['form_message'] = '';
+        } elseif($function == 1){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Added Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+                $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Successfully!</a>
+                    </div>';}
+        elseif($function == 3) {
+                $getList['form_message'] = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Delete Successfully!</a>
+                    </div>';
+        }
 
         $getList['cashforworkpass_id'] = $cashforwork_id;
 //            $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
@@ -295,24 +323,24 @@ class cashforwork extends CI_Controller
             $cost_of_assistance = $this->input->post('cost_of_assistance');
             $addResult = $cashforwork_model->insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
                 ,$daily_payment,$number_bene,$cost_of_assistance);
-            if ($addResult){
-                $getList['cashforworkpass_id'] = $cashforwork_id;
-                $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
-                $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
-                $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
-                $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
-                $this->load->view('header');
-                $this->load->view('navbar');
-                $this->load->view('sidebar');
-
-                $this->load->view('cashforwork_muni_list', $getList);
-                $this->load->view('footer');
-
-            }
-            $this->redirectIndexviewCash_muni($cashforworkpass_id);
+//            if ($addResult){
+//                $getList['cashforworkpass_id'] = $cashforwork_id;
+//                $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
+//                $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
+//                $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
+//                $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
+//                $this->load->view('header');
+//                $this->load->view('navbar');
+//                $this->load->view('sidebar');
+//
+//                $this->load->view('cashforwork_muni_list', $getList);
+//                $this->load->view('footer');
+//
+//            }
+            $this->redirectIndexviewCash_muni($cashforworkpass_id,1);
         }
     }
-    public function updateCashforwork_muni($cashforwork_muni_id)
+    public function updateCashforwork_muni($cashforwork_muni_id,$function)
     {
         $cashforwork_model = new cashforwork_model();
         $this->validateAddmuniForm();
@@ -361,11 +389,39 @@ class cashforwork extends CI_Controller
 //                $this->load->view('footer');
 //            }
 
-            $this->redirectIndexviewCash_muni($cashforwork_id);
+            $this->redirectIndexviewCash_muni($cashforwork_id,$function);
         }
     }
-    public function viewCash_brgy($cashforwork_muni_id)
+    public function viewCash_brgy($cashforwork_muni_id,$function)
     {
+
+        if($function == 0){
+            $getList['form_message'] = '';
+        } elseif($function == 1){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Added Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Successfully!</a>
+                    </div>';}
+        elseif($function == 3) {
+            $getList['form_message'] = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Delete Successfully!</a>
+                    </div>';
+        }
         $cashforwork_model = new cashforwork_model();
 
         $getList['cashforworkpassmuni_id'] = $cashforwork_muni_id;
@@ -432,7 +488,7 @@ class cashforwork extends CI_Controller
                 $this->load->view('footer');
             }
 
-            $this->redirectIndexviewBrgy_muni($cash_muni_id_pass);
+            $this->redirectIndexviewBrgy_muni($cash_muni_id_pass,2);
         }
     }
 //    function view_list()
@@ -491,7 +547,7 @@ class cashforwork extends CI_Controller
                 $this->load->view('footer');
 
             }
-            $this->redirectIndexviewBrgy_muni($cash_muni_id_pass);
+            $this->redirectIndexviewBrgy_muni($cash_muni_id_pass,1);
         }
     }
 
@@ -898,15 +954,15 @@ class cashforwork extends CI_Controller
 
         header("LOCATION: $page");
     }
-    public function redirectIndexviewCash_muni($cashforwork_id)
+    public function redirectIndexviewCash_muni($cashforwork_id,$function)
     {
-        $page = base_url('cashforwork/viewCash_muni/'.$cashforwork_id.'');
+        $page = base_url('cashforwork/viewCash_muni/'.$cashforwork_id.'/'.$function.'');
 
         header("LOCATION: $page");
     }
-    public function redirectIndexviewBrgy_muni($cashforwork_muni_id)
+    public function redirectIndexviewBrgy_muni($cashforwork_muni_id,$function)
     {
-        $page = base_url('cashforwork/viewCash_brgy/'.$cashforwork_muni_id.'');
+        $page = base_url('cashforwork/viewCash_brgy/'.$cashforwork_muni_id.'/'.$function.'');
 
         header("LOCATION: $page");
     }

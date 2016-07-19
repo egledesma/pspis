@@ -151,7 +151,7 @@ class foodforwork extends CI_Controller
             $this->redirectIndex();
         }
     }
-    public function deletefoodforwork_muni($foodforwork_muni_id)
+    public function deletefoodforwork_muni($foodforwork_muni_id,$function)
     {
         $foodforwork_model = new foodforwork_model();
         if ($foodforwork_muni_id > 0){
@@ -159,9 +159,9 @@ class foodforwork extends CI_Controller
             $food_id = $getList->foodforwork_id;
             $deleteResult = $foodforwork_model->deletefood_muni_and_brgy($foodforwork_muni_id);
             }
-            $this->redirectIndexviewfood_muni($food_id);
+            $this->redirectIndexviewfood_muni($food_id,$function);
         }
-    public function deletefoodforwork_brgy($foodforwork_brgy_id)
+    public function deletefoodforwork_brgy($foodforwork_brgy_id,$function)
     {
         $foodforwork_model = new foodforwork_model();
         if ($foodforwork_brgy_id > 0){
@@ -169,7 +169,7 @@ class foodforwork extends CI_Controller
             $foodforwork_muni_id = $getList->foodforwork_muni_id;
             $deleteResult = $foodforwork_model->deletefood_brgy($foodforwork_brgy_id);
         }
-        $this->redirectIndexviewBrgy_muni($foodforwork_muni_id);
+        $this->redirectIndexviewBrgy_muni($foodforwork_muni_id,$function);
     }
 
     public function addfoodforwork()
@@ -230,14 +230,40 @@ class foodforwork extends CI_Controller
                 ));
                 $this->load->view('footer');
             }
-            $this->redirectIndexviewfood_muni($addResult,$region_code);
+            $this->redirectIndexviewfood_muni($addResult,1);
         }
     }
 
-    public function viewfood_muni($foodforwork_id)
+    public function viewfood_muni($foodforwork_id,$function)
     {
         $foodforwork_model = new foodforwork_model();
-
+        if($function == 0){
+            $getList['form_message'] = '';
+        } elseif($function == 1){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Added Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Successfully!</a>
+                    </div>';}
+        elseif($function == 3) {
+            $getList['form_message'] = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Delete Successfully!</a>
+                    </div>';
+        }
         $getList['foodforworkpass_id'] = $foodforwork_id;
 //            $getList['provlist'] = $foodforwork_model->get_provinces($region_code);
         $getList['proj_prov'] = $foodforwork_model->get_project_province($foodforwork_id);
@@ -309,10 +335,10 @@ class foodforwork extends CI_Controller
                 $this->load->view('footer');
 
             }
-            $this->redirectIndexviewfood_muni($foodforworkpass_id);
+            $this->redirectIndexviewfood_muni($foodforworkpass_id,1);
         }
     }
-    public function updatefoodforwork_muni($foodforwork_muni_id)
+    public function updatefoodforwork_muni($foodforwork_muni_id,$function)
     {
         $foodforwork_model = new foodforwork_model();
         $this->validateAddmuniForm();
@@ -361,13 +387,39 @@ class foodforwork extends CI_Controller
 //                $this->load->view('footer');
 //            }
 
-            $this->redirectIndexviewfood_muni($foodforwork_id);
+            $this->redirectIndexviewfood_muni($foodforwork_id,$function);
         }
     }
-    public function viewfood_brgy($foodforwork_muni_id)
+    public function viewfood_brgy($foodforwork_muni_id,$function)
     {
         $foodforwork_model = new foodforwork_model();
-
+        if($function == 0){
+            $getList['form_message'] = '';
+        } elseif($function == 1){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Added Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $getList['form_message'] = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Successfully!</a>
+                    </div>';}
+        elseif($function == 3) {
+            $getList['form_message'] = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Delete Successfully!</a>
+                    </div>';
+        }
         $getList['foodforworkpassmuni_id'] = $foodforwork_muni_id;
 //            $getList['provlist'] = $foodforwork_model->get_provinces($region_code);
         $getList['proj_prov'] = $foodforwork_model->get_project_prov_muni($foodforwork_muni_id);
@@ -432,7 +484,7 @@ class foodforwork extends CI_Controller
                 $this->load->view('footer');
             }
 
-            $this->redirectIndexviewBrgy_muni($food_muni_id_pass);
+            $this->redirectIndexviewBrgy_muni($food_muni_id_pass,2);
         }
     }
 //    function view_list()
@@ -491,7 +543,7 @@ class foodforwork extends CI_Controller
                 $this->load->view('footer');
 
             }
-            $this->redirectIndexviewBrgy_muni($food_muni_id_pass);
+            $this->redirectIndexviewBrgy_muni($food_muni_id_pass,1);
         }
     }
 
@@ -898,15 +950,15 @@ class foodforwork extends CI_Controller
 
         header("LOCATION: $page");
     }
-    public function redirectIndexviewfood_muni($foodforwork_id)
+    public function redirectIndexviewfood_muni($foodforwork_id,$function)
     {
-        $page = base_url('foodforwork/viewfood_muni/'.$foodforwork_id.'');
+        $page = base_url('foodforwork/viewfood_muni/'.$foodforwork_id.'/'.$function.'');
 
         header("LOCATION: $page");
     }
-    public function redirectIndexviewBrgy_muni($foodforwork_muni_id)
+    public function redirectIndexviewBrgy_muni($foodforwork_muni_id,$function)
     {
-        $page = base_url('foodforwork/viewfood_brgy/'.$foodforwork_muni_id.'');
+        $page = base_url('foodforwork/viewfood_brgy/'.$foodforwork_muni_id.'/'.$function.'');
 
         header("LOCATION: $page");
     }

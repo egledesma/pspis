@@ -17,6 +17,7 @@
     function callmuniEditForm()
     {
         document.getElementById("divFrame").style.display = "block";
+        document.getElementById("AddMuniForm").style.display = "none";
     }
     function callviewBrgy()
     {
@@ -53,6 +54,13 @@
 //        document.getElementById('AddBrgyForm').style.display = 'none';
         document.getElementById("divFrame").style.display = "none";
     }
+    function successIframe()
+    {
+        document.getElementById("divFrame").style.display = "none";
+        document.getElementById("iframeSuccess").style.display = "block";
+        location.reload(true);
+    }
+
 </script>
 <style>
     .fluidMedia {
@@ -89,7 +97,15 @@
         <div class="panel">
             <?php foreach ($cashforworkinfo as $cashforworkdata): ?>
 
-                <div class="panel-heading">
+                <div class="panel-heading" >
+                    <div  style = "display:none" id = "iframeSuccess"class="alert alert-alt alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                            Update Successfully!</a>
+                    </div>
+                   <?php echo $form_message ?>
                     <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; <?php echo $cashforworkdata->project_title ?> &nbsp;&nbsp;&nbsp;</mark>&nbsp;&nbsp;&nbsp;</h1>
 
                 </div>
@@ -182,19 +198,19 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" id = "actionButton" style = "display:block">
                                         <a class="btn btn-info btn-outline" id="edit_cashforworkmuni"
-                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callmuniEditForm();"; target ="idisplayForm"
+                                           href="<?php echo base_url('cashforwork/updateCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'/2') ?>" onclick = "callmuniEditForm();"; target ="idisplayForm"
                                            data-toggle="tooltip"
                                            data-placement="top" data-original-title="Edit Project"><i class="icon wb-edit" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-danger btn-outline" id="delete_cashforworkmuni"
-                                           href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'') ?>" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/deleteCashforwork_muni/'.$cashmuni_listData->cash_muni_id.'/3') ?>" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Delete Project"><i class="icon wb-close" aria-hidden="true"></i> </a>
                                         <a class="confirmation btn btn-success btn-outline" id="add_cashforworkbrgy"
-                                           href="<?php echo base_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callAddBrgyForm();"; target ="idisplayForm" data-toggle="tooltip"
+                                           href="<?php echo base_url('cashforwork/addCash_brgy/'.$cashmuni_listData->cash_muni_id.'/0') ?>" onclick = "callAddBrgyForm();"; target ="idisplayForm" data-toggle="tooltip"
                                            data-placement="top" data-original-title="Add Brgy"><i class="icon wb-user-add" aria-hidden="true"></i> </a>
                                     </div>
 
                                 </td>
-                                <td><a id="viewCashbrgy" href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashmuni_listData->cash_muni_id.'') ?>" onclick = "callviewBrgy();"; target ="idisplayForm"><?php echo $cashmuni_listData->city_name; ?>
+                                <td><a id="viewCashbrgy" href="<?php echo base_url('cashforwork/viewCash_brgy/'.$cashmuni_listData->cash_muni_id.'/0') ?>" onclick = "callviewBrgy();"; target ="idisplayForm"><?php echo $cashmuni_listData->city_name; ?>
                                 </td>
                                 <td><?php echo  $cashmuni_listData->no_of_bene_muni; ?></td>
                                 <td><?php echo '₱ '. number_format($cashmuni_listData->cost_of_assistance_muni,2); ?></td>

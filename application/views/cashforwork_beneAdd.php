@@ -63,13 +63,11 @@ error_reporting(0);
                 <table class="table table-hover table-bordered dataTable table-striped width-full" id="exampleTableSearch">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Beneficiaries</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>ID</th>
                         <th>Beneficiaries</th>
                     </tr>
                     </tfoot>
@@ -79,7 +77,6 @@ error_reporting(0);
 <!--                    </pre>-->
                     <?php foreach($cash_benelist as $cash_benedata): ?>  <!--pagination buttons -->
                         <tr>
-                            <td><?php echo $cash_benedata->bene_id ?></td>
                             <td><?php echo $cash_benedata->bene_fullname; ?></td>
                             <td>
                                 <div class="btn-group">

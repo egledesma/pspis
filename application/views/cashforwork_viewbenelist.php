@@ -24,35 +24,7 @@
                 <header class="panel-heading">
                     &nbsp;<?php //echo $form_message; ?>
                 </header>
-                <!--                <div class="panel panel-bordered">-->
-                <!--                    <div class="panel-heading">-->
-                <!--                        <h1 class="panel-title"><mark class="bg-dark">&nbsp;&nbsp;&nbsp; --><?php //echo $project->project_title ?><!-- &nbsp;&nbsp;&nbsp;</mark>&nbsp;&nbsp;&nbsp;</h1>-->
-                <!---->
-                <!--                    </div>-->
-                <!--                    <div class="panel-body">-->
-                <!--                        <div>-->
-                <!--                            <ul class="list-group list-group-dividered list-group-full col-lg-3">-->
-                <!--                                <h5><i class="icon wb-globe" aria-hidden="true"></i><b>Project Location:</b></h5>-->
-                <!--                                <li class="list-group-item"> Region:  <b>--><?php //echo $project->region_name ?><!--</b></li>-->
-                <!--                                <li class="list-group-item"> Province:  <b>--><?php //echo $project->prov_name ?><!--</b></li>-->
-                <!--                            </ul>-->
-                <!--                        </div>-->
-                <!--                        <div>-->
-                <!--                            <ul class="list-group list-group-dividered list-group-full col-lg-3">-->
-                <!--                                <h5><i class="icon wb-pencil" aria-hidden="true"></i><b>Project Information:</b></h5>-->
-                <!--                                <li class="list-group-item"> Nature of Work: <b>--><?php //echo $project->work_nature ?><!--</b></li>-->
-                <!--                                <li class="list-group-item"> Number of Beneficiaries: <b>--><?php //echo $project->total_bene ?><!--</b></li>-->
-                <!--                                <li class="list-group-item"> Number of Days: <b>--><?php //echo $project->no_of_days ?><!--</b></li>-->
-                <!--                            </ul>-->
-                <!--                        </div>-->
-                <!--                        <div>-->
-                <!--                            <ul class="list-group list-group-dividered list-group-full col-lg-3">-->
-                <!--                                <h5><i class="icon fa-money" aria-hidden="true"></i><b>Project Cost:</b></h5>-->
-                <!--                                <li class="list-group-item"> Daily payment amount: <b>--><?php //echo '₱ '. number_format($project->daily_payment,2);  ?><!--</b></li>-->
-                <!--                                <li class="list-group-item"> Cost of Assistance: <b>--><?php //echo '₱ '. number_format($project->total_cost,2);  ?><!--</b></li>-->
-                <!--                            </ul>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
+
                 <!--<pre>-->
                 <?php //print_r($call_bene)?>
                 <!--</pre>-->

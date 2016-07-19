@@ -672,7 +672,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               cashforwork_id = "'.$cashforwork_id.'"
                               ');
-        $this->db->query('UPDATE tbl_cash_benelist SET
+        $this->db->query('UPDATE tbl_cash_bene_list SET
                               deleted ="1"
                               WHERE
                               cashforwork_id = "'.$cashforwork_id.'"
@@ -705,7 +705,7 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               cashforwork_muni_id = "'.$cash_muni_id.'"
                               ');
-        $this->db->query('UPDATE tbl_cash_benelist SET
+        $this->db->query('UPDATE tbl_cash_bene_list SET
                               deleted ="1"
                               WHERE
                               cashforwork_muni_id = "'.$cash_muni_id.'"
@@ -733,10 +733,10 @@ where saa_id = "'.$saa_id.'" and deleted = 0';
                               WHERE
                               cash_brgy_id = "'.$cash_brgy_id.'"
                               ');
-        $this->db->query('UPDATE tbl_cash_benelist SET
+        $this->db->query('UPDATE tbl_cash_bene_list SET
                               deleted ="1"
                               WHERE
-                              cash_brgy_id = "'.$cash_brgy_id.'"
+                              cashforwork_brgy_id = "'.$cash_brgy_id.'"
                               ');
 
 

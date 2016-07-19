@@ -24,7 +24,7 @@ $region_code = $this->session->userdata('uregion');
         }
         else
         {
-            window.parent.closeIframe();
+            window.parent.successIframe();
         }
 
     }
@@ -135,7 +135,7 @@ $region_code = $this->session->userdata('uregion');
                             <div class="col-lg-6">
                                 <input id="number_bene" name="number_bene" placeholder="Number of Beneficiaries" type="number" min="0"  class="form-control" max = "<?php echo $title->number_of_bene - $countBene->totalbene + $proj_prov->no_of_bene_muni ;?>"  value="<?php echo $proj_prov->no_of_bene_muni; ?>" required autofocus onchange = "recalculateMultiply();"/>
                                 <span class="text-danger"><?php echo form_error('number_bene'); ?></span>
-                                <input id ="number_bene_checker" type = "hidden" value = "<?php echo $proj_prov->no_of_bene_muni; ?>">
+                                <input id ="number_bene_checker" type = "hidden" value = "<?php echo $title->number_of_bene - $countBene->totalbene + $proj_prov->no_of_bene_muni; ?>">
                             </div>
                         </td>
                         <td>
