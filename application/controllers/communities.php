@@ -10,18 +10,41 @@
 class communities extends CI_Controller
 {
 
-    public function index(){
 
-       $communities_model = new communities_model();
+    public function index($function = 0){
+
+        $communities_model = new communities_model();
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      ACN-Project Added Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Update Success!</a>
+                    </div>';
+        }
+
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $region_code = $this->session->userdata('uregion');
         $this->load->view('communities_list',array(
-            'project' => $communities_model->get_project($region_code)
+            'project' => $communities_model->get_project($region_code),'form_message'=>$form_message
         ));
         $this->load->view('footer');
+
     }
+
     public function addFirstTranche($project_id)
     {
         $communities_model = new communities_model();
@@ -430,7 +453,7 @@ class communities extends CI_Controller
                    ));
                    $this->load->view('footer');
                }
-               $this->redirectIndex();
+               $this->redirectIndex(1);
 
 
         }
@@ -788,12 +811,14 @@ class communities extends CI_Controller
         return $this->form_validation->set_rules($config);
 
     }
-    public function redirectIndex()
-    {
-        $page = base_url('communities/index');
 
-        header("LOCATION: $page");
+    public function redirectIndex($function)
+    {
+        $page = base_url('communities/index/'.$function);
+//        $sec = "1";
+        header("Location: $page");
     }
+
     public function redirectAdd()
     {
         $page = base_url('communities/addCommunities');

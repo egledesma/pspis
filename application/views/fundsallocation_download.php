@@ -7,6 +7,20 @@
         var date = $('#year').val();
         $('#funds_identifier').val(date+region_code);
     }
+
+    function checkValidate(){
+
+        var fundsbal = parseInt($('#conso_balance').val());
+        var amountReq = $('#inputCurrency').val();
+        var lstReplace = amountReq.replace(/\D/g,'');
+        //alert(fundsbal);
+        //alert(lstReplace);
+        if(fundsbal < lstReplace){
+
+            alert("Insufficient Funds, Please select other Fund Source.");
+            return false;
+        }
+    }
 </script>
 
 <div class="page ">
@@ -42,8 +56,8 @@
                         <label for="fund_source1" class="control-label">Fund Source:</label>
                         <input id="fund_source1" name="fund_source1" placeholder="Fund Source" type="text" value="<?php echo $fundsourcelist->fund_source ?>" disabled class="form-control"/>
                         <input id="fs" name="fs"  type="hidden" value="<?php echo $fundsourcelist->fundsource_id ?>"  class="form-control"/>
+                        <input id="conso_balance" name="conso_balance"  type="hidden" value="<?php echo $consobal->co_funds_remaining?>"  class="form-control"/>
                     </div>
-
                 </div>
 
                 <div class="form-group row">
@@ -87,7 +101,7 @@
                 <input class="form-control"  type="hidden" name="status" value="0">
                 <input class="form-control"  type="hidden" name="myid" value="<?php echo $this->session->userdata('uid')?>">
                 <div class="site-action">
-                    <button  type="submit"  id="btn_add" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
+                    <button  type="submit"  id="btn_add" onclick = "return checkValidate();" name="btn_add" class="btn btn-floating btn-danger btn-lg btn-outline" data-toggle="tooltip"
                              data-placement="top" data-original-title="Save">
                         <i class="front-icon fa-save animation-scale-up" aria-hidden="true"></i>
                     </button>

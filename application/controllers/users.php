@@ -200,47 +200,6 @@ class users extends CI_Controller {
         return $this->form_validation->set_rules($config);
     }
 
-//    public function forgot_password()
-//    {
-//        $Model_user = new Model_user();
-//        $this->validateChangePassword();
-//
-//        $userkey = $this->superKey();
-//
-//        if (!$this->form_validation->run()){
-//            $this->load->view('header');
-//            $this->load->view('forgot_password');
-//            $this->load->view('footer');
-//
-//
-//        } else {
-//            $email = $this->input->post('email');
-//            $password = random_string('alnum', 16);
-//            $superkey = $this->encrypt->sha1($userkey.$password);
-//            $ifUserActivated = $Model_user->userActivated($email);
-//            if($ifUserActivated > 0){
-//                $regResult = $Model_user->forgotPassword($email, $superkey);
-//                if ($regResult == 1){
-//                    $resultSend = $this->forgotpassword_sendmail($email,$password);
-//                    $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
-//                    $this->load->view('header');
-//                    $this->load->view('forgot_password',array('form_message'=>$form_message));
-//                    $this->load->view('footer');
-//                } else {
-//                    $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Fail!<a href="#" class="closed">&times;</a></div>';
-//                    $this->load->view('header');
-//                    $this->load->view('forgot_password', array('form_message' => $form_message));
-//                    $this->load->view('footer');
-//                }
-//            } else {
-//                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Invalid Account/The account is not yet activated.!<a href="#" class="closed">&times;</a></div>';
-//                $this->load->view('header');
-//                $this->load->view('forgot_password', array('form_message' => $form_message));
-//                $this->load->view('footer');
-//            }
-//        }
-//
-//    }
 
     public function forgot_password()
     {
@@ -268,7 +227,7 @@ class users extends CI_Controller {
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
-                      '.$resultSend.'Success!</a>
+                      '.$resultSend.'Succeeded. An email has been sent to your email address.!!</a>
                       </div>';
                 $this->load->view('header');
                 $this->load->view('forgot_password',array('form_message'=>$form_message));
@@ -279,7 +238,7 @@ class users extends CI_Controller {
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <i class="icon wb-close" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
-                     SendFail!</a>
+                     Invalid Account/The account is not yet activated, Please contact your System Administrator for any assistance.</a>
                       </div>';
                 $this->load->view('header');
                 $this->load->view('forgot_password',array('form_message'=>$form_message));
@@ -489,8 +448,7 @@ class users extends CI_Controller {
 
         $mail->Subject = 'Password Reset';
         $mail->Body    = 'Dear Sir/Madam, <br><br>
-                           Please see below for the requested information: <br><br>
-                           Email Address: '.$email.'<br>
+                           Forgot Password:
                            <br><br>
                            <strong><a href="localhost'.base_url().'users/reset_password/'.$email.'/'.$code.'">Click Here</a></strong> to reset your password.<br><br>
                            Please feel free to contact us in case of further queries.

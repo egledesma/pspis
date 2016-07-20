@@ -13,8 +13,8 @@ if($region_code != "190000000"){
         var fundsbal = parseInt($('#conso_balance').val());
         var amountReq = $('#inputCurrency').val();
         var lstReplace = amountReq.replace(/\D/g,'');
-        alert(fundsbal);
-        alert(lstReplace);
+        //alert(fundsbal);
+        //alert(lstReplace);
         if(fundsbal < lstReplace){
 
             alert("Insufficient Funds, Please select other Fund Source.");
@@ -34,12 +34,12 @@ if($region_code != "190000000"){
         var fundsource_id = $('#fundsourcelist').val();
 
         if(fundsource_id > 0){
-            alert(fundsource_id);
+          //  alert(fundsource_id);
             $.ajax({
                 url: "<?php echo base_url('fundsallocation/populate_conso_balance'); ?>",
                 async: false,
                 type: "POST",
-                data: "fundsource_id="+fundsource_id,
+                data: "fund_source="+fundsource_id,
                 dataType: "html",
                 success: function(data) {
                     $('#fundsource').html(data);

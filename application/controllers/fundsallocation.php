@@ -50,6 +50,7 @@ class fundsallocation extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $getList['regionlist'] = $fundsallocation_model->get_regions();
             $getList['fundsourcelist'] = $fundsallocation_model->get_fundsource_byid($fundsource_id);
+            $getList['consobal'] = $fundsallocation_model->get_conso_balance($fundsource_id);
 
             $this->load->view('header');
             $this->load->view('navbar');

@@ -105,6 +105,19 @@ class cofunds extends CI_Controller
 
     }
 
+    public function utilizedhistory($fund_source){
+
+        $cofunds_model = new cofunds_model();
+        $getList['consofunds'] = $cofunds_model->view_consofundsbyid($fund_source);
+        $getList['fundsdetails'] = $cofunds_model->get_consoutilized_history($fund_source);
+        $this->load->view('header');
+        $this->load->view('navbar');
+        $this->load->view('sidebar');
+        $this->load->view('utilizedfunds_history', $getList);
+        $this->load->view('footer');
+
+    }
+
     public function edit($aid)
     {
 

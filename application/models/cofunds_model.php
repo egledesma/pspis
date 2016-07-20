@@ -53,6 +53,22 @@ class cofunds_model extends CI_Model
         return $this->db->query($get_consohistory)->result();
     }
 
+    public function get_consoutilized_history($fund_source) {
+        $get_consohistory = '
+        SELECT
+          *
+        FROM
+          tbl_consofunds_history
+        WHERE
+          fundsource_id ="'.$fund_source.'"
+          and identifier = "3"
+        ORDER BY
+        consolidated_id DESC
+        ';
+
+        return $this->db->query($get_consohistory)->result();
+    }
+
     public function insertFunds($fundsourcelist,$funds_amount2,$myid, $status, $funds_identifier)
     {
 
