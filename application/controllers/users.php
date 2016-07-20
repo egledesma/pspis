@@ -18,8 +18,18 @@ class users extends CI_Controller {
     }
 
 
-    public function register()
+    public function register($function="")
     {
+        if($function == ""){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button><a class="alert-link" href="javascript:void(0)">Registration succeeded. An email has been sent to your email address.!.</a>
+                </div>';
+
+
+        }
         $this->load->model('Model_user');
         $this->customvalidateRegForm();
         $this->init_rpmb_session();
@@ -28,7 +38,7 @@ class users extends CI_Controller {
 
         if (!$this->form_validation->run()){
             $this->load->view('header');
-            $this->load->view('register',$rpmb);
+            $this->load->view('register',array($rpmb,'form_message'=>$form_message));
             $this->load->view('footer');
 
 
@@ -45,13 +55,11 @@ class users extends CI_Controller {
             $regResult = $Model_user->registerUser();
             if ($regResult == 1){
                 $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password); //ok
-                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button><a class="alert-link" href="javascript:void(0)">Registration succeeded. An email has been sent to your email address.!.</a>
-                </div>';
+
                 $this->load->view('header');
                 $this->load->view('register',array($rpmb,'form_message'=>$form_message));
                 $this->load->view('footer');
+                $this->redirectRegister(1);
             } else {
                 $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -139,7 +147,6 @@ class users extends CI_Controller {
             echo "1234";
         }
     }
-	
 	 protected function validateChangePassword()
     {
         $config = array(
@@ -163,10 +170,41 @@ class users extends CI_Controller {
         return $this->form_validation->set_rules($config);
     }
 
+    protected function validateResetPassword()
+    {
+        $config = array(
+            array(
+                'field'   => 'cpassword',
+                'label'   => 'Confirm Password',
+                'rules'   => 'trim|required|matches[npassword]'
+            ),
+            array(
+                'field'   => 'npassword',
+                'label'   => 'Password',
+                'rules'   => 'trim|required'
+            )
+        );
+
+        return $this->form_validation->set_rules($config);
+    }
+
+    protected function validateForgotPassword()
+    {
+        $config = array( array(
+            'field'   => 'email',
+            'label'   => 'email',
+            'rules'   => 'required'
+        )
+        );
+
+        return $this->form_validation->set_rules($config);
+    }
+
+
     public function forgot_password()
     {
         $Model_user = new Model_user();
-        $this->customvalidateForgotForm();
+        $this->validateForgotPassword();
 
         $userkey = $this->superKey();
 
@@ -178,29 +216,82 @@ class users extends CI_Controller {
 
         } else {
             $email = $this->input->post('email');
-            $password = random_string('alnum', 16);
-            $superkey = $this->encrypt->sha1($userkey.$password);
+            $code = $this->encrypt->sha1($userkey.$email);
             $ifUserActivated = $Model_user->userActivated($email);
             if($ifUserActivated > 0){
-                $regResult = $Model_user->forgotPassword($email, $superkey);
-                if ($regResult == 1){
-                    $resultSend = $this->forgotpassword_sendmail($email,$password);
-                    $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
-                    $this->load->view('header');
-                    $this->load->view('forgot_password',array('form_message'=>$form_message));
-                    $this->load->view('footer');
-                } else {
-                    $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Fail!<a href="#" class="closed">&times;</a></div>';
-                    $this->load->view('header');
-                    $this->load->view('forgot_password', array('form_message' => $form_message));
-                    $this->load->view('footer');
-                }
-            } else {
-                $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Invalid Account/The account is not yet activated.!<a href="#" class="closed">&times;</a></div>';
+                    $resultSend = $this->forgotpassword_sendmail($email,$code);
+
+
+                      $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      '.$resultSend.'Succeeded. An email has been sent to your email address.!!</a>
+                      </div>';
                 $this->load->view('header');
-                $this->load->view('forgot_password', array('form_message' => $form_message));
+                $this->load->view('forgot_password',array('form_message'=>$form_message));
+                $this->load->view('footer');
+            } else {
+                $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-close" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                     Invalid Account/The account is not yet activated, Please contact your System Administrator for any assistance.</a>
+                      </div>';
+                $this->load->view('header');
+                $this->load->view('forgot_password',array('form_message'=>$form_message));
                 $this->load->view('footer');
             }
+        }
+
+    }
+
+    public function reset_password($email,$code)
+    {
+        $Model_user = new Model_user();
+        $this->validateResetPassword();
+        $email = trim($email);
+        $userkey = $this->superKey();
+
+        if (!$this->form_validation->run()){
+            $codex = $this->encrypt->sha1($userkey.$email);
+            $this->load->view('header');
+            $this->load->view('reset_password',array('email'=>$email,'code'=>$code, 'codex'=>$codex));
+            $this->load->view('footer');
+
+
+        } else {
+            $email = $this->input->post('email');
+            $pword = $this->input->post('npassword');
+            $password = $this->encrypt->sha1($userkey.$pword);
+
+            $updateResult = $Model_user->resetPassword($email, $password);
+            if ($updateResult){
+                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      '.$resultSend.'Success!</a>
+                      </div>';
+                $this->load->view('header');
+                $this->load->view('reset_password',array('email'=>$email,'code'=>$code, 'codex'=>$codex,'form_message'=>$form_message));
+                $this->load->view('footer');
+            } else {
+                $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-close" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                     SendFail!</a>
+                      </div>';
+                $this->load->view('header');
+                $this->load->view('reset_password',array('email'=>$email,'code'=>$code, 'codex'=>$codex,'form_message'=>$form_message));
+                $this->load->view('footer');
+            }
+
         }
 
     }
@@ -337,7 +428,7 @@ class users extends CI_Controller {
 
 
 
-    public function forgotpassword_sendmail($email,$password) {
+    public function forgotpassword_sendmail($email,$code) {
         $this->load->library('My_PHPMailer');
         $mail = new PHPMailer;
 
@@ -357,9 +448,9 @@ class users extends CI_Controller {
 
         $mail->Subject = 'Password Reset';
         $mail->Body    = 'Dear Sir/Madam, <br><br>
-                           Please see below for the requested information: <br><br>
-                           Email Address: '.$email.'<br>
-                           Password: '.$password.'<br><br>
+                           Forgot Password:
+                           <br><br>
+                           <strong><a href="localhost'.base_url().'users/reset_password/'.$email.'/'.$code.'">Click Here</a></strong> to reset your password.<br><br>
                            Please feel free to contact us in case of further queries.
                            <br>
                            Best Regards,
@@ -371,5 +462,13 @@ class users extends CI_Controller {
         } else {
             $sendMessage = 'Registration succeeded. An email has been sent to your email address.!';
         }
+    }
+
+
+    public function redirectRegister($function)
+    {
+        $page = base_url('users/register/'.$function);
+//        $sec = "1";
+        header("Location: $page");
     }
 }

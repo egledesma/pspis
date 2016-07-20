@@ -53,7 +53,7 @@ class Model_user extends CI_Model {
 
         $this->db->trans_begin();
 
-        $this->db->query('INSERT INTO users(full_name,username,email,passwd,region_code) VALUES("'.$this->getFullname().'","'.$this->getUsername().'","'.$this->getEmail().'","'.$this->getPassword().'","'.$this->getRegion().'")');
+        $this->db->query('INSERT INTO users(full_name,username,email,passwd,region_code, date_created) VALUES("'.$this->getFullname().'","'.$this->getUsername().'","'.$this->getEmail().'","'.$this->getPassword().'","'.$this->getRegion().'",now())');
 
         if ($this->db->trans_status() === FALSE)
         {
@@ -91,6 +91,31 @@ class Model_user extends CI_Model {
         $this->db->close();
     }
 
+    public function resetPassword($email,$password)
+    {
+        $this->db->trans_begin();
+
+        $this->db->query('UPDATE users SET
+                          passwd="'.$password.'",
+                          last_modified =now()
+                          WHERE
+                          email = "'.$email.'"
+
+                          ');
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+        $this->db->close();
+    }
+
     public function ifUserExist()
     {
         $query = $this->db->get_where('users', array('username' => $this->getUsername(),'passwd' => $this->getPassword(), 'activated' => 1));
@@ -101,6 +126,11 @@ class Model_user extends CI_Model {
     {
         $query = $this->db->get_where('users', array('username' => $this->getUsername(),'passwd' => $this->getPassword()));
         return $query->row();
+    }
+
+    public function userActivated($email){
+        $query = $this->db->get_where('users', array('email' => $email,'activated' => 1));
+        return $query->num_rows();
     }
 
 

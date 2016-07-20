@@ -63,7 +63,7 @@ $user_access = $this->session->userdata('access');
 								</a>
 							</li>
 							<li class="site-menu-item">
-								<a class="animsition-link" href="<?php echo base_url('communities/index') ?>" data-slug="uikit-buttons">
+								<a class="animsition-link" href="<?php echo base_url('communities/index/0') ?>" data-slug="uikit-buttons">
 									<i class="site-menu-icon " aria-hidden="true"></i>
 									<span class="site-menu-title">ACN</span>
 								</a>

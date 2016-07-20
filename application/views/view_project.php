@@ -6,7 +6,7 @@
         <h1 class="page-title">Assistance to Communities</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('communities/index') ?>">Communities</a></li>
+            <li><a href="<?php echo base_url('communities/index/0') ?>">Communities</a></li>
             <li class="active">View Project</li>
         </ol>
     </div>
@@ -136,7 +136,11 @@
                                 <td><b><?php echo '₱ '. number_format($budgetdata->first_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_tranche_date ))); ?></td>
                                 <td><b><?php echo $budgetdata->first_tranche_remarks; ?></td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#firstTranche" data-toggle="modal" data-original-title="Transfer Funds"></button></td>
+                                <?php if($budgetdata->first_tranche_status != 1) {?>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#firstTranche" data-toggle="modal" data-original-title="Transfer Funds"></button></td>
+                                <?php } else { ?>
+                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="First Tranche Transferred"></button></td>
+                                <?php } ?>
                             </tr>
                             <div class="modal fade" id="firstTranche" aria-hidden="true" aria-labelledby="firstTranche"
                                  role="dialog" tabindex="-1">
@@ -190,11 +194,16 @@
                             </div>
                             <tr>
                                 <?php if($budgetdata->first_liquidate_status == 1) {?>
-                                <td>2nd Tranche</td>
+                                    <td>2nd Tranche</td>
                                     <td><b><?php echo '₱ '. number_format($budgetdata->second_tranche,2); ?></td>
                                     <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_tranche_date ))); ?></td>
                                     <td><b><?php echo $budgetdata->second_tranche_remarks; ?></td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#secondTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                    <?php if($budgetdata->second_tranche_status != 1) {?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#secondTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                    <?php } else { ?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="Second Tranche Transferred"></button></td>
+                                    <?php } ?>
+
                                 <?php }?>
                             </tr>
                             <div class="modal fade" id="secondTranche" aria-hidden="true" aria-labelledby="secondTranche"
@@ -253,7 +262,12 @@
                                 <td><b><?php echo '₱ '. number_format($budgetdata->third_tranche,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_tranche_date ))); ?></td>
                                 <td><b><?php echo $budgetdata->third_tranche_remarks; ?></td>
-                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#thirdTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                    <?php if($budgetdata->third_tranche_status != 1) {?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#thirdTranche" data-toggle="modal" data-toggle="tooltip" data-original-title="Transfer Funds"></button></td>
+                                    <?php } else { ?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="Third Tranche Transferred"></button></td>
+                                    <?php } ?>
+
                                 <?php }?>
                             </tr>
                             <div class="modal fade" id="thirdTranche" aria-hidden="true" aria-labelledby="thirdTranche"
@@ -328,7 +342,12 @@
                                 <td><b><?php echo  '₱ '. number_format($budgetdata->first_liquidate,2); ?></td>
                                 <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->first_liquidate_date ))); ?></td>
                                 <td><b><?php echo $budgetdata->first_liquidate_remarks; ?></td>
-                                <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#firstLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php if($budgetdata->first_liquidate_status != 1) {?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#firstLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php } else { ?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="First Tranche Liquidated"></button></td>
+                                    <?php } ?>
+
                                 <?php }?>
                             </tr>
                             <div class="modal fade" id="firstLiquidate" aria-hidden="true" aria-labelledby="firstLiquidate"
@@ -353,7 +372,8 @@
                                                 <input id="fund_source" name="fund_source" type="hidden" value="<?php echo $projectdata->fund_source ?>"/>
                                                 <input id="saa_number" name="saa_number" type="hidden" value="<?php echo $projectdata->saa_number ?>"/>
                                                 <label for="first_liquidate" class="control-label">Liquidate Amount:</label>
-                                                <input id="first_liquidate" name="first_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->first_tranche; ?>" max = "<?php echo $budgetdata->first_tranche; ?>" type="number"  class="form-control" />
+                                                <input id="first_liquidated" name="first_liquidated" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->first_tranche; ?>" max = "<?php echo $budgetdata->first_tranche; ?>" type="number"  class="form-control" disabled/> (50% of the Project Amount)
+                                                <input id="first_liquidate" name="first_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->first_tranche; ?>" type="hidden"  class="form-control" />
                                                 <span class="text-danger"><?php echo form_error('first_liquidate'); ?></span>
                                             </div>
                                             </div>
@@ -397,7 +417,11 @@
                                     <td><b><?php echo  '₱ '. number_format($budgetdata->second_liquidate,2); ?></td>
                                     <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->second_liquidate_date ))); ?></td>
                                     <td><b><?php echo $budgetdata->second_liquidate_remarks; ?></td>
-                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#secondLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php if($budgetdata->second_liquidate_status != 1) {?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#secondLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php } else { ?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="Second Tranche Liquidated"></button></td>
+                                    <?php } ?>
                                 <?php }?>
                             </tr>
                             <div class="modal fade" id="secondLiquidate" aria-hidden="true" aria-labelledby="secondLiquidate"
@@ -422,7 +446,8 @@
                                                     <input id="fund_source" name="fund_source" type="hidden" value="<?php echo $projectdata->fund_source ?>"/>
                                                     <input id="saa_number" name="saa_number" type="hidden" value="<?php echo $projectdata->saa_number ?>"/>
                                                     <label for="second_liquidate" class="control-label">Liquidate Amount:</label>
-                                                    <input id="second_liquidate" name="second_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->second_tranche; ?>" max = "<?php echo $budgetdata->second_tranche; ?>" type="number"  class="form-control" />
+                                                    <input id="second_liquidated" name="second_liquidated" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->second_tranche; ?>" max = "<?php echo $budgetdata->second_tranche; ?>" type="number"  class="form-control" disabled/> (40% of the Project Amount)
+                                                    <input id="second_liquidate" name="second_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->second_tranche; ?>" type="hidden"  class="form-control" />
                                                     <span class="text-danger"><?php echo form_error('second_liquidate'); ?></span>
                                                 </div>
                                             </div>
@@ -466,7 +491,11 @@
                                     <td><b><?php echo  '₱ '. number_format($budgetdata->third_liquidate,2); ?></td>
                                     <td><b><?php echo  date('m/d/Y', strtotime(str_replace('-','-',$budgetdata->third_liquidate_date ))); ?></td>
                                     <td><b><?php echo $budgetdata->third_liquidate_remarks; ?></td>
-                                    <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-target="#thirdLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php if($budgetdata->third_liquidate_status != 1) {?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-danger icon wb-plus-circle" data-target="#thirdLiquidate" data-toggle="modal" data-original-title="Liquidate"></button></td>
+                                    <?php } else { ?>
+                                        <td><button type="button" class="btn btn-pure btn-lg btn-success icon wb-check-circle" data-toggle="tooltip"  data-placement="top" data-original-title="Third Tranche Liquidated"></button></td>
+                                    <?php } ?>
                                 <?php }?>
                             </tr>
                             <div class="modal fade" id="thirdLiquidate" aria-hidden="true" aria-labelledby="thirdLiquidate"
@@ -491,7 +520,8 @@
                                                     <input id="fund_source" name="fund_source" type="hidden" value="<?php echo $projectdata->fund_source ?>"/>
                                                     <input id="saa_number" name="saa_number" type="hidden" value="<?php echo $projectdata->saa_number ?>"/>
                                                     <label for="third_liquidate" class="control-label">Liquidate Amount:</label>
-                                                    <input id="third_liquidate" name="third_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->third_tranche; ?>" max = "<?php echo $budgetdata->third_tranche; ?>" type="number"  class="form-control" />
+                                                    <input id="third_liquidated" name="third_liquidated" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->third_tranche; ?>" max = "<?php echo $budgetdata->third_tranche; ?>" type="number"  class="form-control" disabled /> (10% of the Project Amount)
+                                                    <input id="third_liquidate" name="third_liquidate" placeholder="Liquidate Amount" value = "<?php echo $budgetdata->third_tranche; ?>" type="hidden"  class="form-control" />
                                                     <span class="text-danger"><?php echo form_error('third_liquidate'); ?></span>
                                                 </div>
                                             </div>

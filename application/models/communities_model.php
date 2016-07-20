@@ -138,7 +138,7 @@ class communities_model extends CI_Model
         WHERE
           saa_id <> '0'
           and deleted = 0
-          and saa_balance != '0.00'
+          and saa_balance != '0'
           and region_code = '".$region."'
           and status = 0
         GROUP BY
@@ -264,7 +264,7 @@ class communities_model extends CI_Model
     {
         $sql = 'SELECT saa_id,saa_number,saa_balance
 FROM `tbl_saa`
-where deleted = 0 and fundsource_id = "'.$fundsource_id.'"
+where deleted = 0 and saa_balance != "0" and fundsource_id = "'.$fundsource_id.'"
         and region_code ="'.$regionsaa.'"';
         $query = $this->db->query($sql);
         $result = $query->result();
@@ -806,7 +806,7 @@ where saa_number = "'.$saa_id.'" and deleted = 0';
         $this->db->query('insert into tbl_saa_history(
                 saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
                           values
-                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$second_liquidate.'","'.$saa_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$second_liquidate.'","'.$saa_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
 
         $fundsource_id_query = $this->db->query('SELECT fundsource_id FROM lib_fund_source where fund_source ="'.$fund_source.'"');
         $fundsource_id = $fundsource_id_query->row();
@@ -826,7 +826,7 @@ where saa_number = "'.$saa_id.'" and deleted = 0';
             $this->db->query('insert into tbl_consofunds_history(
                 fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$second_liquidate.'","'.$conso_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
+                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$second_liquidate.'","'.$conso_new_value.'","LIQUIDATE SECOND TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
 
 
         if ($this->db->trans_status() === FALSE)
@@ -874,7 +874,7 @@ where saa_number = "'.$saa_id.'" and deleted = 0';
         $this->db->query('insert into tbl_saa_history(
                 saa_id,saa_old_amount,saa_amount,saa_new_amount,description,date_created,created_by,identifier)
                           values
-                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$third_liquidate.'","'.$saa_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
+                          ("'.$saa_id_number.'","'.$saa_old_value.'","'.$third_liquidate.'","'.$saa_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
 
         $fundsource_id_query = $this->db->query('SELECT fundsource_id FROM lib_fund_source where fund_source ="'.$fund_source.'"');
         $fundsource_id = $fundsource_id_query->row();
@@ -894,7 +894,7 @@ where saa_number = "'.$saa_id.'" and deleted = 0';
         $this->db->query('insert into tbl_consofunds_history(
                 fundsource_id,consolidated_old_value,amount,consolidated_new_value,description,created_by,date_created,identifier)
                           values
-                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$third_liquidate.'","'.$conso_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'",now(),"'.$this->session->userdata('uid').'","3")');
+                          ("'.$fund_source_id.'","'.$conso_old_value.'","'.$third_liquidate.'","'.$conso_new_value.'","LIQUIDATE THIRD TRANCHE, PROJECT : '.$project_title.'","'.$this->session->userdata('uid').'",now(),"3")');
 
         $this->db->query('UPDATE tbl_projects SET
                               status = 1

@@ -16,7 +16,7 @@ $region_code = $this->session->userdata('uregion');
         <div class="panel">
             <div class="panel">
                 <header class="panel-heading">
-                    &nbsp;<?php //echo $form_message; ?>
+                    &nbsp;<?php echo $form_message; ?>
                 </header>
                 <div class="panel-body">
                     <div id="exampleTableAddToolbar" >
