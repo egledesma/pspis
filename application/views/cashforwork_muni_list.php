@@ -88,7 +88,7 @@
         <h1 class="page-title">Cash for work (<?php echo $title->project_title;?>)</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('cashforwork/index') ?>">Cash for work</a></li>
+            <li><a href="<?php echo base_url('cashforwork/index/0') ?>">Cash for work</a></li>
             <li class="active">City/Municipality</li>
         </ol>
     </div>

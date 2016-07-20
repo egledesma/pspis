@@ -88,7 +88,7 @@
         <h1 class="page-title">Food for work (<?php echo $title->project_title;?>)</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('dashboardc/dashboard') ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('foodforwork/index') ?>">Food for work</a></li>
+            <li><a href="<?php echo base_url('foodforwork/index/0') ?>">Food for work</a></li>
             <li class="active">City/Municipality</li>
         </ol>
     </div>
