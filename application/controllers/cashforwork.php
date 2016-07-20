@@ -10,14 +10,52 @@ z*/
 class cashforwork extends CI_Controller
 {
 
-    public function index(){
+    public function index($function){
+
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Upload Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Download Successfully!</a>
+                    </div>';
+        }
+        elseif($function == 3){
+            $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Please attach the correct file type and file size required!</a>
+                    </div>';}
+        elseif($function == 4){
+                $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Finalize Project</a>
+                    </div>';
+        }
         $cashforwork_model = new cashforwork_model();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $region_code = $this->session->userdata('uregion');
         $this->load->view('cashforwork_list',array(
-            'project' => $cashforwork_model->get_project($region_code)));
+            'project' => $cashforwork_model->get_project($region_code),
+            'form_message' => $form_message));
         $this->load->view('footer');
     }
     public function finalize_saro($cashforwork_id)
@@ -30,9 +68,9 @@ class cashforwork extends CI_Controller
             $project_title= $getResult->saa_id;
             $fundsource_id = $getResult->fundsource_id;
             $regioncode = $this->session->userdata('uregion');
-            $deleteResult = $cashforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regioncode,$project_title);
+            $finalize = $cashforwork_model->finalize_update($cashforwork_id,$fundsource_id,$total_cost,$saa,$regioncode,$project_title);
 
-            if ($deleteResult){
+            if ($finalize){
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
@@ -43,7 +81,7 @@ class cashforwork extends CI_Controller
 
                 $this->load->view('footer');
             }
-            $this->redirectIndex();
+            $this->redirectIndex(4);
 
         }
     }
@@ -183,8 +221,6 @@ class cashforwork extends CI_Controller
             $this->init_rpmb_session();
             $regionsaro = $this->session->userdata('uregion');
             $getList['fundlist'] = $cashforwork_model->get_fund_source();
-//            $getList['sarolist'] = $cashforwork_model->get_saro($regionsaro);
-
             $getList['natureofworklist'] = $cashforwork_model->get_work_nature();
             $getList['regionlist'] = $cashforwork_model->get_regions();
 
@@ -323,20 +359,7 @@ class cashforwork extends CI_Controller
             $cost_of_assistance = $this->input->post('cost_of_assistance');
             $addResult = $cashforwork_model->insertCashmuni($myid,$cashforworkpass_id,$provlist,$munilist
                 ,$daily_payment,$number_bene,$cost_of_assistance);
-//            if ($addResult){
-//                $getList['cashforworkpass_id'] = $cashforwork_id;
-//                $getList['provlist'] = $cashforwork_model->get_provinces($region_code);
-//                $getList['proj_prov'] = $cashforwork_model->get_project_province($cashforwork_id);
-//                $getList['title'] = $cashforwork_model->get_project_title($cashforwork_id);
-//                $getList['cashmuni_list'] = $cashforwork_model->get_cashmuni_list($cashforwork_id);
-//                $this->load->view('header');
-//                $this->load->view('navbar');
-//                $this->load->view('sidebar');
-//
-//                $this->load->view('cashforwork_muni_list', $getList);
-//                $this->load->view('footer');
-//
-//            }
+
             $this->redirectIndexviewCash_muni($cashforworkpass_id,1);
         }
     }
@@ -638,18 +661,12 @@ class cashforwork extends CI_Controller
     function download_bene($cashforwork_id)
     {
         $cashforwork_model = new cashforwork_model();
-        $this->load->view('header');
-        $this->load->view('navbar');
-        $this->load->view('sidebar');
-
         $cashforworkdata = $cashforwork_model->get_upload_filename($cashforwork_id);
         ob_clean();
         $name = $cashforworkdata->file_location;
         $data = file_get_contents("./uploads/cashforwork/".$name); // Read the file's contents
-
-
         force_download($name, $data);
-        $this->load->view('footer');
+
     }
     function do_upload($cashforwork_id)
     {
@@ -665,14 +682,13 @@ class cashforwork extends CI_Controller
         {
             $error = array('error' => $this->upload->display_errors());
 //            $cashforwork_muni_idpass = $cashforwork_model->get_brgy_cashforwork_id($cashforwork_id);
-//
 //            $cashforworkmuni_id = $cashforwork_muni_idpass->cashforwork_muni_id;
             $this->load->view('header');
             $this->load->view('navbar');
             $this->load->view('sidebar');
             $this->load->view('upload_bene', $error);
             $this->load->view('footer');
-            $this->redirectIndex($cashforwork_id);
+            $this->redirectIndex(3);
         }
         else
         {
@@ -685,7 +701,7 @@ class cashforwork extends CI_Controller
 //            $cashforwork_muni_idpass = $cashforwork_model->get_brgy_cashforwork_id($cashforwork_id);
 //            $cashforworkmuni_id = $cashforwork_muni_idpass->cashforwork_muni_id;
             $this->load->view('upload_success', $data);
-            $this->redirectIndex($cashforwork_id);
+            $this->redirectIndex(1);
         }
     }
 
@@ -942,9 +958,10 @@ class cashforwork extends CI_Controller
         return $this->form_validation->set_rules($config);
 
     }
-    public function redirectIndex()
+    public function redirectIndex($function)
     {
-        $page = base_url('cashforwork/index');
+
+        $page = base_url('cashforwork/index/'.$function.'');
 
         header("LOCATION: $page");
     }

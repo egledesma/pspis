@@ -173,10 +173,16 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'" and region_code = "'.
 //        $this->db->close();
 //
 //    }
-    public function finalize_update($fundsource_id,$total_cost,$saa_id,$regioncode,$project_title)
+    public function finalize_update($cashforwork_id,$fundsource_id,$total_cost,$saa_id,$regioncode,$project_title)
     {
         $this->db->trans_begin();
-
+        $this->db->query('UPDATE tbl_cashforwork SET
+                              finalize_status = 1,
+                              modified_by = "'.$this->session->userdata('uid').'",
+                              date_modified = now()
+                              WHERE
+                              cashforwork_id = "'.$cashforwork_id.'"
+                              ');
         $this->db->query('UPDATE tbl_saa SET
                               saa_funds_downloaded ="'.$total_cost.'" + saa_funds_downloaded,
                               saa_funds_utilized = "'.$total_cost.'" + saa_funds_utilized,
@@ -213,7 +219,8 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'" and region_code = "'.
         $this->db->query('UPDATE tbl_funds_allocated SET
                               funds_obligated ="'.$total_cost.'" + funds_obligated,
                               remaining_budget = remaining_budget - "'.$total_cost.'",
-                              modified_by = "'.$this->session->userdata('uid').'"
+                              modified_by = "'.$this->session->userdata('uid').'",
+                              date_modified = now()
                               WHERE
                               fundsource_id  = "'.$fundsource_id.'" and
                               region_code = "'.$regioncode.'"
@@ -252,7 +259,8 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'" and region_code = "'.
 
         $this->db->query('UPDATE tbl_co_funds SET
                               co_funds_utilized = "'.$total_cost.'" + co_funds_utilized,
-                              modified_by = "'.$this->session->userdata('uid').'"
+                              modified_by = "'.$this->session->userdata('uid').'",
+                              date_modified = now()
                               WHERE
                               fundsource_id = "'.$fundsource_id.'"
                               ');
@@ -304,7 +312,7 @@ where deleted = 0 and fundsource_id = "'.$fundsource_id.'" and region_code = "'.
     // Manual Input of COst of assistance
     public function get_project($region_code)
     {
-        $sql = 'SELECT g.saa_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location
+        $sql = 'SELECT g.saa_number,a.cashforwork_id,a.project_title,a.region_code,b.region_name,c.work_nature,a.no_of_days,number_of_bene as total_bene, cost_of_assistance as total_cost,a.file_location,a.finalize_status
                 FROM `tbl_cashforwork` a
                 INNER JOIN lib_region b
                 on a.region_code = b.region_code

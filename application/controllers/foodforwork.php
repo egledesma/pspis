@@ -10,14 +10,51 @@ z*/
 class foodforwork extends CI_Controller
 {
 
-    public function index(){
+    public function index($function){
+        if($function == 0){
+            $form_message = '';
+        } elseif($function == 1){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Upload Successfully!</a>
+                    </div>';
+        } elseif($function == 2){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Download Successfully!</a>
+                    </div>';
+        }
+        elseif($function == 3){
+            $form_message = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Please attach the correct file type and file size required!</a>
+                    </div>';}
+        elseif($function == 4){
+            $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Finalize Project</a>
+                    </div>';
+        }
         $foodforwork_model = new foodforwork_model();
         $this->load->view('header');
         $this->load->view('navbar');
         $this->load->view('sidebar');
         $region_code = $this->session->userdata('uregion');
         $this->load->view('foodforwork_list',array(
-            'project' => $foodforwork_model->get_project($region_code)));
+            'project' => $foodforwork_model->get_project($region_code),
+            'form_message' => $form_message));
         $this->load->view('footer');
     }
     public function finalize_saro($foodforwork_id)
@@ -30,9 +67,9 @@ class foodforwork extends CI_Controller
             $project_title= $getResult->saa_id;
             $fundsource_id = $getResult->fundsource_id;
             $regioncode = $this->session->userdata('uregion');
-            $deleteResult = $foodforwork_model->finalize_update($fundsource_id,$total_cost,$saa,$regioncode,$project_title);
+            $finalize = $foodforwork_model->finalize_update($foodforwork_id,$fundsource_id,$total_cost,$saa,$regioncode,$project_title);
 
-            if ($deleteResult){
+            if ($finalize){
                 $this->load->view('header');
                 $this->load->view('navbar');
                 $this->load->view('sidebar');
@@ -670,7 +707,7 @@ class foodforwork extends CI_Controller
             $this->load->view('sidebar');
             $this->load->view('upload_bene', $error);
             $this->load->view('footer');
-            $this->redirectIndex($foodforwork_id);
+            $this->redirectIndex(3);
         }
         else
         {
@@ -683,7 +720,7 @@ class foodforwork extends CI_Controller
 //            $foodforwork_muni_idpass = $foodforwork_model->get_brgy_foodforwork_id($foodforwork_id);
 //            $foodforworkmuni_id = $foodforwork_muni_idpass->foodforwork_muni_id;
             $this->load->view('upload_success', $data);
-            $this->redirectIndex($foodforwork_id);
+            $this->redirectIndex(1);
         }
     }
 
@@ -938,9 +975,9 @@ class foodforwork extends CI_Controller
         return $this->form_validation->set_rules($config);
 
     }
-    public function redirectIndex()
+    public function redirectIndex($function)
     {
-        $page = base_url('foodforwork/index');
+        $page = base_url('foodforwork/index/'.$function.'');
 
         header("LOCATION: $page");
     }

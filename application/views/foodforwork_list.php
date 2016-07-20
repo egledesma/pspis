@@ -74,10 +74,11 @@
 <!--                        <a class="confirmation btn btn-success btn-outline" id="confirm"-->
 <!--                           href="--><?php //echo base_url('foodforwork/viewfood_muni/'.$projectData->foodforwork_id.'') ?><!--" data-toggle="tooltip"-->
 <!--                           data-placement="top" data-original-title="Add City/Municipality"><i class="icon wb-user-add" aria-hidden="true"></i> </a>-->
-
+                        <?php if($projectData->finalize_status == 0) {?>
                         <a class="btn btn-info btn-outline" id="confirm"
                            href="<?php echo base_url('foodforwork/finalize_saro/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"
                            data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
+                        <?php }?>
                         <?php if($projectData->file_location == '') {?>
                             <a class="btn btn-info btn-outline" id="confirm"
                                href="<?php echo base_url('foodforwork/upload_bene/'.$projectData->foodforwork_id.'') ?>" data-toggle="tooltip"

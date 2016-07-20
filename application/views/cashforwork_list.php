@@ -22,7 +22,7 @@
         <div class="panel">
             <div class="panel">
                 <header class="panel-heading">
-                    &nbsp;<?php //echo $form_message; ?>
+                    &nbsp;<?php echo $form_message; ?>
 </header>
 <div class="panel-body">
     <div id="exampleTableAddToolbar" >
@@ -39,7 +39,6 @@
             <th>Number of Beneficiaries</th>
             <th>Number of Days</th>
             <th>Cost of Assistance</th>
-            <!-- <th>Status</th> -->
         </tr>
         </thead>
         <tfoot>
@@ -74,16 +73,18 @@
 <!--                        <a class="confirmation btn btn-success btn-outline" id="confirm"-->
 <!--                           href="--><?php //echo base_url('cashforwork/viewCash_muni/'.$projectData->cashforwork_id.'') ?><!--" data-toggle="tooltip"-->
 <!--                           data-placement="top" data-original-title="Add City/Municipality"><i class="icon wb-user-add" aria-hidden="true"></i> </a>-->
-
+                        <?php if($projectData->finalize_status == 0) {?>
                         <a class="btn btn-info btn-outline" id="confirm"
                            href="<?php echo base_url('cashforwork/finalize_saro/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                            data-placement="top" data-original-title="Finalize"><i class="icon fa-check-square-o" aria-hidden="true"></i></a>
+                        <?php }?>
+
                         <?php if($projectData->file_location == '') {?>
                             <a class="btn btn-info btn-outline" id="confirm"
                                href="<?php echo base_url('cashforwork/upload_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Attach file"><i class="icon wb-upload" aria-hidden="true"></i></a>
                         <?php } else {?>
-                            <a class="btn btn-info btn-outline" id="confirm" target = "_blank"
+                            <a class="btn btn-info btn-outline" id="confirm"
                                href="<?php echo base_url('cashforwork/download_bene/'.$projectData->cashforwork_id.'') ?>" data-toggle="tooltip"
                                data-placement="top" data-original-title="Download file"><i class="icon wb-download" aria-hidden="true"></i></a>
                         <?php }?>
@@ -111,5 +112,5 @@
 </div>
 </div>
 </div>
-
+</div>
 </div>
