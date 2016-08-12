@@ -72,7 +72,7 @@ class Model_user extends CI_Model {
     {
         $this->db->trans_begin();
 
-        $this->db->query('UPDATE users SET
+        $this->db->query('UPDATE users1 SET
                           passwd="'.$password.'"
                           WHERE
                           uid = "'.$id.'"
@@ -112,6 +112,20 @@ class Model_user extends CI_Model {
         {
             $this->db->trans_commit();
             return TRUE;
+        }
+        $this->db->close();
+    }
+
+    public function getuserpass($uid = 0)
+    {
+        $query = $this->db->query('SELECT passwd,uid from users where uid = "'.$uid.'"');
+        if ($query->num_rows() > 0)
+        {
+            return $query->row();
+        }
+        else
+        {
+            return FALSE;
         }
         $this->db->close();
     }

@@ -30,15 +30,18 @@ class users extends CI_Controller {
 
 
         }
+        error_reporting(0);
+
         $this->load->model('Model_user');
         $this->customvalidateRegForm();
         $this->init_rpmb_session();
         $rpmb['regionlist'] = $this->Model_form->get_regions();
+        $rpmb['form_message'] = $form_message;
         $userkey = $this->superKey();
 
         if (!$this->form_validation->run()){
             $this->load->view('header');
-            $this->load->view('register',array($rpmb,'form_message'=>$form_message));
+            $this->load->view('register',$rpmb);
             $this->load->view('footer');
 
 
@@ -57,7 +60,7 @@ class users extends CI_Controller {
                 $registerSendResult = $this->registration_sendmail($email,$username,$fullname,$regionlist,$password); //ok
 
                 $this->load->view('header');
-                $this->load->view('register',array($rpmb,'form_message'=>$form_message));
+                $this->load->view('register',$rpmb);
                 $this->load->view('footer');
                 $this->redirectRegister(1);
             } else {
@@ -105,64 +108,81 @@ class users extends CI_Controller {
             }
         }
     }
-	
-	public function change_password($uid =0)
-    {
-		if ($uid > 0)
-                {
-          $Model_user = new Model_user();
-		  $this->validateChangePassword();
 
-        if (!$this->form_validation->run()){
-			$this->load->view('header');
-			$this->load->view('nav');
-			$this->load->view('sidebar');
-			$this->load->view('change_password');
-			$this->load->view('sidepanel');
-			$this->load->view('footer');
-        } else {
-			$id = $this->input->post('id');
-            $password = $this->input->post('password');
-            $updateResult = $Model_user->changePassword($id, $password);
-            if ($updateResult){
-                $resultSend = $this->forgotpassword_sendmail($email,$password);
-                $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
-				$this->load->view('header');
-			$this->load->view('nav');
-			$this->load->view('sidebar');
-			$this->load->view('change_password',array('form_message'=>$form_message));
-			$this->load->view('sidepanel');
-			$this->load->view('footer');
+    public function change_password($uid =0)
+    {
+
+        if ($uid > 0)
+        {
+
+            $Model_user = new Model_user();
+            $this->validateChangePassword();
+
+
+
+
+            if (!$this->form_validation->run()){
+                $this->load->view('header');
+                $this->load->view('navbar');
+                $this->load->view('sidebar');
+                $this->load->view('change_password',array('passworddetails' => $Model_user->getuserpass($uid)));
+                $this->load->view('footer');
             } else {
-                $form_message = ' <div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>'.$resultSend.'<a href="#" class="closed">&times;</a></div>';
-				$this->load->view('header');
-			$this->load->view('nav');
-			$this->load->view('sidebar');
-			$this->load->view('change_password',array('form_message'=>$form_message));
-			$this->load->view('sidepanel');
-			$this->load->view('footer');
+                $id = $this->input->post('user_id');
+                $o_password = $this->input->post('o_password');
+                $c_password = $this->input->post('c_password');
+                $n_password = $this->input->post('n_password');
+                $newkey = $this->encrypt->sha1($userkey.$n_password);
+                $updateResult = $Model_user->changePassword($id, $newkey);
+                if ($updateResult){
+                    $form_message = '<div class="alert alert-alt alert-success alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onClick="window.location.href=assistance/index">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <i class="icon wb-check" aria-hidden="true"></i><a class="alert-link" href="javascript:window.location.href=assistance/index">
+                      Change Password Successfully!</a>
+                    </div>';
+                    $this->load->view('header');
+                    $this->load->view('navbar');
+                    $this->load->view('sidebar');
+                    $this->load->view('change_password',array('passworddetails' => $Model_user->getuserpass($uid),'form_message'=>$form_message));
+                    $this->load->view('footer');
+                } else {
+                    $form_message = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert3"><i class="fa fa-lock"></i>Update Success!<a href="#" class="closed">&times;</a></div>';
+                    $this->load->view('header');
+                    $this->load->view('navbar');
+                    $this->load->view('sidebar');
+                    $this->load->view('change_password',array('passworddetails' => $Model_user->getuserpass($uid),'form_message'=>$form_message));
+                    $this->load->view('footer');
+                }
+
             }
-        }
+
         } else {
             echo "1234";
         }
     }
-	 protected function validateChangePassword()
+
+    protected function validateChangePassword()
     {
         $config = array(
             array(
-                'field'   => 'id',
-                'label'   => 'id',
+                'field'   => 'user_id',
+                'label'   => 'user_id',
                 'rules'   => 'required'
             ),
             array(
-                'field'   => 'password2',
+                'field'   => 'c_password',
                 'label'   => 'Confirm Password',
-                'rules'   => 'trim|required|matches[password]'
+                'rules'   => 'trim|required|matches[n_password]'
+            ),array(
+                'field'   => 'o_password',
+                'label'   => 'Old Password',
+                'rules'   => 'trim|required|callback_oldpassword_check'
             ),
             array(
-                'field'   => 'password',
-                'label'   => 'Password',
+                'field'   => 'n_password',
+                'label'   => 'New Password',
                 'rules'   => 'trim|required'
             )
         );
@@ -291,18 +311,18 @@ class users extends CI_Controller {
                 $this->load->view('reset_password',array('email'=>$email,'code'=>$code, 'codex'=>$codex,'form_message'=>$form_message));
                 $this->load->view('footer');
             }
-
         }
+
 
     }
 
-    public function oldpassword_check($oldpassword){
+    public function oldpassword_check($o_password){
         $Model_user = new Model_user();
         $userkey = $this->superKey();
         $myid = $this->session->userdata('uid');
-        $old_password_hash = sha1($userkey.$oldpassword);
+        $old_password_hash = sha1($userkey.$o_password);
         $old_password_db_hash = $Model_user->getuserpass($myid);
-        $error = '<div class="kode-alert kode-alert kode-alert-icon kode-alert-click alert6"><i class="fa fa-lock"></i>Old password not match!<a href="#" class="closed">&times;</a></div>';
+        $error = 'Old password not match!';
         if($old_password_hash != $old_password_db_hash->passwd)
         {
             $this->form_validation->set_message('oldpassword_check', ''.$error.'');
@@ -381,6 +401,14 @@ class users extends CI_Controller {
         $sec = "1";
         header("Refresh: $sec; url=$page");
     }
+
+    public function redirectcPassword($function)
+    {
+        $uid = $this->session->userdata('uid');
+        $page = base_url('users/change_password/'.$uid);
+//        $sec = "1";
+        header("Location: $page");
+    }
 	
 	public function init_rpmb_session() {
         if(isset($_POST['regionlist']) and $_POST['regionlist'] > 0) {
@@ -437,8 +465,8 @@ class users extends CI_Controller {
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = '';                 // SMTP username
-        $mail->Password = '';                           // SMTP password
+        $mail->Username = 'itsm-desk@dswd.gov.ph';                 // SMTP username
+        $mail->Password = 'm21l3rm0d3r@t0r123';                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;                                    // TCP port to connect to
 
@@ -450,7 +478,7 @@ class users extends CI_Controller {
         $mail->Body    = 'Dear Sir/Madam, <br><br>
                            Forgot Password:
                            <br><br>
-                           <strong><a href="localhost'.base_url().'users/reset_password/'.$email.'/'.$code.'">Click Here</a></strong> to reset your password.<br><br>
+                           <strong><a href="webdev.dswd.gov.ph/beta'.base_url().'users/reset_password/'.$email.'/'.$code.'">Click Here</a></strong> to reset your password.<br><br>
                            Please feel free to contact us in case of further queries.
                            <br>
                            Best Regards,

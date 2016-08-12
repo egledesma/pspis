@@ -32,7 +32,6 @@ $region_code = $this->session->userdata('uregion');
                     <th>Nature of work</th>
                     <th>Fund Source</th>
                     <th>Project Cost</th>
-                    <th>Implementing Agency</th>
                     <!-- <th>Status</th> -->
                 </tr>
                 </thead>
@@ -45,7 +44,6 @@ $region_code = $this->session->userdata('uregion');
                     <th>Nature of work</th>
                     <th>Fund Source</th>
                     <th>Project Cost</th>
-                    <th>Implementing Agency</th>
                    <!-- <th>Status</th> -->
                 </tr>
                 </tfoot>
@@ -72,7 +70,6 @@ $region_code = $this->session->userdata('uregion');
                     <td><?php echo $projectData->work_nature; ?></td>
                     <td><?php echo $projectData->fund_source; ?></td>
                     <td><?php echo '₱ '. number_format($projectData->project_cost,2); ?></td>
-                    <td><?php echo $projectData->implementing_agency; ?></td>
                    <!-- <td><?php // echo $projectData->status; ?></td> -->
 
                 </tr>

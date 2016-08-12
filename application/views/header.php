@@ -15,8 +15,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <title>PSPIS- Funds Monitoring Tool</title>
 
-    <link rel="apple-touch-icon" href="<?php echo base_url('assets/images/apple-touch-icon.png'); ?>">
-    <link rel="shortcut icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>">
+    <link rel="apple-touch-icon" href="<?php echo base_url('assets/images/logobig.jpg'); ?>">
+    <link rel="shortcut icon" href="<?php echo base_url('assets/images/logo.png'); ?>">
 
     <script src="<?php echo base_url('assets/ajax/jquery.min.js'); ?>"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -67,6 +67,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Scripts -->
     <script src="<?php echo base_url('assets/vendor/modernizr/modernizr.js'); ?>"></script>
     <script src="<?php echo base_url('assets/vendor/breakpoints/breakpoints.js'); ?>"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url('assets/js/jquery.maskMoney.js'); ?>" type="text/javascript" >  </script>
 
     <!-- Inline -->
     <style>

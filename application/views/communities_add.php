@@ -217,16 +217,25 @@ $region_code = $this->session->userdata('uregion');
 
     function recalculateSum()
     {
-        var num1 = parseInt(document.getElementById("amount_requested").value);
-        var num2 = parseInt(document.getElementById("lgu_amount_prov").value);
-        var num3 = parseInt(document.getElementById("lgu_amount_muni").value);
-        var num4 = parseInt(document.getElementById("lgu_amount_brgy").value);
-        document.getElementById("project_cost").value = num1 + num2 + num3 + num4;
+
+        var num1 =  $('#amount_requested').val();
+        var Rep1 = num1.replace(/[^0-9.]*/g,'');
+
+        var num2 =  $('#lgu_amount_prov').val();
+        var Rep2 = num2.replace(/[^0-9.]*/g,'');
+
+        var num3 =  $('#lgu_amount_muni').val();
+        var Rep3 = num3.replace(/[^0-9.]*/g,'');
+
+        var num4 = $('#lgu_amount_brgy').val();
+        var Rep4 = num4.replace(/[^0-9.]*/g,'');
+
+
+        document.getElementById("project_cost").value =  +Rep2 + +Rep3 + +Rep4 + +Rep1;
 
     }
 
 </script>
-
 
 <div class="page ">
 
@@ -296,9 +305,10 @@ $region_code = $this->session->userdata('uregion');
                             } ?>
                         </select>
                     </div>
+                    </div>
 
 
-                <div name = "saanumber" id = "saanumber">
+                <div class="form-group row" name = "saanumber" id = "saanumber">
 
                 </div>
 
@@ -322,7 +332,7 @@ $region_code = $this->session->userdata('uregion');
                     </div>
                 </div>
 
-                    </div>
+
 
                 <div class="form-group row">
                     <div id="project_title" class="col-sm-6">
@@ -497,7 +507,7 @@ $region_code = $this->session->userdata('uregion');
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_prov" class="control-label">LGU amount province:</label>
-                        <input onblur="recalculateSum();" id="lgu_amount_prov" name="lgu_amount_prov"  placeholder="LGU amount province" type="number"  class="form-control"  value="0" required autofocus/>
+                        <input onblur="recalculateSum();" id="lgu_amount_prov" name="lgu_amount_prov"  placeholder="LGU amount province" type="text"  class="form-control"  value="0" />
                         <span class="text-danger"><?php echo form_error('lgu_amount_prov'); ?></span>
                     </div>
 
@@ -519,7 +529,7 @@ $region_code = $this->session->userdata('uregion');
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_muni" class="control-label">LGU amount City/Municipality:</label>
-                        <input onblur="recalculateSum();" id="lgu_amount_muni" name="lgu_amount_muni"  placeholder="LGU amount City/Municipality:" type="number"  class="form-control"  value="0" required autofocus/>
+                        <input onblur="recalculateSum();" id="lgu_amount_muni" name="lgu_amount_muni"  placeholder="LGU amount City/Municipality:" type="text"  class="form-control"  value="0" required autofocus/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_muni'); ?></span>
                     </div>
 
@@ -543,7 +553,7 @@ $region_code = $this->session->userdata('uregion');
 
                     <div class="col-sm-4">
                         <label for="lgu_amount_brgy" class="control-label">LGU amount Barangay:</label>
-                        <input onblur="recalculateSum();" id="lgu_amount_brgy" name="lgu_amount_brgy"  placeholder="LGU amount Barangay:" type="number"  class="form-control"  value="0" required autofocus/>
+                        <input onblur="recalculateSum();" id="lgu_amount_brgy" name="lgu_amount_brgy"  placeholder="LGU amount Barangay:" type="text"  class="form-control"  value="0" required/>
                         <span class="text-danger"><?php echo form_error('lgu_amount_brgy'); ?></span>
                     </div>
 
@@ -557,7 +567,7 @@ $region_code = $this->session->userdata('uregion');
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="project_cost" class="control-label">Project Cost:</label>
-                        <input id="project_cost" name="project_cost" placeholder="Project Cost" type="number"  class="form-control"  value="<?php echo set_value('project_cost'); ?>" required autofocus/>
+                        <input id="project_cost"  name="project_cost" placeholder="Project Cost" data-symbol="₱ " data-thousands="," data-decimal="." data-affixStay ="True" type="text" data- class="form-control"  value="<?php echo set_value('project_cost'); ?>" required/>
                         <span class="text-danger"><?php echo form_error('project_cost'); ?></span>
                     </div>
 

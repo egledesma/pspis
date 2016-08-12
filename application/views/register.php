@@ -7,6 +7,8 @@
  */
 error_reporting(0);
 
+ //print_r($regionlist);
+
     $form_validation = '<div class="alert alert-alt alert-danger alert-dismissible" role="alert">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -27,7 +29,7 @@ error_reporting(0);
             <img class="brand-img" src="<?php echo base_url('assets/images/logobig.jpg'); ?>" alt="...">
             <h2 class="brand-text">PSPIS</h2>
         </div>
-        <p>Register</p>
+        <p>REGISTER</p>
         <form method="post" action="">
               <div class="form-group">
                   <?php echo $form_message;?><?php if(validation_errors() != false) { echo $form_validation; } else {} ?>

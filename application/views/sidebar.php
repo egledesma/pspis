@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $region_code = $this->session->userdata('uregion');
 $user_access = $this->session->userdata('access');
+$uid = $this->session->userdata('uid');
 
 ?><div class="site-menubar">
 	<div class="site-menubar-body">
@@ -167,8 +168,9 @@ $user_access = $this->session->userdata('access');
 					<li class="site-menu-category">PROFILE</li>
 
 					<!------------------------ CHANGE PASSWORD ------------------------>
-					<li class="site-menu-item has-sub">
-						<a class="animsition-link" href="<?php echo base_url('users/change_password') ?>" data-slug="app">
+
+					<li class="site-menu-item">
+						<a class="animsition-link" href="<?php echo base_url('users/change_password/'.$uid.'') ?>" data-slug="app">
 							<i class="site-menu-icon wb-unlock" aria-hidden="true"></i>
 							<span class="site-menu-title">Change Password</span>
 						</a>

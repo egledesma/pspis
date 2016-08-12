@@ -9,7 +9,7 @@ class Model_form extends CI_Model
         FROM
           lib_region
         WHERE
-          region_code <> '-1'
+          region_code <> '000000000'
         ORDER BY
           region_code
         ";

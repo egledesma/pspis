@@ -426,13 +426,13 @@ class communities extends CI_Controller
             $lgucounterpart_prov = $this->input->post('lgucounterpart_prov_code');
             $lgucounterpart_muni = $this->input->post('lgucounterpart_muni_code');
             $lgucounterpart_brgy = $this->input->post('brgylist');
-            $lgu_amount_prov = $this->input->post('lgu_amount_prov');
-            $lgu_amount_muni= $this->input->post('lgu_amount_muni');
-            $lgu_amount_brgy = $this->input->post('lgu_amount_brgy');
+            $lgu_amount_prov = preg_replace('/[^0-9.]*/', '', $this->input->post('lgu_amount_prov'));
+            $lgu_amount_muni= preg_replace('/[^0-9.]*/', '', $this->input->post('lgu_amount_muni'));
+            $lgu_amount_brgy = preg_replace('/[^0-9.]*/', '', $this->input->post('lgu_amount_brgy'));
             $lgu_remarks_prov = $this->input->post('remarks_prov');
             $lgu_remarks_muni = $this->input->post('remarks_muni');
             $lgu_remarks_brgy = $this->input->post('remarks_brgy');
-            $project_cost = $this->input->post('project_cost');
+            $project_cost = preg_replace('/[^0-9.]*/', '', $this->input->post('project_cost'));
             $implementing_agency = $this->input->post('implementing_agency');
             $start_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('start_date'))));
             $target_date = date('Y/m/d', strtotime(str_replace('-','-', $this->input->post('target_date'))));
@@ -584,7 +584,7 @@ class communities extends CI_Controller
         $natureofworklist = $this->communities_model->get_naturemaxmin($nature_id);
 
             $data1 = array(
-                'type'        => 'number',
+                'type'        => 'text',
                 'id'          => 'amount_requested',
                 'name'       => 'amount_requested',
                 'max'   => $natureofworklist->maximum_amount,

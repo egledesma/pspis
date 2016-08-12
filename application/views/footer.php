@@ -1,6 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 ?><!-- Footer -->
+<script type="text/javascript">$("#lgu_amount_prov").maskMoney({prefix:'₱ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});</script>
+<script type="text/javascript">$("#lgu_amount_muni").maskMoney({prefix:'₱ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});</script>
+<script type="text/javascript">$("#lgu_amount_brgy").maskMoney({prefix:'₱ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});</script>
 
 <!-- Core  -->
 <script src="<?php echo base_url('assets/vendor/jquery/jquery.js'); ?>"></script>
@@ -71,6 +74,7 @@
 <script src="<?php echo base_url('assets/js/modules/export-csv.js'); ?>"></script>
 
 <script>
+
 	(function() {
 		$('#exampleWarningConfirm').on("click", function() {
 			swal({
